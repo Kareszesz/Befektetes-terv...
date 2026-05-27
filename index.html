@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="hu">
-<head>
+<html lang="en">
+<head><base href="https://d16ilfvy4mv02r.cloudfront.net/workspaces/VWeyRa1OgFpLyIduIFYHjdM1ukrP1G5L/7214ae41-b748-4ac0-96b9-20e90bbb4c76/files/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Pénzügyi Terv</title>
+<title>Financial Plan</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -171,6 +171,15 @@ input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(124,106
 .sync-btn{width:100%;background:rgba(124,106,255,0.1);border:1px solid rgba(124,106,255,0.25);color:var(--accent);border-radius:12px;padding:12px;font-size:13px;font-family:var(--font-body);cursor:pointer;transition:background 0.15s;margin-top:12px;}
 .sync-btn:active{background:rgba(124,106,255,0.22);}
 
+/* INVEST CONFIG CARD */
+.invest-cfg-card{background:var(--card);border:1px solid rgba(124,106,255,0.3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:14px;gap:12px;transition:border-color 0.2s;}
+.invest-cfg-card:active{border-color:rgba(124,106,255,0.6);}
+.invest-cfg-left{flex:1;min-width:0;}
+.invest-cfg-name{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.invest-cfg-ticker{font-family:var(--font-mono);font-size:11px;background:rgba(124,106,255,0.15);color:var(--accent);padding:2px 7px;border-radius:8px;}
+.invest-cfg-detail{font-size:11px;color:var(--muted2);margin-top:3px;font-family:var(--font-mono);}
+.invest-cfg-icon{font-size:18px;color:var(--muted);flex-shrink:0;}
+
 /* ANALYTICS */
 .an-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;}
 .an-title{font-size:13px;font-weight:600;margin-bottom:3px;}
@@ -255,16 +264,21 @@ input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(124,106
 .eur-card:active{border-color:rgba(255,255,255,0.18);}
 .eur-left{font-size:13px;color:var(--muted2);}
 .eur-right{font-family:var(--font-mono);font-size:15px;color:var(--accent4);}
+.eur-refresh-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:var(--muted2);font-size:14px;padding:4px 9px;cursor:pointer;line-height:1;transition:background 0.15s,color 0.15s;flex-shrink:0;}
+.eur-refresh-btn:active{background:rgba(62,207,142,0.15);color:var(--accent2);}
+.eur-refresh-btn.spinning{animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .empty-row{padding:12px 16px;font-size:13px;color:var(--muted);}
 .tag-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-family:var(--font-mono);border:1px solid;}
 .tag-chip.now{background:rgba(62,207,142,0.1);border-color:rgba(62,207,142,0.3);color:var(--accent2);}
 .tag-chip.other{background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--muted);}
 
 /* BOTTOM SHEET */
-#sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:none;align-items:flex-end;}
+#sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:none;align-items:flex-end;transition:height 0.05s,top 0.05s;}
 #sheet-overlay.open{display:flex;}
-#bottom-sheet{background:#1a1a26;border-radius:20px 20px 0 0;width:100%;max-width:500px;margin:0 auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);padding:0 20px calc(32px + env(safe-area-inset-bottom));}
+#bottom-sheet{background:#1a1a26;border-radius:20px 20px 0 0;width:100%;max-width:500px;margin:0 auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);display:flex;flex-direction:column;max-height:90dvh;}
 #sheet-overlay.open #bottom-sheet{transform:translateY(0);}
+#sheet-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 8px;}
 .sheet-handle{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:14px auto 20px;}
 .sheet-title{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:20px;}
 .sheet-label{font-size:12px;color:var(--muted2);margin-bottom:6px;font-family:var(--font-mono);}
@@ -274,22 +288,79 @@ input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(124,106
 select.sheet-input{-webkit-appearance:none;appearance:none;cursor:pointer;}
 .sheet-hint{background:rgba(124,106,255,0.07);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--muted2);margin-bottom:14px;line-height:1.6;}
 .sheet-hint strong{color:var(--accent4);}
-.sheet-btns{display:flex;gap:10px;margin-top:20px;}
+.sheet-btns{display:flex;gap:10px;flex-shrink:0;padding:12px 20px calc(20px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,0.06);background:#1a1a26;}
 .sheet-cancel{flex:1;background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--muted2);border-radius:12px;padding:13px;font-size:15px;cursor:pointer;font-family:var(--font-body);}
 .sheet-save{flex:2;background:var(--accent);border:none;color:#fff;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font-body);}
 .sheet-save:active{opacity:0.85;}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeUp 0.35s ease both;}
+
+/* ═══════════════ ONBOARDING WIZARD ═══════════════ */
+#onboarding-overlay{position:fixed;inset:0;background:rgba(10,10,15,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:1000;display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity 0.35s;pointer-events:none;}
+#onboarding-overlay.open{opacity:1;pointer-events:all;}
+#onboarding-card{width:100%;max-width:500px;background:#1a1a26;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:94dvh;overflow:hidden;transform:translateY(60px);transition:transform 0.35s cubic-bezier(0.32,0.72,0,1);}
+#onboarding-overlay.open #onboarding-card{transform:translateY(0);}
+#wizard-progress{display:flex;justify-content:center;gap:8px;padding:18px 24px 0;flex-shrink:0;}
+.wiz-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.14);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+.wiz-dot.active{background:var(--accent);width:26px;border-radius:4px;}
+.wiz-dot.done{background:var(--accent2);}
+#wizard-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 22px 8px;}
+#wizard-body::-webkit-scrollbar{width:3px;}
+#wizard-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+#wizard-footer{display:flex;align-items:center;justify-content:space-between;padding:14px 22px calc(20px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,0.06);background:#1a1a26;flex-shrink:0;}
+.wiz-skip-btn{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font-body);padding:8px 4px;}
+.wiz-nav-btns{display:flex;gap:10px;}
+.wiz-back-btn{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:var(--muted2);border-radius:12px;padding:12px 20px;font-size:14px;cursor:pointer;font-family:var(--font-body);transition:background 0.15s;}
+.wiz-back-btn:active{background:rgba(255,255,255,0.13);}
+.wiz-next-btn{background:var(--accent);border:none;color:#fff;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:opacity 0.15s;}
+.wiz-next-btn:active{opacity:0.82;}
+.wiz-start-btn{width:100%;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);border:none;color:#fff;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font-head);margin-top:8px;letter-spacing:-0.01em;transition:opacity 0.15s;}
+.wiz-start-btn:active{opacity:0.85;}
+.wiz-headline{font-family:var(--font-head);font-size:24px;font-weight:800;letter-spacing:-0.02em;margin:22px 0 6px;line-height:1.25;}
+.wiz-sub{font-size:14px;color:var(--muted2);margin-bottom:22px;line-height:1.55;}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.lang-opt{background:rgba(255,255,255,0.04);border:2px solid var(--border);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:all 0.18s;}
+.lang-opt:active{opacity:0.75;}
+.lang-opt.selected{border-color:var(--accent);background:rgba(124,106,255,0.12);}
+.lang-opt .lo-flag{font-size:28px;display:block;margin-bottom:6px;}
+.lang-opt .lo-name{font-size:13px;font-weight:600;}
+.curr-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.curr-chip{background:rgba(255,255,255,0.06);border:2px solid var(--border);border-radius:10px;padding:8px 14px;font-size:15px;font-family:var(--font-mono);cursor:pointer;transition:all 0.15s;}
+.curr-chip:active{opacity:0.7;}
+.curr-chip.selected{border-color:var(--accent);background:rgba(124,106,255,0.15);color:var(--accent);}
+.wiz-inc-row{display:flex;gap:8px;margin-bottom:8px;}
+.wiz-add-link{background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer;font-family:var(--font-body);padding:6px 0;display:block;margin-top:2px;}
+.wiz-exp-slot{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.wiz-exp-emoji{font-size:22px;flex-shrink:0;}
+.wiz-exp-info{flex:1;min-width:0;}
+.wiz-exp-label{font-size:12px;color:var(--muted2);margin-bottom:6px;display:flex;align-items:center;gap:6px;font-family:var(--font-mono);}
+.inv-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.inv-choice-card{background:rgba(255,255,255,0.04);border:2px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all 0.18s;}
+.inv-choice-card:active{opacity:0.75;}
+.inv-choice-card.selected{border-color:var(--accent);background:rgba(124,106,255,0.1);}
+.inv-choice-emoji{font-size:26px;display:block;margin-bottom:8px;}
+.inv-choice-label{font-size:13px;font-weight:600;line-height:1.3;}
+.wiz-tooltip-btn{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);color:var(--muted2);font-size:11px;cursor:pointer;font-family:var(--font-mono);flex-shrink:0;line-height:1;vertical-align:middle;transition:background 0.15s;}
+.wiz-tooltip-btn:active{background:rgba(124,106,255,0.25);}
+.wiz-tooltip-pop{position:fixed;background:#252535;border:1px solid rgba(255,255,255,0.13);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--muted2);line-height:1.55;max-width:260px;z-index:1100;box-shadow:0 8px 32px rgba(0,0,0,0.55);pointer-events:none;animation:fadeUp 0.2s ease both;}
+.mm-preview-card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
+.mm-preview-row{margin-bottom:10px;}
+.mm-preview-row:last-child{margin-bottom:0;}
+.mm-preview-label{font-size:11px;color:var(--muted2);font-family:var(--font-mono);margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;}
+.mm-preview-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.07);overflow:hidden;}
 </style>
 </head>
 <body>
 <header id="app-header">
-  <div class="app-title">Pénzügyi Terv</div>
-  <div class="month-nav">
-    <button class="month-nav-btn" id="prev-month">‹</button>
-    <span class="month-nav-display" id="month-display">Már 2026</span>
-    <button class="month-nav-btn" id="next-month">›</button>
+  <div class="app-title" id="app-title-el">Financial Plan</div>
+  <div style="display:flex;align-items:center;gap:6px">
+    <div class="month-nav">
+      <button class="month-nav-btn" id="prev-month">‹</button>
+      <span class="month-nav-display" id="month-display">Mar 2026</span>
+      <button class="month-nav-btn" id="next-month">›</button>
+    </div>
+    <button class="month-nav-btn" id="settings-btn" onclick="openSettings()" title="Settings" style="font-size:15px">⚙</button>
   </div>
 </header>
 <div id="tab-content">
@@ -300,20 +371,37 @@ select.sheet-input{-webkit-appearance:none;appearance:none;cursor:pointer;}
   <div class="tab-pane" id="pane-ai"></div>
 </div>
 <nav id="bottom-nav">
-  <button class="nav-item active" data-tab="summary"><span class="nav-icon">📊</span><span class="nav-label">Összegzés</span></button>
-  <button class="nav-item" data-tab="budget"><span class="nav-icon">💰</span><span class="nav-label">Büdzsé</span></button>
-  <button class="nav-item" data-tab="invest"><span class="nav-icon">📈</span><span class="nav-label">Befektetés</span></button>
-  <button class="nav-item" data-tab="analytics"><span class="nav-icon">📉</span><span class="nav-label">Analitika</span></button>
-  <button class="nav-item" data-tab="ai"><span class="nav-icon">🤖</span><span class="nav-label">AI</span></button>
+  <button class="nav-item active" data-tab="summary"><span class="nav-icon">📊</span><span class="nav-label" id="nav-summary">Summary</span></button>
+  <button class="nav-item" data-tab="budget"><span class="nav-icon">💰</span><span class="nav-label" id="nav-budget">Budget</span></button>
+  <button class="nav-item" data-tab="invest"><span class="nav-icon">📈</span><span class="nav-label" id="nav-invest">Invest</span></button>
+  <button class="nav-item" data-tab="analytics"><span class="nav-icon">📉</span><span class="nav-label" id="nav-analytics">Analytics</span></button>
+  <button class="nav-item" data-tab="ai"><span class="nav-icon">🤖</span><span class="nav-label" id="nav-ai">AI</span></button>
 </nav>
 <div id="sheet-overlay">
   <div id="bottom-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title" id="sheet-title">Szerkesztés</div>
-    <div id="sheet-body"></div>
+    <div id="sheet-scroll">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="sheet-title">Szerkesztés</div>
+      <div id="sheet-body"></div>
+    </div>
     <div class="sheet-btns">
-      <button class="sheet-cancel" id="sheet-cancel">Mégse</button>
-      <button class="sheet-save" id="sheet-save">Mentés</button>
+      <button class="sheet-cancel" id="sheet-cancel">Cancel</button>
+      <button class="sheet-save" id="sheet-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settings-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:200;align-items:flex-end;">
+  <div id="settings-sheet" style="background:#1a1a26;border-radius:20px 20px 0 0;width:100%;max-width:500px;margin:0 auto;max-height:90dvh;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);display:flex;flex-direction:column;">
+    <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 8px;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="settings-title">⚙ Settings</div>
+    <div id="settings-body"></div>
+    </div>
+    <div class="sheet-btns">
+      <button class="sheet-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="sheet-save" onclick="saveSettings()">Save</button>
     </div>
   </div>
 </div>
@@ -322,22 +410,279 @@ select.sheet-input{-webkit-appearance:none;appearance:none;cursor:pointer;}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const STORAGE_KEY = 'penzugyi_v3';
-const MONTHS_HU = ['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'];
-const MONTHS_SHORT = ['Jan','Feb','Már','Ápr','Máj','Jún','Júl','Aug','Szep','Okt','Nov','Dec'];
+const STORAGE_KEY = 'penzugyi_v4';
 
-const BASE_INCOME = [
-  {id:1,name:'Ösztöndíj',amount:58000},
-  {id:2,name:'Apától',amount:10000}
-];
-const BASE_EXPENSES = [
-  {id:1,name:'Kaja – Bevásárlás',amount:21000,category:'Core'},
-  {id:2,name:'Kaja – Vendéglátás',amount:20000,category:'Choice'},
-  {id:3,name:'Gyógytornász',amount:10000,category:'Core'},
-  {id:4,name:'Ruházat',amount:8000,category:'Choice'},
-  {id:5,name:'Szórakozás',amount:2500,category:'Choice'},
-  {id:6,name:'Közlekedés',amount:3000,category:'Core'}
-];
+/* ============================================================
+   LOCALES
+============================================================ */
+const LOCALES = {
+  en: {
+    appTitle:'Financial Plan',
+    navSummary:'Summary', navBudget:'Budget', navInvest:'Invest', navAnalytics:'Analytics', navAI:'AI',
+    months:['January','February','March','April','May','June','July','August','September','October','November','December'],
+    monthsShort:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    // Summary
+    wealthBalance:'Wealth Balance', bankAccount:'Bank Account', cashLocal:'Cash (local)', cashSecondary:'Cash (foreign)', portfolio:'Portfolio',
+    totalWealth:'Total Wealth', moneyMap:'Money Map', necessary:'Necessary', discretionary:'Discretionary',
+    investment:'Investment', freeRemainder:'Free Remainder', moneyMapScore:'Money Map Score',
+    currentMonth:'Current month', yearlyAvg:'Yearly avg', invested:'Invested',
+    activeMonths:'active months', monthlyCashflow:'Monthly Cashflow', income:'Income', expenses:'Expenses',
+    monthlyRemainder:'Monthly Remainder (after investment)', exchangeRate:'Exchange Rate',
+    liveUpdated:'Updated', liveRate:'live', offlineRate:'⚠ Offline rate', manualRate:'Manual rate',
+    noSecondary:'No secondary currency configured',
+    // Budget
+    score:'Score', capital:'1 · Capital – Income', noIncome:'No income',
+    total:'Total', addIncome:'＋ Add Income', applyIncomeAll:'↕ Apply income to all months',
+    coreExpenses:'2 · Core – Necessary expenses', noCoreExp:'No Core expenses',
+    choiceExpenses:'3 · Choice – Discretionary expenses', noChoiceExp:'No Choice expenses',
+    addExpense:'＋ Add Expense', applyExpAll:'↕ Apply expenses to all months',
+    compound:'4 · Compound – Investment', setInvestment:'✦ Set Investment',
+    result:'Result – Summary', monthlyRemain:'Monthly Remainder',
+    noInvestment:'— No planned investment for this month',
+    confirmIncomeAll:'Apply current month\'s income to all 12 months?',
+    confirmExpAll:'Apply current month\'s expenses to all 12 months?',
+    // Invest
+    yearSummary:'Yearly Summary', investedYear:'Invested', activeMonthsFull:'Active Months',
+    months12:'/ 12 months', compoundCalc:'Compound Interest Calculator',
+    monthlyInv:'Monthly investment', annualReturn:'Annual return', timespan:'Timespan',
+    syncFromPlan:'⟳ Sync from investment plan', paid:'Paid in', gain:'Gain', total2:'Total',
+    growthChart:'Growth Chart', years:'years', milestones:'Milestones',
+    monthlyPlan:'Monthly Investment Plan', strategy:'Strategy',
+    strategyText:'VWCE ETF · DCA · TBSZ account – tax-free returns after 5 years',
+    warningText:'⚠️ Warning: 7% return is VWCE historical average – actual results may vary. Not investment advice.',
+    currentLabel:'Now', viewingLabel:'Viewing',
+    // Analytics
+    monthlyCashflowChart:'Monthly Cashflow', incVsExp:'Income vs Expenses – monthly breakdown',
+    coreChoiceVsInc:'Core + Choice expenses compared to income',
+    investConsistency:'Investment Consistency', monthlyVWCE:'Monthly VWCE ETF investments',
+    dcaStrategy:'DCA strategy – yearly plan progress',
+    savingsRate:'Savings Rate', compoundRateMonthly:'Compound rate month by month',
+    vcChanGoal:'Invested % of income · Vincent Chan goal: ≥20%',
+    expBreakdown:'Expense Breakdown', catAvgMonthly:'Categories by average monthly spend',
+    allMonthsAvg:'Annual average of all months\' expenses',
+    // AI
+    aiForecast:'AI Forecast', aiYearlyForecast:'📊 Yearly investment forecast',
+    plannedYearlyTotal:'Planned yearly total',
+    activeMonthsLabel:'active months', avgPerMonth:'avg',
+    keepPace:'If you keep the pace, at 7% annual return:',
+    in5years:'In 5 years', in10years:'In 10 years', avgRate:'Avg rate',
+    aiAnalysis:'AI Analysis · Personalised Insights',
+    geminiChat:'Gemini AI Chat',
+    activateGemini:'🔑 Activate Gemini AI Chat',
+    geminiDesc:'Enter your free Google Gemini API key to ask personalised financial questions. The key is stored only in your browser.',
+    getFreeKey:'→ Get free API key',
+    save:'Save', cancel:'Cancel', delete:'Delete',
+    geminiActive:'✅ Gemini AI active', apiKeySaved:'API key saved',
+    financialAssistant:'Financial Assistant',
+    geminiActiveLabel:'Gemini 2.0 Flash · active',
+    needApiKey:'API key required to activate chat',
+    askFinances:'Ask about your finances...', enterKeyFirst:'Enter Gemini API key above',
+    chatPlaceholder:'Ask anything about your finances!', chatPlaceholderSub:'e.g. "How can I grow my savings?"',
+    // Edit sheets
+    editIncome:'Edit Income', name:'Name', amount:'Amount', egIncome:'e.g. Scholarship',
+    newIncome:'New Income', egPartTime:'e.g. Part-time job',
+    editExpense:'Edit Expense', egFood:'e.g. Food', newExpense:'New Expense', egGym:'e.g. Gym',
+    category:'Category', coreCat:'🏠 Core – Necessary expense', choiceCat:'🎯 Choice – Discretionary expense',
+    compoundAlloc:'– Compound allocation',
+    suggestedLabel:'💡 Suggested', investedAmount:'Invested amount',
+    ofWhichVWCE:'Of which VWCE ETF', ofWhichEmergency:'Of which emergency fund',
+    note:'Note', egDCA:'e.g. DCA · monthly buy',
+    fxRateTitle:'Exchange Rate', fxRateEditTitle:'Edit Exchange Rate',
+    bankBalance:'Bank Account Balance', localCash:'Cash (local)', cashSecondaryLbl:'Cash (foreign)', portfolioLabel:'Portfolio value',
+    amountLabel:'Amount',
+    // Score labels
+    great:'Great', okay:'Okay', needsWork:'Needs Work', weak:'Weak',
+    vcScale:'Current month · Vincent Chan scale (0–3)',
+    // Insights
+    ins1t_great:'Excellent investment rate!', ins1t_good:'Good Compound ratio', ins1t_low:'Raise your Compound ratio', ins1t_none:'Time to start DCA',
+    ins2t_high:'Dining – worth watching', ins2t_mid:'Dining looks fine', ins2t_low:'Dining balanced',
+    ins3t_streak:'DCA Streak!', ins3t_cons:'DCA consistency',
+    ins4t_miss:'Emergency fund missing', ins4t_ok:'Emergency fund OK', ins4t_build:'Emergency fund growing',
+    ins5t_sec:'Foreign currency holding', ins6t_cash:'Cash-first mindset – smart choice',
+    // Forecast labels
+    ytdLabel:'YTD invested', plannedLabel:'Planned total', projectedLabel:'Projected',
+    // Settings
+    settingsTitle:'⚙ Settings', language:'Language', currencySymbol:'Primary Currency Symbol',
+    currencyHint:'Symbol shown on all amounts, e.g. Ft · € · $ · ₹ · £',
+    secondaryCurrencySection:'Secondary / Foreign Currency (optional)',
+    scCode:'ISO Code (e.g. EUR, USD, GBP)',
+    scSymbol:'Symbol (e.g. €, $, £)',
+    scName:'Name (e.g. Euro)',
+    scRate:'Exchange rate to primary',
+    scRateHint:'How many primary units = 1 foreign unit?',
+    scFetchLive:'Fetch live rate',
+    scRemove:'Remove secondary currency',
+    scAdd:'+ Add secondary currency',
+    // Investment Config
+    investConfig:'Investment Settings', instrumentName:'Asset Name', tickerLabel:'Ticker / Symbol (optional)',
+    expectedReturnLabel:'Expected Annual Return', configNoteLabel:'Note / Strategy',
+    configureInv:'⚙ Configure Investment', configHint:'The expected return also updates the compound calculator.',
+    ofWhichAsset:'Of which',
+    // Onboarding wizard
+    wizWelcomeSub:'Let\'s set up your financial plan in 2 minutes.',
+    wizLangLabel:'Choose your language',
+    wizCurrLabel:'Currency symbol',
+    wizCurrCustom:'Custom…',
+    wizStep2Title:'What\'s your income?',
+    wizStep2Sub:'Enter your monthly take-home pay. Rough estimates are fine.',
+    wizIncName:'Label (e.g. Salary)',
+    wizAddSource:'＋ Add another source',
+    wizStep3Title:'What do you spend monthly?',
+    wizStep3Sub:'Rough estimates are fine – you can edit everything later.',
+    wizHousing:'Housing / Rent',
+    wizFood:'Food',
+    wizLifestyle:'Lifestyle / Fun',
+    wizAddMore:'＋ Add more expenses',
+    wizStep4Title:'Do you invest?',
+    wizStep4Sub:'Tell us about your investment goal or get started.',
+    wizAlreadyInvest:'I already invest',
+    wizWantToStart:'I want to start',
+    wizAssetName:'Asset name',
+    wizExpReturn:'Expected annual return (%)',
+    wizMonthlyAmt:'Monthly investment amount',
+    wizAccount:'Account type (e.g. TBSZ, ISA)',
+    wizSavingsAmt:'How much could you save monthly?',
+    wizPlaceholderNote:'We\'ll help you build a real plan. For now, let\'s reserve a monthly savings slot.',
+    wizStep5Title:'You\'re all set! 🎉',
+    wizStep5Sub:'Here\'s your Money Map preview based on your numbers.',
+    wizStartBtn:'Start tracking →',
+    wizSkip:'Skip',
+    wizBack:'Back',
+    wizNext:'Next',
+    // Tooltips
+    ttDCA:'Dollar-Cost Averaging – buying a fixed amount at regular intervals regardless of price. Reduces the risk of buying at the worst moment.',
+    ttETF:'Exchange-Traded Fund – a basket of many stocks you buy as one share. Instant diversification at very low cost.',
+    ttExpReturn:'Estimated annual growth rate based on historical data. Not guaranteed, but very useful for long-term planning.',
+    ttTaxAccount:'A tax-advantaged account (e.g. TBSZ in Hungary) where investment gains may be fully tax-free after 5 years.',
+  },
+  hu: {
+    appTitle:'Pénzügyi Terv',
+    navSummary:'Összegzés', navBudget:'Büdzsé', navInvest:'Befektetés', navAnalytics:'Analitika', navAI:'AI',
+    months:['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'],
+    monthsShort:['Jan','Feb','Már','Ápr','Máj','Jún','Júl','Aug','Szep','Okt','Nov','Dec'],
+    wealthBalance:'Vagyonmérleg', bankAccount:'Bankszámlán', cashHUF:'Készpénz HUF', cashEUR:'Készpénz EUR', portfolio:'Portfólió (VWCE)',
+    totalWealth:'Összes vagyon', moneyMap:'Money Map', necessary:'Szükséges', discretionary:'Választható',
+    investment:'Befektetés', freeRemainder:'Szabad maradvány', moneyMapScore:'Money Map Score',
+    currentMonth:'Ez a hónap', yearlyAvg:'Éves átlag', invested:'Befektetve',
+    activeMonths:'aktív hó', monthlyCashflow:'Havi pénzáram', income:'Bevételek', expenses:'Kiadások',
+    monthlyRemainder:'Havi maradvány (befektetés után)', exchangeRate:'Árfolyam',
+    liveUpdated:'Frissítve', liveRate:'live', offlineRate:'⚠ Offline árfolyam', manualRate:'Manuális árfolyam',
+    score:'Score', capital:'1 · Capital – Bevételek', noIncome:'Nincs bevétel',
+    total:'Összesen', addIncome:'＋ Bevétel hozzáadása', applyIncomeAll:'↕ Bevételek alkalmazása minden hónapra',
+    coreExpenses:'2 · Core – Szükséges kiadások', noCoreExp:'Nincs Core kiadás',
+    choiceExpenses:'3 · Choice – Választható kiadások', noChoiceExp:'Nincs Choice kiadás',
+    addExpense:'＋ Kiadás hozzáadása', applyExpAll:'↕ Kiadások alkalmazása minden hónapra',
+    compound:'4 · Compound – Befektetés', setInvestment:'✦ Befektetés beállítása',
+    result:'Result – Összesítés', monthlyRemain:'Havi maradvány',
+    noInvestment:'— Nem tervezett befektetés erre a hónapra',
+    confirmIncomeAll:'Alkalmazza a jelenlegi hónap bevételeit mind a 12 hónapra?',
+    confirmExpAll:'Alkalmazza a jelenlegi hónap kiadásait mind a 12 hónapra?',
+    yearSummary:'Éves összesítő', investedYear:'Befektetett', activeMonthsFull:'Aktív hónapok',
+    months12:'/ 12 hónap', compoundCalc:'Kamatos kamat kalkulátor',
+    monthlyInv:'Havi befektetés', annualReturn:'Éves hozam', timespan:'Időtáv',
+    syncFromPlan:'⟳ Szinkronizálás a befektetési tervből', paid:'Befizetett', gain:'Hozam', total2:'Végösszeg',
+    growthChart:'Növekedési grafikon', years:'év', milestones:'Mérföldkövek',
+    monthlyPlan:'Havi befektetési terv', strategy:'Stratégia',
+    strategyText:'VWCE ETF · DCA · TBSZ számla – 5 év után adómentes hozam',
+    warningText:'⚠️ Figyelem: A 7%-os hozam a VWCE historikus átlaga – a valóság eltérhet. Nem befektetési tanácsadás.',
+    currentLabel:'Most', viewingLabel:'Nézett',
+    monthlyCashflowChart:'Havi Cashflow', incVsExp:'Bevétel vs Kiadások – havi bontás',
+    coreChoiceVsInc:'Core + Choice kiadások összehasonlítva a bevétellel',
+    investConsistency:'Befektetési konzisztencia', monthlyVWCE:'Havi VWCE ETF befektetések',
+    dcaStrategy:'DCA stratégia – éves terv alakulása',
+    savingsRate:'Megtakarítási ráta', compoundRateMonthly:'Compound arány hónapról hónapra',
+    vcChanGoal:'Befektetett % a bevételből · Vincent Chan cél: ≥20%',
+    expBreakdown:'Kiadásmegoszlás', catAvgMonthly:'Kategóriák átlag havi kiadás szerint',
+    allMonthsAvg:'Az összes hónap kiadásainak éves átlaga',
+    aiForecast:'AI Előrejelzés', aiYearlyForecast:'📊 Éves befektetési előrejelzés',
+    plannedYearlyTotal:'Tervezett éves total',
+    activeMonthsLabel:'aktív hónap', avgPerMonth:'átlag',
+    keepPace:'Ha tartod a tempót, 7%-os éves hozammal:',
+    in5years:'5 év múlva', in10years:'10 év múlva', avgRate:'Átl. arány',
+    aiAnalysis:'AI Elemzés · Személyre szabott felismerések',
+    geminiChat:'Gemini AI Chat',
+    activateGemini:'🔑 Gemini AI Chat aktiválása',
+    geminiDesc:'Add meg az ingyenes Google Gemini API kulcsot és személyre szabott pénzügyi kérdéseket tehetsz fel. Az API kulcs csak a böngésződben tárolódik.',
+    getFreeKey:'→ Ingyenes API kulcs igénylése',
+    save:'Mentés', cancel:'Mégse', delete:'Törlés',
+    geminiActive:'✅ Gemini AI aktív', apiKeySaved:'API kulcs elmentve',
+    financialAssistant:'Pénzügyi Asszisztens',
+    geminiActiveLabel:'Gemini 2.0 Flash · aktív',
+    needApiKey:'API kulcs szükséges a chat aktiválásához',
+    askFinances:'Kérdezz a pénzügyeidről...', enterKeyFirst:'Add meg a Gemini API kulcsot fent',
+    chatPlaceholder:'Kérdezz bármit a pénzügyeidről!', chatPlaceholderSub:'pl. „Hogyan növelhetem a megtakarításom?"',
+    editIncome:'Bevétel szerkesztése', name:'Megnevezés', amount:'Összeg', egIncome:'pl. Ösztöndíj',
+    newIncome:'Új bevétel', egPartTime:'pl. Diákmunka',
+    editExpense:'Kiadás szerkesztése', egFood:'pl. Kaja', newExpense:'Új kiadás', egGym:'pl. Edzőterem',
+    category:'Kategória', coreCat:'🏠 Core – Szükséges kiadás', choiceCat:'🎯 Choice – Választható kiadás',
+    compoundAlloc:'– Compound allokáció',
+    suggestedLabel:'💡 Javasolt', investedAmount:'Befektetett összeg',
+    ofWhichVWCE:'Ebből VWCE ETF', ofWhichEmergency:'Ebből vészalap',
+    note:'Megjegyzés', egDCA:'pl. DCA · havi vétel',
+    eurRate:'EUR/HUF árfolyam', eurRateLabel:'1 EUR = ? HUF',
+    bankBalance:'Bankszámla egyenleg', localCash:'Készpénz HUF', cashEURLabel:'Készpénz EUR', portfolioLabel:'Portfólió értéke',
+    amountLabel:'Összeg',
+    great:'Great', okay:'Okay', needsWork:'Fejlesztendő', weak:'Gyenge',
+    vcScale:'Aktuális hónap · Vincent Chan skála (0–3)',
+    ins1t_great:'Kiváló befektetési arány!', ins1t_good:'Jó Compound arány', ins1t_low:'Növeld a Compound arányt', ins1t_none:'Ideje elkezdeni a DCA-t',
+    ins2t_high:'Vendéglátás – érdemes figyelni', ins2t_mid:'Vendéglátás rendben', ins2t_low:'Vendéglátás kiegyensúlyozott',
+    ins3t_streak:'DCA Streak!', ins3t_cons:'DCA konzisztencia',
+    ins4t_miss:'Vészalap hiányzik', ins4t_ok:'Vészalap rendben', ins4t_build:'Vészalap épül',
+    ins5t_eur:'EUR készpénz portfólió', ins6t_cash:'Készpénzes szemlélet – okos döntés',
+    ytdLabel:'YTD befektetve', plannedLabel:'Tervezett total', projectedLabel:'Előrejelzett',
+    settingsTitle:'⚙ Beállítások', language:'Nyelv', currencySymbol:'Pénznem szimbólum',
+    currencyHint:'Írj be bármilyen szimbólumot, pl. Ft · € · $ · ₹ · £',
+    // Investment Config
+    investConfig:'Befektetési eszköz', instrumentName:'Eszköz neve', tickerLabel:'Ticker / Szimbólum (opcionális)',
+    expectedReturnLabel:'Várható éves hozam', configNoteLabel:'Megjegyzés / Stratégia',
+    configureInv:'⚙ Befektetési eszköz beállítása', configHint:'A várható éves hozam a kalkulátorban is frissül.',
+    ofWhichAsset:'Ebből',
+    // Onboarding wizard
+    wizWelcomeSub:'2 perc alatt beállítjuk a pénzügyi tervedet.',
+    wizLangLabel:'Válassz nyelvet',
+    wizCurrLabel:'Pénznem szimbólum',
+    wizCurrCustom:'Egyéni…',
+    wizStep2Title:'Mi a havi jövedelmed?',
+    wizStep2Sub:'Add meg a nettó havi bevételedet. Hozzávetőleges összeg is tökéletes.',
+    wizIncName:'Megnevezés (pl. Ösztöndíj)',
+    wizAddSource:'＋ Másik forrás hozzáadása',
+    wizStep3Title:'Mire költesz havonta?',
+    wizStep3Sub:'Hozzávetőleges összegek is jók – mindent szerkeszthetsz később.',
+    wizHousing:'Lakhatás / Albérlet',
+    wizFood:'Élelmiszer / Kaja',
+    wizLifestyle:'Életstílus / Szórakozás',
+    wizAddMore:'＋ Több kiadás hozzáadása',
+    wizStep4Title:'Befektetsz már?',
+    wizStep4Sub:'Állítsd be a befektetési célodat, vagy kezdd el most.',
+    wizAlreadyInvest:'Már befektetek',
+    wizWantToStart:'El szeretnék kezdeni',
+    wizAssetName:'Eszköz neve',
+    wizExpReturn:'Várható éves hozam (%)',
+    wizMonthlyAmt:'Havi befektetés összege',
+    wizAccount:'Számlatípus (pl. TBSZ)',
+    wizSavingsAmt:'Mennyit tudnál havonta félretenni?',
+    wizPlaceholderNote:'Segítünk egy igazi tervet felállítani. Most csak jelöljük be a havi megtakarítási keretet.',
+    wizStep5Title:'Készen állsz! 🎉',
+    wizStep5Sub:'Íme a Money Map előnézeted a saját számaid alapján.',
+    wizStartBtn:'Kezdjük el →',
+    wizSkip:'Kihagyás',
+    wizBack:'Vissza',
+    wizNext:'Tovább',
+    // Tooltips
+    ttDCA:'Dollar-Cost Averaging – rendszeres, fix összegű vásárlás az ártól függetlenül. Csökkenti a rossz időpontban való vétel kockázatát.',
+    ttETF:'Tőzsdén kereskedett alap – egyetlen vásárlással sok részvénybe fektetsz egyszerre. Azonnali diverzifikáció, nagyon alacsony díjjal.',
+    ttExpReturn:'Historikus adatok alapján becsült éves növekedési ráta. Nem garantált, de hasznos a hosszú távú tervezéshez.',
+    ttTaxAccount:'Adókedvezményes számla (pl. TBSZ Magyarországon), ahol a befektetési hozam 5 év után teljesen adómentes lehet.',
+  }
+};
+
+function t(key){ return (LOCALES[state.settings?.language||'hu']||LOCALES.hu)[key]||key; }
+function getLang(){ return state.settings?.language||'hu'; }
+function getCurrSym(){ return state.settings?.currencySymbol||'Ft'; }
+function getLocale(){ return getLang()==='hu'?'hu-HU':'en-US'; }
+
+const BASE_INCOME = [];
+const BASE_EXPENSES = [];
 
 /* ============================================================
    STATE
@@ -352,25 +697,14 @@ function createMonth(n) {
     month:n,
     income:BASE_INCOME.map(x=>({...x})),
     expenses:BASE_EXPENSES.map(x=>({...x})),
-    invested:0,vwce:0,emergency:0,note:''
+    invested:0,vwce:0,emergency:0,note:'',
+    assets:{bank:0,cashHUF:0,cashEUR:0,portfolio:0}
   };
 }
 
 function createYear(year) {
   const months = Array.from({length:12},(_,i)=>createMonth(i+1));
-  if(year===2026){
-    const preset={
-      6:{invested:90000,note:'Első vétel · 175 EUR + 20 000 Ft',vwce:90000},
-      7:{invested:25000,note:'DCA · nyár',vwce:25000},
-      8:{invested:25000,note:'DCA · nyár vége',vwce:25000},
-      9:{invested:14000,note:'Tanév kezdet',vwce:14000},
-      10:{invested:14000,note:'Rutinszerű DCA',vwce:14000},
-      11:{invested:14000,note:'Rutinszerű DCA',vwce:14000},
-      12:{invested:14000,note:'Rutinszerű DCA',vwce:14000}
-    };
-    for(const[m,d] of Object.entries(preset)) Object.assign(months[+m-1],d);
-  }
-  return {assets:{bank:25000,cashHUF:92000,cashEUR:175,portfolio:0},months};
+  return {months};
 }
 
 function loadState() {
@@ -388,7 +722,10 @@ function initDefault() {
     eurRate:400,
     geminiKey:'',
     years:{'2026':createYear(2026)},
-    calculator:{monthly:16000,rate:7,years:20}
+    calculator:{monthly:16000,rate:7,years:20},
+    settings:{language:'hu',currencySymbol:'Ft'},
+    investmentConfig:{name:'VWCE ETF',ticker:'VWCE',expectedReturn:7,note:'DCA strategy · TBSZ'},
+    onboardingComplete:false
   };
 }
 
@@ -396,9 +733,25 @@ function migrateState() {
   if(!state.currentMonth) state.currentMonth = _NOW.getMonth()+1;
   if(!state.geminiKey) state.geminiKey = '';
   if(!state.calculator) state.calculator = {monthly:16000,rate:7,years:20};
+  if(state.eurRateLive===undefined) state.eurRateLive=false;
+  if(!state.settings) state.settings={language:'hu',currencySymbol:'Ft'};
+  if(!state.settings.language) state.settings.language='hu';
+  if(!state.settings.currencySymbol) state.settings.currencySymbol='Ft';
+  if(!state.investmentConfig) state.investmentConfig={name:'VWCE ETF',ticker:'VWCE',expectedReturn:7,note:'DCA strategy · TBSZ'};
+  if(!state.investmentConfig.ticker) state.investmentConfig.ticker='';
+  // Existing users: mark onboarding as complete (they already know the app)
+  if(state.onboardingComplete===undefined) state.onboardingComplete=true;
+  // Sync calculator rate to investmentConfig if calculator was at default
+  if(state.calculator.rate===7&&state.investmentConfig.expectedReturn!==7) state.calculator.rate=state.investmentConfig.expectedReturn;
   for(const y of Object.keys(state.years)){
     const yd = state.years[y];
-    if(!yd.assets) yd.assets = {bank:0,cashHUF:0,cashEUR:0,portfolio:0};
+    // Migrate year-level assets → per-month assets
+    if(yd.assets && yd.months && yd.months[0] && !yd.months[0].assets){
+      yd.months.forEach(m=>{ m.assets={...yd.assets}; });
+      delete yd.assets;
+    }
+    // Ensure every month has an assets object
+    if(yd.months) yd.months.forEach(m=>{ if(!m.assets) m.assets={bank:0,cashHUF:0,cashEUR:0,portfolio:0}; });
     // Migrate old format (year-level income/expenses) to per-month
     if(yd.months && yd.months[0] && !yd.months[0].income){
       const oldInc = yd.income||BASE_INCOME;
@@ -430,26 +783,41 @@ function mExp(m){return mCore(m)+mChoice(m);}
 function mRemain(m){return mInc(m)-mExp(m)-m.invested;}
 function yearInv(){return getYD().months.reduce((s,m)=>s+m.invested,0);}
 
-function fmt(n){return Number(n).toLocaleString('hu-HU')+' Ft';}
-function fmtS(n){n=Number(n);if(n>=1000000)return(n/1000000).toFixed(1).replace('.',',')+' M';if(n>=1000)return(n/1000).toFixed(0)+'e';return String(Math.round(n));}
-function fmtM(n){return(n/1000000).toFixed(1).replace('.',',')+' M Ft';}
-function fmtP(n){return n.toFixed(1).replace('.',',')+' %';}
+function fmt(n){const sym=getCurrSym();const loc=getLocale();return Number(n).toLocaleString(loc)+'\u00a0'+sym;}
+function fmtS(n){n=Number(n);const sym=getCurrSym();const isHu=getLocale()==='hu-HU';if(n>=1000000)return(n/1000000).toFixed(1).replace(isHu?'.':'-', isHu?',':'.')+'\u00a0M';if(n>=1000)return(n/1000).toFixed(0)+(isHu?'e':'k');return String(Math.round(n));}
+function fmtM(n){const isHu=getLocale()==='hu-HU';return(n/1000000).toFixed(1).replace(isHu?'.':'-',isHu?',':'.')+'\u00a0M\u00a0'+getCurrSym();}
+function fmtP(n){return n.toFixed(1).replace('.',getLocale()==='hu-HU'?',':'.')+'\u00a0%';}
 function fv(monthly,rate,years){const r=rate/100/12,n=years*12;if(r===0)return monthly*n;return monthly*((Math.pow(1+r,n)-1)/r);}
 function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function escA(s){return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 function mmScore(pct){
-  if(pct>=20)return{score:3,label:'Great',emoji:'🟢',cls:'green'};
-  if(pct>=10)return{score:2,label:'Okay',emoji:'🟡',cls:'yellow'};
-  if(pct>=5) return{score:1,label:'Fejlesztendő',emoji:'🟠',cls:'orange'};
-  return{score:0,label:'Gyenge',emoji:'🔴',cls:'red'};
+  if(pct>=20)return{score:3,label:t('great'),emoji:'🟢',cls:'green'};
+  if(pct>=10)return{score:2,label:t('okay'),emoji:'🟡',cls:'yellow'};
+  if(pct>=5) return{score:1,label:t('needsWork'),emoji:'🟠',cls:'orange'};
+  return{score:0,label:t('weak'),emoji:'🔴',cls:'red'};
 }
 function scoreColor(cls){
   return cls==='green'?'var(--accent2)':cls==='yellow'?'var(--accent4)':cls==='orange'?'var(--accent5)':'var(--accent3)';
 }
 
 function updateHeader(){
-  document.getElementById('month-display').textContent=MONTHS_SHORT[state.currentMonth-1]+' '+state.currentYear;
+  const mn=t('monthsShort')[state.currentMonth-1];
+  document.getElementById('month-display').textContent=mn+' '+state.currentYear;
+}
+function updateStaticUI(){
+  const el=id=>document.getElementById(id);
+  el('app-title-el').textContent=t('appTitle');
+  document.title=t('appTitle');
+  el('nav-summary').textContent=t('navSummary');
+  el('nav-budget').textContent=t('navBudget');
+  el('nav-invest').textContent=t('navInvest');
+  el('nav-analytics').textContent=t('navAnalytics');
+  el('nav-ai').textContent=t('navAI');
+  el('sheet-cancel').textContent=t('cancel');
+  el('sheet-save').textContent=t('save');
+  el('settings-title').textContent=t('settingsTitle');
+  document.documentElement.lang=getLang();
 }
 
 /* ============================================================
@@ -485,14 +853,14 @@ function makeNewYear(){
   const maxY=Math.max(...yrs);
   const ny=maxY+1;
   const prev=state.years[String(maxY)];
-  const carry=prev.assets.portfolio+yearInv();
   const lastM=prev.months[11];
+  const carry=lastM.assets.portfolio+yearInv();
   state.years[String(ny)]=createYear(ny);
   const nyd=state.years[String(ny)];
-  nyd.assets.portfolio=carry;
   nyd.months.forEach(m=>{
     m.income=lastM.income.map(x=>({...x}));
     m.expenses=lastM.expenses.map(x=>({...x}));
+    m.assets={...lastM.assets,portfolio:carry};
   });
   state.currentYear=ny;
 }
@@ -522,82 +890,95 @@ function renderCurrent(){renderTab(activeTab);}
    RENDER: DASHBOARD
 ============================================================ */
 function renderDashboard(){
-  const yd=getYD(),m=getMD(),eur=state.eurRate;
-  const totalAssets=yd.assets.bank+yd.assets.cashHUF+yd.assets.cashEUR*eur+yd.assets.portfolio;
+  const m=getMD(),eur=state.eurRate;
+  const a=m.assets;
+  const totalAssets=a.bank+a.cashHUF+a.cashEUR*eur+a.portfolio;
   const inc=mInc(m),core=mCore(m),choice=mChoice(m),inv=m.invested,remain=mRemain(m);
   const corePct=inc>0?core/inc*100:0,choicePct=inc>0?choice/inc*100:0;
   const compPct=inc>0?inv/inc*100:0,remPct=inc>0?Math.max(0,remain/inc*100):0;
   const score=mmScore(compPct);
+  const yd=getYD();
   const yInv=yearInv(),actM=yd.months.filter(mm=>mm.invested>0).length;
   const mwi=yd.months.filter(mm=>mInc(mm)>0);
   const avgComp=mwi.length>0?mwi.map(mm=>mInc(mm)>0?mm.invested/mInc(mm)*100:0).reduce((a,b)=>a+b,0)/mwi.length:0;
   const yrScore=mmScore(avgComp);
   const isNow=state.currentYear===_NOW.getFullYear()&&state.currentMonth===_NOW.getMonth()+1;
+  const mn=t('monthsShort')[state.currentMonth-1];
+  const mnFull=t('months')[state.currentMonth-1];
+  const rateSubtitle=state.eurRateLastFetched
+    ?t('liveUpdated')+': '+new Date(state.eurRateLastFetched).toLocaleTimeString(getLocale(),{hour:'2-digit',minute:'2-digit'})+(state.eurRateLive?' · '+t('liveRate'):'')
+    :state.eurRateLive===false?t('offlineRate'):t('manualRate');
 
   document.getElementById('pane-summary').innerHTML=`<div class="fade-in">
-  <div class="section-label">Vagyonmérleg</div>
+  <div class="section-label">${t('wealthBalance')}</div>
   <div class="grid-2">
-    <div class="card tap" onclick="editAsset('bank')"><div class="card-label">Bankszámlán</div><div class="card-value purple">${fmtS(yd.assets.bank)}</div><div class="card-sub">${fmt(yd.assets.bank)}</div></div>
-    <div class="card tap" onclick="editAsset('cashHUF')"><div class="card-label">Készpénz HUF</div><div class="card-value purple">${fmtS(yd.assets.cashHUF)}</div><div class="card-sub">${fmt(yd.assets.cashHUF)}</div></div>
-    <div class="card tap" onclick="editAsset('cashEUR')"><div class="card-label">Készpénz EUR</div><div class="card-value yellow">${yd.assets.cashEUR} €</div><div class="card-sub">≈ ${fmt(Math.round(yd.assets.cashEUR*eur))}</div></div>
-    <div class="card tap" onclick="editAsset('portfolio')"><div class="card-label">Portfólió (VWCE)</div><div class="card-value green">${fmtS(yd.assets.portfolio)}</div><div class="card-sub">${fmt(yd.assets.portfolio)}</div></div>
-    <div class="card full"><div class="card-label">Összes vagyon</div><div class="card-value green">${fmtS(totalAssets)}</div><div class="card-sub">${fmt(Math.round(totalAssets))}</div></div>
+    <div class="card tap" onclick="editAsset('bank')"><div class="card-label">${t('bankAccount')}</div><div class="card-value purple">${fmtS(a.bank)}</div><div class="card-sub">${fmt(a.bank)}</div></div>
+    <div class="card tap" onclick="editAsset('cashHUF')"><div class="card-label">${t('cashHUF')}</div><div class="card-value purple">${fmtS(a.cashHUF)}</div><div class="card-sub">${fmt(a.cashHUF)}</div></div>
+    <div class="card tap" onclick="editAsset('cashEUR')"><div class="card-label">${t('cashEUR')}</div><div class="card-value yellow">${a.cashEUR} €</div><div class="card-sub">≈ ${fmt(Math.round(a.cashEUR*eur))}</div></div>
+    <div class="card tap" onclick="editAsset('portfolio')"><div class="card-label">${getLang()==='hu'?'Portfólió':'Portfolio'} (${escH(state.investmentConfig.name)})</div><div class="card-value green">${fmtS(a.portfolio)}</div><div class="card-sub">${fmt(a.portfolio)}</div></div>
+    <div class="card full"><div class="card-label">${t('totalWealth')}</div><div class="card-value green">${fmtS(totalAssets)}</div><div class="card-sub">${fmt(Math.round(totalAssets))}</div></div>
   </div>
 
-  <div class="section-label">Money Map · ${MONTHS_HU[state.currentMonth-1]}</div>
+  <div class="section-label">${t('moneyMap')} · ${mnFull}</div>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <div style="font-size:12px;color:var(--muted2)">Bevétel: <span style="color:var(--accent2);font-family:var(--font-mono)">${fmt(inc)}</span></div>
-      <span class="tag-chip ${isNow?'now':'other'}">${isNow?'⬤ Most':'📅 '+MONTHS_HU[state.currentMonth-1]}</span>
+      <div style="font-size:12px;color:var(--muted2)">${t('income')}: <span style="color:var(--accent2);font-family:var(--font-mono)">${fmt(inc)}</span></div>
+      <span class="tag-chip ${isNow?'now':'other'}">${isNow?'⬤ '+t('currentLabel'):'📅 '+mnFull}</span>
     </div>
     <div class="mm-bar-row">
-      <div class="mm-bar-meta"><span class="mm-bar-name"><span class="cat-badge core">Core</span>Szükséges</span><div class="mm-bar-nums"><span class="mm-bar-amount">${fmt(core)}</span><span class="mm-bar-pct">${fmtP(corePct)}</span></div></div>
+      <div class="mm-bar-meta"><span class="mm-bar-name"><span class="cat-badge core">Core</span>${t('necessary')}</span><div class="mm-bar-nums"><span class="mm-bar-amount">${fmt(core)}</span><span class="mm-bar-pct">${fmtP(corePct)}</span></div></div>
       <div class="mm-bar-track"><div class="mm-bar-fill core-fill" style="width:${Math.min(corePct,100)}%"></div></div>
     </div>
     <div class="mm-bar-row">
-      <div class="mm-bar-meta"><span class="mm-bar-name"><span class="cat-badge choice">Choice</span>Választható</span><div class="mm-bar-nums"><span class="mm-bar-amount">${fmt(choice)}</span><span class="mm-bar-pct">${fmtP(choicePct)}</span></div></div>
+      <div class="mm-bar-meta"><span class="mm-bar-name"><span class="cat-badge choice">Choice</span>${t('discretionary')}</span><div class="mm-bar-nums"><span class="mm-bar-amount">${fmt(choice)}</span><span class="mm-bar-pct">${fmtP(choicePct)}</span></div></div>
       <div class="mm-bar-track"><div class="mm-bar-fill choice-fill" style="width:${Math.min(choicePct,100)}%"></div></div>
     </div>
     <div class="mm-bar-row">
-      <div class="mm-bar-meta"><span class="mm-bar-name"><span class="cat-badge compound">Compound</span>Befektetés</span><div class="mm-bar-nums"><span class="mm-bar-amount">${fmt(inv)}</span><span class="mm-bar-pct">${fmtP(compPct)}</span></div></div>
+      <div class="mm-bar-meta"><span class="mm-bar-name"><span class="cat-badge compound">Compound</span>${t('investment')}</span><div class="mm-bar-nums"><span class="mm-bar-amount">${fmt(inv)}</span><span class="mm-bar-pct">${fmtP(compPct)}</span></div></div>
       <div class="mm-bar-track"><div class="mm-bar-fill compound-fill" style="width:${Math.min(compPct,100)}%"></div></div>
     </div>
     <div class="mm-bar-row" style="margin-bottom:0">
-      <div class="mm-bar-meta"><span class="mm-bar-name" style="color:var(--muted)">Szabad maradvány</span><div class="mm-bar-nums"><span class="mm-bar-amount" style="color:${remain>=0?'var(--text)':'var(--accent3)'}">${remain>=0?'+':''}${fmt(remain)}</span><span class="mm-bar-pct">${fmtP(remPct)}</span></div></div>
+      <div class="mm-bar-meta"><span class="mm-bar-name" style="color:var(--muted)">${t('freeRemainder')}</span><div class="mm-bar-nums"><span class="mm-bar-amount" style="color:${remain>=0?'var(--text)':'var(--accent3)'}">${remain>=0?'+':''}${fmt(remain)}</span><span class="mm-bar-pct">${fmtP(remPct)}</span></div></div>
       <div class="mm-bar-track"><div class="mm-bar-fill remain-fill" style="width:${Math.min(remPct,100)}%;${remain<0?'background:rgba(255,107,107,0.4)':''}"></div></div>
     </div>
   </div>
 
-  <div class="section-label">Money Map Score</div>
+  <div class="section-label">${t('moneyMapScore')}</div>
   <div class="score-big-card">
     <div class="score-big-num ${score.cls}">${score.score}</div>
     <div class="score-big-info">
       <div class="score-big-label">${score.emoji} ${score.label}</div>
-      <div class="score-big-sub">Aktuális hónap · Vincent Chan skála (0–3)</div>
+      <div class="score-big-sub">${t('vcScale')}</div>
       <div class="score-big-pct" style="color:${scoreColor(score.cls)}">${fmtP(compPct)}</div>
     </div>
   </div>
   <div class="score-compare">
-    <div class="score-mini-card"><div class="score-mini-label">Ez a hónap</div><div class="score-mini-num ${score.cls}">${score.score}</div><div class="score-mini-sub">${score.emoji} ${score.label}</div></div>
-    <div class="score-mini-card"><div class="score-mini-label">Éves átlag</div><div class="score-mini-num ${yrScore.cls}">${yrScore.score}</div><div class="score-mini-sub">${yrScore.emoji} ${fmtP(avgComp)}</div></div>
-    <div class="score-mini-card"><div class="score-mini-label">Befektetve ${state.currentYear}</div><div class="score-mini-num purple" style="font-size:22px">${fmtS(yInv)}</div><div class="score-mini-sub">${actM} aktív hó</div></div>
+    <div class="score-mini-card"><div class="score-mini-label">${t('currentMonth')}</div><div class="score-mini-num ${score.cls}">${score.score}</div><div class="score-mini-sub">${score.emoji} ${score.label}</div></div>
+    <div class="score-mini-card"><div class="score-mini-label">${t('yearlyAvg')}</div><div class="score-mini-num ${yrScore.cls}">${yrScore.score}</div><div class="score-mini-sub">${yrScore.emoji} ${fmtP(avgComp)}</div></div>
+    <div class="score-mini-card"><div class="score-mini-label">${t('invested')} ${state.currentYear}</div><div class="score-mini-num purple" style="font-size:22px">${fmtS(yInv)}</div><div class="score-mini-sub">${actM} ${t('activeMonths')}</div></div>
   </div>
 
-  <div class="section-label">Havi pénzáram</div>
+  <div class="section-label">${t('monthlyCashflow')}</div>
   <div class="grid-2">
-    <div class="card"><div class="card-label">Bevételek</div><div class="card-value green">${fmtS(inc)}</div><div class="card-sub">${fmt(inc)}</div></div>
-    <div class="card"><div class="card-label">Kiadások</div><div class="card-value red">${fmtS(core+choice)}</div><div class="card-sub">${fmt(core+choice)}</div></div>
+    <div class="card"><div class="card-label">${t('income')}</div><div class="card-value green">${fmtS(inc)}</div><div class="card-sub">${fmt(inc)}</div></div>
+    <div class="card"><div class="card-label">${t('expenses')}</div><div class="card-value red">${fmtS(core+choice)}</div><div class="card-sub">${fmt(core+choice)}</div></div>
   </div>
   <div class="result-box ${remain>=0?'green':'red'}" style="margin-top:10px">
-    <div class="rb-label">Havi maradvány (befektetés után)</div>
+    <div class="rb-label">${t('monthlyRemainder')}</div>
     <div class="rb-value">${remain>=0?'+':''}${fmt(remain)}</div>
     <div class="rb-sub">${fmt(inc)} − ${fmt(core+choice)} − ${fmt(inv)}</div>
   </div>
 
-  <div class="section-label">Árfolyam</div>
+  <div class="section-label">${t('exchangeRate')}</div>
   <div class="eur-card" onclick="editEurRate()">
-    <span class="eur-left">EUR/HUF árfolyam</span>
-    <span class="eur-right">1 € = ${eur} Ft ✎</span>
+    <div>
+      <span class="eur-left">EUR/HUF</span>
+      <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">${rateSubtitle}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="eur-refresh-btn" id="eur-refresh-icon" onclick="event.stopPropagation();refreshEurRate()" title="Refresh">↻</button>
+      <span class="eur-right">1 € = ${eur} ${getCurrSym()} ✎</span>
+    </div>
   </div>
 </div>`;
 }
@@ -612,12 +993,12 @@ function renderBudget(){
   const corePct=inc>0?core/inc*100:0,choicePct=inc>0?choice/inc*100:0,compPct=inc>0?inv/inc*100:0;
   const score=mmScore(compPct);
 
-  const pills=MONTHS_HU.map((n,i)=>{
+  const pills=t('monthsShort').map((n,i)=>{
     const mn=i+1,mm=getMonth(mn);
     let cls='month-pill';
     if(mn===state.currentMonth)cls+=' active';
     if(mm.invested>0)cls+=' has-inv';
-    return`<div class="${cls}" onclick="setMonth(${mn})">${MONTHS_SHORT[i]}</div>`;
+    return`<div class="${cls}" onclick="setMonth(${mn})">${n}</div>`;
   }).join('');
 
   const incHtml=m.income.map(it=>`
@@ -640,51 +1021,51 @@ function renderBudget(){
 
   const compHtml=inv>0
     ?`<div class="budget-item-v2" onclick="editInvestment()">
-        <span class="item-name">VWCE ETF · DCA</span>
+        <span class="item-name">${escH(state.investmentConfig.name)} · DCA</span>
         <div class="item-right"><span class="cat-badge compound" style="font-size:8px;padding:1px 5px">DCA</span><span class="item-amount expense">−${fmt(m.vwce||inv)}</span></div>
-      </div>${m.emergency>0?`<div class="budget-item-v2" onclick="editInvestment()"><span class="item-name">Vészalap</span><div class="item-right"><span class="item-amount expense">−${fmt(m.emergency)}</span></div></div>`:''}`
-    :`<div class="empty-row">— Nem tervezett befektetés erre a hónapra</div>`;
+      </div>${m.emergency>0?`<div class="budget-item-v2" onclick="editInvestment()"><span class="item-name">${getLang()==='hu'?'Vészalap':'Emergency Fund'}</span><div class="item-right"><span class="item-amount expense">−${fmt(m.emergency)}</span></div></div>`:''}`
+    :`<div class="empty-row">${t('noInvestment')}</div>`;
 
   document.getElementById('pane-budget').innerHTML=`<div class="fade-in">
   <div class="month-pills">${pills}</div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <div style="font-family:var(--font-head);font-size:20px;font-weight:700">${MONTHS_HU[state.currentMonth-1]}</div>
-    <div class="score-badge ${score.cls}">${score.emoji} Score: ${score.score}/3</div>
+    <div style="font-family:var(--font-head);font-size:20px;font-weight:700">${t('months')[state.currentMonth-1]}</div>
+    <div class="score-badge ${score.cls}">${score.emoji} ${t('score')}: ${score.score}/3</div>
   </div>
 
-  <div class="section-label">1 · Capital – Bevételek</div>
+  <div class="section-label">${t('capital')}</div>
   <div class="budget-sec">
-    <div>${incHtml||'<div class="empty-row">Nincs bevétel</div>'}</div>
-    <div class="budget-sec-footer"><span class="footer-label">Összesen</span><span class="footer-total green">+${fmt(inc)}</span></div>
+    <div>${incHtml||`<div class="empty-row">${t('noIncome')}</div>`}</div>
+    <div class="budget-sec-footer"><span class="footer-label">${t('total')}</span><span class="footer-total green">+${fmt(inc)}</span></div>
   </div>
-  <button class="add-btn" onclick="addInc()" style="margin-bottom:6px">＋ Bevétel hozzáadása</button>
-  <button class="apply-all-btn" onclick="applyIncomeToAll()">↕ Bevételek alkalmazása minden hónapra</button>
+  <button class="add-btn" onclick="addInc()" style="margin-bottom:6px">${t('addIncome')}</button>
+  <button class="apply-all-btn" onclick="applyIncomeToAll()">${t('applyIncomeAll')}</button>
 
-  <div class="section-label">2 · Core – Szükséges kiadások</div>
+  <div class="section-label">${t('coreExpenses')}</div>
   <div class="budget-sec">
-    <div>${coreHtml||'<div class="empty-row">Nincs Core kiadás</div>'}</div>
-    <div class="budget-sec-footer"><span class="footer-label">Összesen</span><span class="footer-pct">${fmtP(corePct)}</span><span class="footer-total red">−${fmt(core)}</span></div>
+    <div>${coreHtml||`<div class="empty-row">${t('noCoreExp')}</div>`}</div>
+    <div class="budget-sec-footer"><span class="footer-label">${t('total')}</span><span class="footer-pct">${fmtP(corePct)}</span><span class="footer-total red">−${fmt(core)}</span></div>
   </div>
 
-  <div class="section-label">3 · Choice – Választható kiadások</div>
+  <div class="section-label">${t('choiceExpenses')}</div>
   <div class="budget-sec">
-    <div>${choiceHtml||'<div class="empty-row">Nincs Choice kiadás</div>'}</div>
-    <div class="budget-sec-footer"><span class="footer-label">Összesen</span><span class="footer-pct">${fmtP(choicePct)}</span><span class="footer-total red">−${fmt(choice)}</span></div>
+    <div>${choiceHtml||`<div class="empty-row">${t('noChoiceExp')}</div>`}</div>
+    <div class="budget-sec-footer"><span class="footer-label">${t('total')}</span><span class="footer-pct">${fmtP(choicePct)}</span><span class="footer-total red">−${fmt(choice)}</span></div>
   </div>
-  <button class="add-btn" onclick="addExp()" style="margin-bottom:6px">＋ Kiadás hozzáadása</button>
-  <button class="apply-all-btn" onclick="applyExpensesToAll()">↕ Kiadások alkalmazása minden hónapra</button>
+  <button class="add-btn" onclick="addExp()" style="margin-bottom:6px">${t('addExpense')}</button>
+  <button class="apply-all-btn" onclick="applyExpensesToAll()">${t('applyExpAll')}</button>
 
-  <div class="section-label">4 · Compound – Befektetés</div>
+  <div class="section-label">${t('compound')}</div>
   <div class="budget-sec">
     <div>${compHtml}</div>
-    ${inv>0?`<div class="budget-sec-footer"><span class="footer-label">Összesen</span><span class="footer-pct">${fmtP(compPct)}</span><span class="footer-total yellow">−${fmt(inv)}</span></div>`:''}
+    ${inv>0?`<div class="budget-sec-footer"><span class="footer-label">${t('total')}</span><span class="footer-pct">${fmtP(compPct)}</span><span class="footer-total yellow">−${fmt(inv)}</span></div>`:''}
   </div>
-  <button class="add-btn" onclick="editInvestment()" style="margin-bottom:16px">✦ Befektetés beállítása</button>
+  <button class="add-btn" onclick="editInvestment()" style="margin-bottom:16px">${t('setInvestment')}</button>
 
-  <div class="section-label">Result – Összesítés</div>
+  <div class="section-label">${t('result')}</div>
   <div class="result-box ${remain>=0?'green':'red'}">
-    <div class="rb-label">Havi maradvány</div>
+    <div class="rb-label">${t('monthlyRemain')}</div>
     <div class="rb-value">${remain>=0?'+':''}${fmt(remain)}</div>
     <div class="rb-sub">${fmt(inc)} − ${fmt(core)} − ${fmt(choice)} − ${fmt(inv)}</div>
   </div>
@@ -701,13 +1082,13 @@ function setMonth(n){state.currentMonth=n;saveState();updateHeader();renderCurre
 
 function applyIncomeToAll(){
   const src=getMD();
-  if(!confirm('Alkalmazza a jelenlegi hónap bevételeit mind a 12 hónapra?'))return;
+  if(!confirm(t('confirmIncomeAll')))return;
   getYD().months.forEach(m=>{ if(m.month!==state.currentMonth) m.income=src.income.map(x=>({...x})); });
   saveState();renderBudget();
 }
 function applyExpensesToAll(){
   const src=getMD();
-  if(!confirm('Alkalmazza a jelenlegi hónap kiadásait mind a 12 hónapra?'))return;
+  if(!confirm(t('confirmExpAll')))return;
   getYD().months.forEach(m=>{ if(m.month!==state.currentMonth) m.expenses=src.expenses.map(x=>({...x})); });
   saveState();renderBudget();
 }
@@ -719,57 +1100,71 @@ function renderInvest(){
   const yd=getYD(),yInv=yearInv(),actM=yd.months.filter(m=>m.invested>0).length;
   const rows=yd.months.map(m=>{
     const isCurrent=state.currentYear===_NOW.getFullYear()&&m.month===_NOW.getMonth()+1;
+    const isViewing=state.currentMonth===m.month&&!isCurrent;
     const hasInv=m.invested>0;
     let cls='month-item',dotCls='month-dot';
     if(hasInv)cls+=' has-inv';
     if(isCurrent)cls+=' is-current';
     if(isCurrent)dotCls+=' current';
     else if(hasInv)dotCls+=' filled';
+    const emergLabel=getLang()==='hu'?'Vész':'Emrg';
     return`<div class="${cls}" onclick="editMonthInv(${m.month})">
       <div class="${dotCls}"></div>
       <div class="month-info">
-        <div class="month-name">${MONTHS_HU[m.month-1]}${isCurrent?'<span class="current-badge">Most</span>':''}${state.currentMonth===m.month&&!isCurrent?'<span class="current-badge" style="background:rgba(255,255,255,0.07);color:var(--muted2)">Nézett</span>':''}</div>
+        <div class="month-name">${t('months')[m.month-1]}${isCurrent?`<span class="current-badge">${t('currentLabel')}</span>`:''}${isViewing?`<span class="current-badge" style="background:rgba(255,255,255,0.07);color:var(--muted2)">${t('viewingLabel')}</span>`:''}</div>
         ${m.note?`<div class="month-note">${escH(m.note)}</div>`:''}
-        ${hasInv?`<div class="month-alloc">VWCE: ${fmt(m.vwce||m.invested)}${m.emergency>0?' · Vész: '+fmt(m.emergency):''}</div>`:''}
+        ${hasInv?`<div class="month-alloc">${escH(state.investmentConfig.ticker||state.investmentConfig.name)}: ${fmt(m.vwce||m.invested)}${m.emergency>0?' · '+emergLabel+': '+fmt(m.emergency):''}</div>`:''}
       </div>
       <div class="month-amount ${hasInv?'active':''}">${hasInv?fmt(m.invested):'—'}</div>
     </div>`;
   }).join('');
 
   const c=state.calculator;
+  const cfg=state.investmentConfig;
+  const strategyStr=cfg.note||`${cfg.name} · DCA`;
+  const warnStr=getLang()==='hu'
+    ?`⚠️ Figyelem: A ${cfg.expectedReturn}%-os hozam a ${escH(cfg.name)} historikus átlaga – a valóság eltérhet. Nem befektetési tanácsadás.`
+    :`⚠️ Note: The ${cfg.expectedReturn}% return is the historical average for ${escH(cfg.name)} – actual returns may vary. Not financial advice.`;
   document.getElementById('pane-invest').innerHTML=`<div class="fade-in">
-  <div class="section-label">Éves összesítő</div>
+  <div class="section-label">${t('yearSummary')}</div>
+  <div class="invest-cfg-card" onclick="editInvestmentConfig()">
+    <div class="invest-cfg-left">
+      <div class="invest-cfg-name">${escH(cfg.name)}${cfg.ticker?`<span class="invest-cfg-ticker">${escH(cfg.ticker)}</span>`:''}</div>
+      <div class="invest-cfg-detail">${cfg.expectedReturn}% ${getLang()==='hu'?'várható éves hozam':'expected annual return'}${cfg.note?' · '+escH(cfg.note):''}</div>
+    </div>
+    <span class="invest-cfg-icon">⚙</span>
+  </div>
   <div class="grid-2">
-    <div class="card"><div class="card-label">Befektetett ${state.currentYear}</div><div class="card-value purple">${fmtS(yInv)}</div><div class="card-sub">${fmt(yInv)}</div></div>
-    <div class="card"><div class="card-label">Aktív hónapok</div><div class="card-value purple">${actM}</div><div class="card-sub">/ 12 hónap</div></div>
+    <div class="card"><div class="card-label">${t('investedYear')} ${state.currentYear}</div><div class="card-value purple">${fmtS(yInv)}</div><div class="card-sub">${fmt(yInv)}</div></div>
+    <div class="card"><div class="card-label">${t('activeMonthsFull')}</div><div class="card-value purple">${actM}</div><div class="card-sub">${t('months12')}</div></div>
   </div>
 
-  <div class="section-label">Kamatos kamat kalkulátor</div>
+  <div class="section-label">${t('compoundCalc')}</div>
   <div class="calc-card">
-    <div class="slider-group"><div class="slider-top"><span class="slider-label">Havi befektetés</span><span class="slider-val" id="sv-monthly">${fmt(c.monthly)}</span></div><input type="range" id="sl-monthly" min="5000" max="100000" step="1000" value="${c.monthly}" oninput="updateCalc()"></div>
-    <div class="slider-group"><div class="slider-top"><span class="slider-label">Éves hozam</span><span class="slider-val" id="sv-rate">${c.rate}%</span></div><input type="range" id="sl-rate" min="1" max="15" step="0.5" value="${c.rate}" oninput="updateCalc()"></div>
-    <div class="slider-group"><div class="slider-top"><span class="slider-label">Időtáv</span><span class="slider-val" id="sv-years">${c.years} év</span></div><input type="range" id="sl-years" min="1" max="40" step="1" value="${c.years}" oninput="updateCalc()"></div>
-    <button class="sync-btn" onclick="syncCalc()">⟳ Szinkronizálás a befektetési tervből</button>
+    <div class="slider-group"><div class="slider-top"><span class="slider-label">${t('monthlyInv')}</span><span class="slider-val" id="sv-monthly">${fmt(c.monthly)}</span></div><input type="range" id="sl-monthly" min="5000" max="100000" step="1000" value="${c.monthly}" oninput="updateCalc()"></div>
+    <div class="slider-group"><div class="slider-top"><span class="slider-label">${t('annualReturn')}</span><span class="slider-val" id="sv-rate">${c.rate}%</span></div><input type="range" id="sl-rate" min="1" max="20" step="0.5" value="${c.rate}" oninput="updateCalc()"></div>
+    <div class="slider-group"><div class="slider-top"><span class="slider-label">${t('timespan')}</span><span class="slider-val" id="sv-years">${c.years} ${t('years')}</span></div><input type="range" id="sl-years" min="1" max="40" step="1" value="${c.years}" oninput="updateCalc()"></div>
+    <button class="sync-btn" onclick="syncCalc()">${t('syncFromPlan')}</button>
   </div>
   <div class="grid-3" id="calc-stats"></div>
-  <div class="section-label" style="margin-top:16px">Növekedési grafikon · ${c.years} év</div>
+  <div class="section-label" style="margin-top:16px">${t('growthChart')} · ${c.years} ${t('years')}</div>
   <div class="calc-card">
     <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
     <div class="chart-legend">
-      <span class="legend-item"><span class="legend-dot" style="background:rgba(124,106,255,0.7)"></span>Befizetett tőke</span>
-      <span class="legend-item"><span class="legend-dot" style="background:rgba(62,207,142,0.7)"></span>Hozam</span>
+      <span class="legend-item"><span class="legend-dot" style="background:rgba(124,106,255,0.7)"></span>${t('paid')}</span>
+      <span class="legend-item"><span class="legend-dot" style="background:rgba(62,207,142,0.7)"></span>${t('gain')}</span>
     </div>
   </div>
-  <div class="section-label" style="margin-top:16px">Mérföldkövek</div>
+  <div class="section-label" style="margin-top:16px">${t('milestones')}</div>
   <div class="milestone-grid" id="calc-milestones"></div>
 
-  <div class="section-label" style="margin-top:16px">Havi befektetési terv</div>
+  <div class="section-label" style="margin-top:16px">${t('monthlyPlan')}</div>
   ${rows}
   <div class="highlight-box">
-    🎯 <strong>Stratégia:</strong> VWCE ETF · DCA · TBSZ számla – 5 év után adómentes hozam<br>
-    <span style="display:inline-block;margin-top:6px">💶 175 EUR × ${state.eurRate} Ft ≈ <strong style="color:var(--accent4)">${fmt(Math.round(175*state.eurRate))}</strong></span>
+    🎯 <strong>${t('strategy')}:</strong> ${escH(strategyStr)}<br>
+    <span style="display:inline-block;margin-top:6px">💶 175 EUR × ${state.eurRate} ${getCurrSym()} ≈ <strong style="color:var(--accent4)">${fmt(Math.round(175*state.eurRate))}</strong></span>
   </div>
-  <div class="warn-box" style="margin-top:10px">⚠️ <strong>Figyelem:</strong> A 7%-os hozam a VWCE historikus átlaga – a valóság eltérhet. Nem befektetési tanácsadás.</div>
+  <div class="warn-box" style="margin-top:10px">${warnStr}</div>
 </div>`;
   buildCalcChart();updateCalcUI();
 }
@@ -784,12 +1179,14 @@ function updateCalcUI(){
   const{monthly,rate,years}=state.calculator;
   const g=id=>document.getElementById(id);
   if(!g('sv-monthly'))return;
-  g('sv-monthly').textContent=fmt(monthly);g('sv-rate').textContent=rate+'%';g('sv-years').textContent=years+' év';
+  g('sv-monthly').textContent=fmt(monthly);
+  g('sv-rate').textContent=rate+'%';
+  g('sv-years').textContent=years+' '+t('years');
   const total=fv(monthly,rate,years),invested=monthly*years*12,gain=total-invested;
   const s=g('calc-stats');
-  if(s)s.innerHTML=`<div class="stat-card"><div class="stat-label">Befizetett</div><div class="stat-value purple">${fmtS(invested)}</div></div><div class="stat-card"><div class="stat-label">Hozam</div><div class="stat-value green">${fmtS(gain)}</div></div><div class="stat-card"><div class="stat-label">Végösszeg</div><div class="stat-value yellow">${fmtS(total)}</div></div>`;
+  if(s)s.innerHTML=`<div class="stat-card"><div class="stat-label">${t('paid')}</div><div class="stat-value purple">${fmtS(invested)}</div></div><div class="stat-card"><div class="stat-label">${t('gain')}</div><div class="stat-value green">${fmtS(gain)}</div></div><div class="stat-card"><div class="stat-label">${t('total2')}</div><div class="stat-value yellow">${fmtS(total)}</div></div>`;
   const ms=g('calc-milestones');
-  if(ms)ms.innerHTML=[5,10,20,30].map(y=>`<div class="milestone-card"><div class="milestone-label">${y} év múlva</div><div class="milestone-value">${fmtM(fv(monthly,rate,y))}</div><div class="milestone-sub">${fmtS(fv(monthly,rate,y))} összesen</div></div>`).join('');
+  if(ms)ms.innerHTML=[5,10,20,30].map(y=>`<div class="milestone-card"><div class="milestone-label">${y} ${t('years')}</div><div class="milestone-value">${fmtM(fv(monthly,rate,y))}</div><div class="milestone-sub">${fmtS(fv(monthly,rate,y))}</div></div>`).join('');
 }
 function buildCalcChart(){
   const canvas=document.getElementById('growthChart');if(!canvas)return;
@@ -797,7 +1194,7 @@ function buildCalcChart(){
   const{monthly,rate,years}=state.calculator;
   const labels=[],principal=[],gains=[];
   for(let y=1;y<=years;y++){const t=fv(monthly,rate,y),inv=monthly*y*12;labels.push(y+'');principal.push(Math.round(inv));gains.push(Math.round(t-inv));}
-  charts.growth=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Befizetett',data:principal,backgroundColor:'rgba(124,106,255,0.7)',stack:'a',borderRadius:2},{label:'Hozam',data:gains,backgroundColor:'rgba(62,207,142,0.7)',stack:'a',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+Math.round(ctx.raw).toLocaleString('hu-HU')+' Ft'}}},scales:{x:{stacked:true,ticks:{color:'#6b6b80',autoSkip:true,maxTicksLimit:10},grid:{display:false}},y:{stacked:true,ticks:{color:'#6b6b80',callback:v=>(v/1000000).toFixed(1)+'M'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+  charts.growth=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:t('paid'),data:principal,backgroundColor:'rgba(124,106,255,0.7)',stack:'a',borderRadius:2},{label:t('gain'),data:gains,backgroundColor:'rgba(62,207,142,0.7)',stack:'a',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+Math.round(ctx.raw).toLocaleString(getLocale())+'\u00a0'+getCurrSym()}}},scales:{x:{stacked:true,ticks:{color:'#6b6b80',autoSkip:true,maxTicksLimit:10},grid:{display:false}},y:{stacked:true,ticks:{color:'#6b6b80',callback:v=>(v/1000000).toFixed(1)+'M'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
 }
 function syncCalc(){
   const yd=getYD(),wi=yd.months.filter(m=>m.invested>0);
@@ -805,7 +1202,12 @@ function syncCalc(){
   const avg=Math.round(wi.reduce((s,m)=>s+m.invested,0)/wi.length/1000)*1000;
   const cl=Math.min(100000,Math.max(5000,avg));
   const sl=document.getElementById('sl-monthly');if(sl)sl.value=cl;
-  state.calculator.monthly=cl;saveState();updateCalcUI();buildCalcChart();
+  state.calculator.monthly=cl;
+  // Also sync rate from investmentConfig
+  const configRate=state.investmentConfig.expectedReturn;
+  state.calculator.rate=configRate;
+  const slr=document.getElementById('sl-rate');if(slr)slr.value=configRate;
+  saveState();updateCalcUI();buildCalcChart();
 }
 
 /* ============================================================
@@ -813,33 +1215,33 @@ function syncCalc(){
 ============================================================ */
 function renderAnalytics(){
   document.getElementById('pane-analytics').innerHTML=`<div class="fade-in">
-  <div class="section-label">Havi Cashflow</div>
+  <div class="section-label">${t('monthlyCashflowChart')}</div>
   <div class="an-card">
-    <div class="an-title">Bevétel vs Kiadások – havi bontás</div>
-    <div class="an-sub">Core + Choice kiadások összehasonlítva a bevétellel</div>
+    <div class="an-title">${t('incVsExp')}</div>
+    <div class="an-sub">${t('coreChoiceVsInc')}</div>
     <div class="chart-wrap" style="height:200px"><canvas id="ch-cashflow"></canvas></div>
     <div class="chart-legend">
-      <span class="legend-item"><span class="legend-dot" style="background:rgba(62,207,142,0.7)"></span>Bevétel</span>
+      <span class="legend-item"><span class="legend-dot" style="background:rgba(62,207,142,0.7)"></span>${t('income')}</span>
       <span class="legend-item"><span class="legend-dot" style="background:rgba(255,107,107,0.7)"></span>Core</span>
       <span class="legend-item"><span class="legend-dot" style="background:rgba(124,106,255,0.7)"></span>Choice</span>
     </div>
   </div>
-  <div class="section-label">Befektetési konzisztencia</div>
+  <div class="section-label">${t('investConsistency')}</div>
   <div class="an-card">
-    <div class="an-title">Havi VWCE ETF befektetések</div>
-    <div class="an-sub">DCA stratégia – éves terv alakulása</div>
+    <div class="an-title">${getLang()==='hu'?'Havi '+escH(state.investmentConfig.name)+' befektetések':'Monthly '+escH(state.investmentConfig.name)+' investments'}</div>
+    <div class="an-sub">${t('dcaStrategy')}</div>
     <div class="chart-wrap" style="height:180px"><canvas id="ch-invest"></canvas></div>
   </div>
-  <div class="section-label">Megtakarítási ráta</div>
+  <div class="section-label">${t('savingsRate')}</div>
   <div class="an-card">
-    <div class="an-title">Compound arány hónapról hónapra</div>
-    <div class="an-sub">Befektetett % a bevételből · Vincent Chan cél: ≥20%</div>
+    <div class="an-title">${t('compoundRateMonthly')}</div>
+    <div class="an-sub">${t('vcChanGoal')}</div>
     <div class="chart-wrap" style="height:160px"><canvas id="ch-savings"></canvas></div>
   </div>
-  <div class="section-label">Kiadásmegoszlás · ${state.currentYear}</div>
+  <div class="section-label">${t('expBreakdown')} · ${state.currentYear}</div>
   <div class="an-card">
-    <div class="an-title">Kategóriák átlag havi kiadás szerint</div>
-    <div class="an-sub">Az összes hónap kiadásainak éves átlaga</div>
+    <div class="an-title">${t('catAvgMonthly')}</div>
+    <div class="an-sub">${t('allMonthsAvg')}</div>
     <div class="chart-wrap" style="height:240px"><canvas id="ch-cat"></canvas></div>
   </div>
 </div>`;
@@ -848,25 +1250,26 @@ function renderAnalytics(){
 
 function buildAnalyticsCharts(){
   const yd=getYD();
-  const labels=MONTHS_SHORT;
+  const labels=t('monthsShort');
   const chartOpts={responsive:true,maintainAspectRatio:false};
   const tickColor='#6b6b80',gridColor='rgba(255,255,255,0.05)';
-  const hufCb=ctx=>ctx.dataset.label+': '+Math.round(ctx.raw).toLocaleString('hu-HU')+' Ft';
+  const sym=getCurrSym(),loc=getLocale();
+  const moneyCb=ctx=>ctx.dataset.label+': '+Math.round(ctx.raw).toLocaleString(loc)+'\u00a0'+sym;
 
   // Cashflow
   const cf=document.getElementById('ch-cashflow');
   if(cf){if(charts.cf)charts.cf.destroy();
     charts.cf=new Chart(cf.getContext('2d'),{type:'bar',data:{labels,datasets:[
-      {label:'Bevétel',data:yd.months.map(m=>mInc(m)),backgroundColor:'rgba(62,207,142,0.6)',borderRadius:3},
+      {label:t('income'),data:yd.months.map(m=>mInc(m)),backgroundColor:'rgba(62,207,142,0.6)',borderRadius:3},
       {label:'Core',data:yd.months.map(m=>mCore(m)),backgroundColor:'rgba(255,107,107,0.6)',borderRadius:3},
       {label:'Choice',data:yd.months.map(m=>mChoice(m)),backgroundColor:'rgba(124,106,255,0.6)',borderRadius:3}
-    ]},options:{...chartOpts,plugins:{legend:{display:false},tooltip:{callbacks:{label:hufCb}}},scales:{x:{ticks:{color:tickColor},grid:{display:false}},y:{ticks:{color:tickColor,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:gridColor}}}}});}
+    ]},options:{...chartOpts,plugins:{legend:{display:false},tooltip:{callbacks:{label:moneyCb}}},scales:{x:{ticks:{color:tickColor},grid:{display:false}},y:{ticks:{color:tickColor,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:gridColor}}}}});}
 
   // Investment bar
   const inv=document.getElementById('ch-invest');
   if(inv){if(charts.inv)charts.inv.destroy();
     const invData=yd.months.map(m=>m.invested);
-    charts.inv=new Chart(inv.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Befektetve',data:invData,backgroundColor:invData.map((_,i)=>i===_NOW.getMonth()&&state.currentYear===_NOW.getFullYear()?'rgba(124,106,255,0.9)':'rgba(62,207,142,0.6)'),borderRadius:4}]},options:{...chartOpts,plugins:{legend:{display:false},tooltip:{callbacks:{label:hufCb}}},scales:{x:{ticks:{color:tickColor},grid:{display:false}},y:{ticks:{color:tickColor,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:gridColor}}}}});}
+    charts.inv=new Chart(inv.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:t('invested'),data:invData,backgroundColor:invData.map((_,i)=>i===_NOW.getMonth()&&state.currentYear===_NOW.getFullYear()?'rgba(124,106,255,0.9)':'rgba(62,207,142,0.6)'),borderRadius:4}]},options:{...chartOpts,plugins:{legend:{display:false},tooltip:{callbacks:{label:moneyCb}}},scales:{x:{ticks:{color:tickColor},grid:{display:false}},y:{ticks:{color:tickColor,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},grid:{color:gridColor}}}}});}
 
   // Savings rate line
   const sv=document.getElementById('ch-savings');
@@ -874,7 +1277,7 @@ function buildAnalyticsCharts(){
     const svData=yd.months.map(m=>{const i=mInc(m);return i>0?parseFloat((m.invested/i*100).toFixed(1)):0;});
     charts.sv=new Chart(sv.getContext('2d'),{type:'line',data:{labels,datasets:[
       {label:'Compound %',data:svData,borderColor:'rgba(255,209,102,0.9)',backgroundColor:'rgba(255,209,102,0.1)',tension:0.3,fill:true,pointRadius:4,pointBackgroundColor:'rgba(255,209,102,1)'},
-      {label:'Cél (20%)',data:Array(12).fill(20),borderColor:'rgba(62,207,142,0.4)',borderDash:[5,5],tension:0,fill:false,pointRadius:0}
+      {label:'Goal (20%)',data:Array(12).fill(20),borderColor:'rgba(62,207,142,0.4)',borderDash:[5,5],tension:0,fill:false,pointRadius:0}
     ]},options:{...chartOpts,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},scales:{x:{ticks:{color:tickColor},grid:{display:false}},y:{min:0,max:35,ticks:{color:tickColor,callback:v=>v+'%'},grid:{color:gridColor}}}}});}
 
   // Category doughnut
@@ -884,7 +1287,7 @@ function buildAnalyticsCharts(){
     yd.months.forEach(m=>m.expenses.forEach(e=>{catMap[e.name]=(catMap[e.name]||0)+e.amount;}));
     const entries=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
     const clrs=['rgba(255,107,107,0.8)','rgba(124,106,255,0.8)','rgba(62,207,142,0.8)','rgba(255,209,102,0.8)','rgba(255,159,67,0.8)','rgba(78,205,196,0.8)','rgba(199,180,255,0.8)','rgba(255,150,130,0.8)'];
-    charts.ct=new Chart(ct.getContext('2d'),{type:'doughnut',data:{labels:entries.map(([k])=>k),datasets:[{data:entries.map(([,v])=>Math.round(v/12)),backgroundColor:clrs.slice(0,entries.length),borderWidth:0,hoverOffset:8}]},options:{...chartOpts,plugins:{legend:{display:true,position:'right',labels:{color:'#9494a8',font:{size:11},boxWidth:12,padding:8}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+Math.round(ctx.raw).toLocaleString('hu-HU')+' Ft/hó'}}}}});}
+    charts.ct=new Chart(ct.getContext('2d'),{type:'doughnut',data:{labels:entries.map(([k])=>k),datasets:[{data:entries.map(([,v])=>Math.round(v/12)),backgroundColor:clrs.slice(0,entries.length),borderWidth:0,hoverOffset:8}]},options:{...chartOpts,plugins:{legend:{display:true,position:'right',labels:{color:'#9494a8',font:{size:11},boxWidth:12,padding:8}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+Math.round(ctx.raw).toLocaleString(loc)+'\u00a0'+sym+'/'+t('monthsShort')[0].toLowerCase().replace(/[^a-z]/gi,'m')}}}}});}
 }
 
 /* ============================================================
@@ -892,45 +1295,46 @@ function buildAnalyticsCharts(){
 ============================================================ */
 function genInsights(){
   const yd=getYD(),ms=yd.months,mwi=ms.filter(m=>mInc(m)>0),mwv=ms.filter(m=>m.invested>0);
+  const curAssets=getMD().assets;
   const insights=[];
   const avgComp=mwi.length>0?mwi.map(m=>m.invested/mInc(m)*100).reduce((a,b)=>a+b,0)/mwi.length:0;
   const avgInc=mwi.length>0?mwi.reduce((s,m)=>s+mInc(m),0)/mwi.length:68000;
 
   // 1. Compound ratio
-  if(avgComp>=20)insights.push({e:'🚀',t:'success',title:'Kiváló befektetési arány!',text:`Átlagos ${avgComp.toFixed(1)}%-os Compound arányod van idén – meghaladod a 20%-os Vincent Chan célt. Tartsd meg ezt a tempót, a kamatos kamat dolgozik érted!`});
-  else if(avgComp>=10)insights.push({e:'📈',t:'info',title:'Jó Compound arány',text:`${avgComp.toFixed(1)}% az átlagos befektetési arányod. A 20%-os cél eléréséhez havonta kb. ${fmt(Math.round(avgInc*0.2))} lenne ideális.`});
-  else if(avgComp>0)insights.push({e:'💡',t:'warning',title:'Növeld a Compound arányt',text:`Jelenlegi átlag: ${avgComp.toFixed(1)}%. Apró lépésekkel is el lehet jutni a 20%-os célig – a konzisztencia fontosabb, mint az összeg!`});
-  else insights.push({e:'🌱',t:'warning',title:'Ideje elkezdeni a DCA-t',text:`Még nincs tervezett befektetés. A korai kezdés a legnagyobb előny – akár havi 5-10e Ft is exponenciálisan nő évtizedek alatt.`});
+  if(avgComp>=20)insights.push({e:'🚀',t:'success',title:t('ins1t_great'),text:getLang()==='hu'?`Átlagos ${avgComp.toFixed(1)}%-os Compound arányod van idén – meghaladod a 20%-os Vincent Chan célt. Tartsd meg ezt a tempót!`:`Your average Compound ratio is ${avgComp.toFixed(1)}% this year – you're beating the 20% Vincent Chan target. Keep it up!`});
+  else if(avgComp>=10)insights.push({e:'📈',t:'info',title:t('ins1t_good'),text:getLang()==='hu'?`${avgComp.toFixed(1)}% az átlagos befektetési arányod. A 20%-os cél eléréséhez havonta kb. ${fmt(Math.round(avgInc*0.2))} lenne ideális.`:`Your average investment rate is ${avgComp.toFixed(1)}%. To reach the 20% target, aim for around ${fmt(Math.round(avgInc*0.2))}/month.`});
+  else if(avgComp>0)insights.push({e:'💡',t:'warning',title:t('ins1t_low'),text:getLang()==='hu'?`Jelenlegi átlag: ${avgComp.toFixed(1)}%. Apró lépésekkel is el lehet jutni a 20%-os célig!`:`Current average: ${avgComp.toFixed(1)}%. Small steps still get you to the 20% goal – consistency beats amount!`});
+  else insights.push({e:'🌱',t:'warning',title:t('ins1t_none'),text:getLang()==='hu'?`Még nincs tervezett befektetés. A korai kezdés a legnagyobb előny – akár havi 5-10e Ft is exponenciálisan nő.`:`No investment planned yet. Starting early is the biggest advantage – even a small monthly amount grows exponentially.`});
 
-  // 2. Restaurant
-  const avgRest=ms.map(m=>m.expenses.filter(e=>e.name.toLowerCase().includes('vendég')||e.name.toLowerCase().includes('étterem')||e.name.toLowerCase().includes('resto')).reduce((s,e)=>s+e.amount,0)).reduce((a,b)=>a+b,0)/12;
+  // 2. Dining
+  const avgRest=ms.map(m=>m.expenses.filter(e=>e.name.toLowerCase().includes('vendég')||e.name.toLowerCase().includes('étterem')||e.name.toLowerCase().includes('resto')||e.name.toLowerCase().includes('dining')||e.name.toLowerCase().includes('restaurant')).reduce((s,e)=>s+e.amount,0)).reduce((a,b)=>a+b,0)/12;
   const restPct=avgInc>0?avgRest/avgInc*100:0;
-  if(restPct>25)insights.push({e:'🍽️',t:'warning',title:'Vendéglátás – érdemes figyelni',text:`Az étteremre/kávézóra fordított kiadás ${restPct.toFixed(0)}% a bevételedből. Egy-két főzős hét sokat segíthet – de nem kell lemondani mindenről!`});
-  else if(restPct>10)insights.push({e:'🍜',t:'info',title:'Vendéglátás rendben',text:`${restPct.toFixed(0)}% megy étteremre és kávézóra – ez normális egy aktív és társasági fiatalnak. Tartsd szemmel, hogy ne szökjön fel.`});
-  else if(avgRest>0)insights.push({e:'✅',t:'success',title:'Vendéglátás kiegyensúlyozott',text:`Az étterem-kiadásaid ${restPct.toFixed(0)}% a bevételből – egészséges egyensúly az élvezet és a fegyelem között.`});
+  if(restPct>25)insights.push({e:'🍽️',t:'warning',title:t('ins2t_high'),text:getLang()==='hu'?`Az étteremre fordított kiadás ${restPct.toFixed(0)}% a bevételedből. Egy-két főzős hét sokat segíthet!`:`Dining out is ${restPct.toFixed(0)}% of your income. A couple of home-cooking weeks can make a big difference!`});
+  else if(restPct>10)insights.push({e:'🍜',t:'info',title:t('ins2t_mid'),text:getLang()==='hu'?`${restPct.toFixed(0)}% megy étteremre – normális egy aktív fiatalnak. Tartsd szemmel.`:`${restPct.toFixed(0)}% goes to dining out – normal for an active person. Just keep an eye on it.`});
+  else if(avgRest>0)insights.push({e:'✅',t:'success',title:t('ins2t_low'),text:getLang()==='hu'?`Az étterem-kiadásaid ${restPct.toFixed(0)}% – egészséges egyensúly.`:`Your dining spend is ${restPct.toFixed(0)}% – a healthy balance between enjoyment and discipline.`});
 
-  // 3. Investment consistency
+  // 3. DCA streak
   if(state.currentYear===_NOW.getFullYear()){
     const mnow=_NOW.getMonth()+1;
     const invSoFar=ms.slice(0,mnow).filter(m=>m.invested>0).length;
-    if(invSoFar===mnow&&mnow>=2)insights.push({e:'🔥',t:'success',title:`${invSoFar} hónapos DCA streak!`,text:`Minden hónapban befektettél idén – ez az, amit a legjobb befektetők csinálnak. A konzisztencia hosszú távon ver minden stratégiát.`});
-    else if(mnow>2&&invSoFar<mnow)insights.push({e:'📅',t:'info',title:'DCA konzisztencia',text:`${invSoFar}/${mnow} hónapban fektettél be idén. Próbálj meg automatizálni (Trading 212 AutoInvest) – így nem kell minden hónapban emlékezni rá.`});
+    if(invSoFar===mnow&&mnow>=2)insights.push({e:'🔥',t:'success',title:`${invSoFar} ${getLang()==='hu'?'hónapos':'-month'} ${t('ins3t_streak')}`,text:getLang()==='hu'?`Minden hónapban befektettél idén – ez az, amit a legjobb befektetők csinálnak.`:`You've invested every month this year – that's exactly what the best investors do.`});
+    else if(mnow>2&&invSoFar<mnow)insights.push({e:'📅',t:'info',title:t('ins3t_cons'),text:getLang()==='hu'?`${invSoFar}/${mnow} hónapban fektettél be idén. Próbálj automatizálni!`:`You've invested in ${invSoFar}/${mnow} months this year. Try automating it so you never miss a month!`});
   }
 
   // 4. Emergency fund
   const totEmg=ms.reduce((s,m)=>s+m.emergency,0);
   const avgExp=ms.map(m=>mExp(m)).reduce((a,b)=>a+b,0)/12;
   const emgMonths=avgExp>0?totEmg/avgExp:0;
-  if(totEmg===0)insights.push({e:'🛡️',t:'warning',title:'Vészalap hiányzik',text:`Érdemes vészalapot is felépíteni – 2-3 havi kiadás elegendő (≈${fmt(Math.round(avgExp*3))}). Ez védi az ETF befektetésed is, ha valami váratlan jön.`});
-  else if(emgMonths>=3)insights.push({e:'✅',t:'success',title:'Vészalap rendben',text:`${emgMonths.toFixed(1)} havi kiadást fed a vészalapod – ez kiváló! Mostantól a befektetéseidre összpontosíthatsz.`});
-  else insights.push({e:'🛡️',t:'info',title:'Vészalap épül',text:`Jó kezdet! Jelenleg ≈${emgMonths.toFixed(1)} havi kiadást fed. Cél: 3 hónap (≈${fmt(Math.round(avgExp*3))}).`});
+  if(totEmg===0)insights.push({e:'🛡️',t:'warning',title:t('ins4t_miss'),text:getLang()==='hu'?`Érdemes vészalapot felépíteni – 2-3 havi kiadás elegendő (≈${fmt(Math.round(avgExp*3))}).`:`Consider building an emergency fund – 2-3 months of expenses is enough (≈${fmt(Math.round(avgExp*3))}).`});
+  else if(emgMonths>=3)insights.push({e:'✅',t:'success',title:t('ins4t_ok'),text:getLang()==='hu'?`${emgMonths.toFixed(1)} havi kiadást fed a vészalapod – kiváló!`:`Your emergency fund covers ${emgMonths.toFixed(1)} months of expenses – excellent!`});
+  else insights.push({e:'🛡️',t:'info',title:t('ins4t_build'),text:getLang()==='hu'?`Jó kezdet! Jelenleg ≈${emgMonths.toFixed(1)} havi kiadást fed. Cél: 3 hónap (≈${fmt(Math.round(avgExp*3))}).`:`Good start! Currently covers ≈${emgMonths.toFixed(1)} months. Goal: 3 months (≈${fmt(Math.round(avgExp*3))}).`});
 
   // 5. EUR asset
-  const eurVal=yd.assets.cashEUR*state.eurRate;
-  if(yd.assets.cashEUR>0)insights.push({e:'💶',t:'info',title:'EUR készpénz portfólió',text:`${yd.assets.cashEUR} EUR (≈${fmt(Math.round(eurVal))}) stabil értéktároló infláció ellen. Az EUR-t érdemes megtartani – az árfolyam-különbség is pluszt hozhat.`});
+  const eurVal=curAssets.cashEUR*state.eurRate;
+  if(curAssets.cashEUR>0)insights.push({e:'💶',t:'info',title:t('ins5t_eur'),text:getLang()==='hu'?`${curAssets.cashEUR} EUR (≈${fmt(Math.round(eurVal))}) stabil értéktároló infláció ellen.`:`${curAssets.cashEUR} EUR (≈${fmt(Math.round(eurVal))}) is a solid inflation hedge. Keep it.`});
 
   // 6. Cash preference
-  insights.push({e:'💵',t:'info',title:'Készpénzes szemlélet – okos döntés',text:`A fizikai pénzzel való gazdálkodás természetesen visszafog a felesleges kiadásoktól. Kombináld a banki megtakarítással és az ETF befektetéssel a legjobb eredményért.`});
+  insights.push({e:'💵',t:'info',title:t('ins6t_cash'),text:getLang()==='hu'?`A fizikai pénzzel való gazdálkodás természetesen visszafog a felesleges kiadásoktól.`:`Managing physical cash naturally limits impulse spending. Combine it with bank savings and ETF investing for the best result.`});
 
   return insights;
 }
@@ -946,11 +1350,12 @@ function genForecast(){
   const remM=12-(_NOW.getMonth()+1);
   const projected=Math.max(ytd+(avgInv||0)*remM,planned);
   const monthly=planned>0?planned/12:avgInv;
+  const expRet=state.investmentConfig.expectedReturn;
   return{
     ytd,planned,projected,
     avgComp:avgInc>0?avgInv/avgInc*100:0,
-    avgInv,avgInc,
-    fiveY:fv(monthly,7,5),tenY:fv(monthly,7,10),
+    avgInv,avgInc,expRet,
+    fiveY:fv(monthly,expRet,5),tenY:fv(monthly,expRet,10),
     active:wi.length
   };
 }
@@ -969,47 +1374,50 @@ function renderAI(){
 
   const apiSection=!state.geminiKey
     ?`<div class="api-key-card">
-        <div class="api-key-title">🔑 Gemini AI Chat aktiválása</div>
-        <div class="api-key-desc">Add meg az ingyenes Google Gemini API kulcsot és személyre szabott pénzügyi kérdéseket tehetsz fel. Az API kulcs csak a böngésződben tárolódik.<br><a href="https://aistudio.google.com/app/apikey" target="_blank">→ Ingyenes API kulcs igénylése</a></div>
-        <div class="api-key-row"><input class="api-key-input" id="gkey" type="password" placeholder="AIza..."><button class="api-key-save" onclick="saveGKey()">Mentés</button></div>
+        <div class="api-key-title">${t('activateGemini')}</div>
+        <div class="api-key-desc">${t('geminiDesc')}<br><a href="https://aistudio.google.com/app/apikey" target="_blank">${t('getFreeKey')}</a></div>
+        <div class="api-key-row"><input class="api-key-input" id="gkey" type="password" placeholder="AIza..."><button class="api-key-save" onclick="saveGKey()">${t('save')}</button></div>
       </div>`
     :`<div class="api-key-card" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
-        <div><div class="api-key-title" style="margin-bottom:2px">✅ Gemini AI aktív</div><div style="font-size:11px;color:var(--muted2)">API kulcs elmentve</div></div>
-        <button onclick="clearGKey()" style="background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.3);color:var(--accent3);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">Törlés</button>
+        <div><div class="api-key-title" style="margin-bottom:2px">${t('geminiActive')}</div><div style="font-size:11px;color:var(--muted2)">${t('apiKeySaved')}</div></div>
+        <button onclick="clearGKey()" style="background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.3);color:var(--accent3);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">${t('delete')}</button>
       </div>`;
 
   const msgsHtml=chatMessages.length===0
-    ?`<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px"><div style="font-size:28px;margin-bottom:8px">💬</div>Kérdezz bármit a pénzügyeidről!<br><span style="font-size:11px">pl. „Hogyan növelhetem a megtakarításom?"</span></div>`
+    ?`<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px"><div style="font-size:28px;margin-bottom:8px">💬</div>${t('chatPlaceholder')}<br><span style="font-size:11px">${t('chatPlaceholderSub')}</span></div>`
     :chatMessages.map(msg=>`<div class="chat-msg ${msg.role}"><div class="chat-bubble">${msg.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>')}</div></div>`).join('');
 
   const fcColor=fc.avgComp>=20?'var(--accent2)':fc.avgComp>=10?'var(--accent4)':'var(--accent3)';
+  const keepPaceStr=getLang()==='hu'
+    ?`Ha tartod a tempót, ${fc.expRet}%-os éves hozammal (${escH(state.investmentConfig.name)}):`
+    :`At your pace, with ${fc.expRet}% annual return (${escH(state.investmentConfig.name)}):`;
 
   document.getElementById('pane-ai').innerHTML=`<div class="fade-in">
-  <div class="section-label">AI Előrejelzés · ${state.currentYear}</div>
+  <div class="section-label">${t('aiForecast')} · ${state.currentYear}</div>
   <div class="forecast-card">
-    <div class="forecast-title">📊 Éves befektetési előrejelzés</div>
+    <div class="forecast-title">${t('aiYearlyForecast')}</div>
     <div class="forecast-amount">${fmtS(fc.projected)}</div>
-    <div class="forecast-detail">Tervezett éves total · ${fc.active} aktív hónap · átlag ${fmt(Math.round(fc.avgInv))}/hó<br>Ha tartod a tempót, 7%-os éves hozammal:</div>
+    <div class="forecast-detail">${t('plannedYearlyTotal')} · ${fc.active} ${t('activeMonthsLabel')} · ${t('avgPerMonth')} ${fmt(Math.round(fc.avgInv))}/mo<br>${keepPaceStr}</div>
     <div class="forecast-bars">
-      <div class="forecast-bar-item"><div class="forecast-bar-label">5 év múlva</div><div class="forecast-bar-value purple">${fmtM(fc.fiveY)}</div></div>
-      <div class="forecast-bar-item"><div class="forecast-bar-label">10 év múlva</div><div class="forecast-bar-value yellow">${fmtM(fc.tenY)}</div></div>
-      <div class="forecast-bar-item"><div class="forecast-bar-label">Átl. arány</div><div class="forecast-bar-value" style="color:${fcColor}">${fc.avgComp.toFixed(1)}%</div></div>
+      <div class="forecast-bar-item"><div class="forecast-bar-label">${t('in5years')}</div><div class="forecast-bar-value purple">${fmtM(fc.fiveY)}</div></div>
+      <div class="forecast-bar-item"><div class="forecast-bar-label">${t('in10years')}</div><div class="forecast-bar-value yellow">${fmtM(fc.tenY)}</div></div>
+      <div class="forecast-bar-item"><div class="forecast-bar-label">${t('avgRate')}</div><div class="forecast-bar-value" style="color:${fcColor}">${fc.avgComp.toFixed(1)}%</div></div>
     </div>
   </div>
 
-  <div class="section-label">AI Elemzés · Személyre szabott felismerések</div>
+  <div class="section-label">${t('aiAnalysis')}</div>
   ${insHtml}
 
-  <div class="section-label">Gemini AI Chat</div>
+  <div class="section-label">${t('geminiChat')}</div>
   ${apiSection}
   <div class="chat-container">
     <div class="chat-header">
       <div class="chat-header-icon">🤖</div>
-      <div><div class="chat-header-name">Pénzügyi Asszisztens</div><div class="chat-header-sub">${state.geminiKey?'Gemini 2.0 Flash · aktív':'API kulcs szükséges a chat aktiválásához'}</div></div>
+      <div><div class="chat-header-name">${t('financialAssistant')}</div><div class="chat-header-sub">${state.geminiKey?t('geminiActiveLabel'):t('needApiKey')}</div></div>
     </div>
     <div class="chat-messages" id="chat-msgs">${msgsHtml}</div>
     <div class="chat-input-area">
-      <input class="chat-input" id="chat-in" placeholder="${state.geminiKey?'Kérdezz a pénzügyeidről...':'Add meg a Gemini API kulcsot fent'}" ${!state.geminiKey?'disabled':''} onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}">
+      <input class="chat-input" id="chat-in" placeholder="${state.geminiKey?t('askFinances'):t('enterKeyFirst')}" ${!state.geminiKey?'disabled':''} onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}">
       <button class="chat-send-btn" id="chat-btn" onclick="sendChat()" ${!state.geminiKey?'disabled':''}>➤</button>
     </div>
   </div>
@@ -1037,19 +1445,19 @@ async function sendChat(){
   inp.disabled=true;
 
   try{
-    const yd=getYD(),m=getMD();
-    // System instruction (proper Gemini API format - no fake user/model turns needed)
+    const yd=getYD(),m=getMD(),ma=m.assets;
+    const cfg=state.investmentConfig;
     const sysPrompt=`You are a supportive personal finance assistant for a Hungarian university student (18 years old).
 
 CURRENT FINANCIAL DATA:
 - Monthly income: ${fmt(mInc(m))} (scholarship 58,000 + parent 10,000 HUF)
 - Monthly expenses: Core ${fmt(mCore(m))} | Choice ${fmt(mChoice(m))} | Total ${fmt(mExp(m))}
-- Monthly investment: ${fmt(m.invested)} (VWCE ETF, DCA strategy, TBSZ account)
+- Monthly investment: ${fmt(m.invested)} (${cfg.name}${cfg.ticker?' ['+cfg.ticker+']':''}, DCA strategy, expected annual return ${cfg.expectedReturn}%${cfg.note?', '+cfg.note:''})
 - Year ${state.currentYear} total invested so far: ${fmt(yearInv())}
-- Assets: Bank ${fmt(yd.assets.bank)} | Cash HUF ${fmt(yd.assets.cashHUF)} | EUR ${yd.assets.cashEUR}€ (≈${fmt(Math.round(yd.assets.cashEUR*state.eurRate))}) | Portfolio ${fmt(yd.assets.portfolio)}
+- Assets: Bank ${fmt(ma.bank)} | Cash HUF ${fmt(ma.cashHUF)} | EUR ${ma.cashEUR}€ (≈${fmt(Math.round(ma.cashEUR*state.eurRate))}) | Portfolio ${fmt(ma.portfolio)}
 - EUR/HUF rate: ${state.eurRate} Ft
 
-PHILOSOPHY: Long-term DCA investing only. VWCE ETF. TBSZ. No day trading. No gambling. No crypto speculation. Small consistent steps while enjoying youth.
+PHILOSOPHY: Long-term DCA investing only. ${cfg.name}${cfg.ticker?' ('+cfg.ticker+')':''}. TBSZ account. No day trading. No gambling. No crypto speculation. Small consistent steps while enjoying youth.
 PERSONALITY: Supportive, realistic, non-judgmental. Student life is valid. Never shame spending on food, travel, or experiences.
 LANGUAGE: Respond in the same language as the user (Hungarian or English). Be concise (2-4 sentences unless the question requires more).`;
 
@@ -1101,15 +1509,15 @@ LANGUAGE: Respond in the same language as the user (Hungarian or English). Be co
     const msg2=err.message||'';
     let e='';
     if(msg2.includes('HTTP_429')||msg2.includes('RESOURCE_EXHAUSTED')||msg2.includes('quota')){
-      e='⏳ **Rate limit elérve.** Az ingyenes Gemini tier percenként korlátozott. Várj 1-2 percet, majd próbáld újra!';
+      e=getLang()==='hu'?'⏳ **Rate limit elérve.** Az ingyenes Gemini tier percenként korlátozott. Várj 1-2 percet!':'⏳ **Rate limit reached.** The free Gemini tier is limited per minute. Wait 1-2 minutes and try again.';
     }else if(msg2.includes('HTTP_400')||msg2.includes('INVALID_ARGUMENT')){
-      e='❌ **Formátum hiba (400).** Töröld a chat előzményeket (Törlés gomb fent) és próbáld újra.';
+      e=getLang()==='hu'?'❌ **Formátum hiba (400).** Töröld a chat előzményeket és próbáld újra.':'❌ **Format error (400).** Clear the chat history and try again.';
     }else if(msg2.includes('HTTP_403')||msg2.includes('API_KEY')||msg2.includes('key not valid')){
-      e='🔑 **Érvénytelen API kulcs.** Ellenőrizd a kulcsot az aistudio.google.com oldalon.';
+      e=getLang()==='hu'?'🔑 **Érvénytelen API kulcs.** Ellenőrizd az aistudio.google.com oldalon.':'🔑 **Invalid API key.** Please check it at aistudio.google.com.';
     }else if(msg2.includes('HTTP_401')){
-      e='🔑 **Hitelesítési hiba.** Az API kulcs lejárt vagy érvénytelen.';
+      e=getLang()==='hu'?'🔑 **Hitelesítési hiba.** Az API kulcs lejárt vagy érvénytelen.':'🔑 **Auth error.** The API key is expired or invalid.';
     }else{
-      e='❌ Hiba: '+(msg2||'Ismeretlen hiba. Próbáld újra!');
+      e='❌ '+(msg2||getLang()==='hu'?'Ismeretlen hiba. Próbáld újra!':'Unknown error. Please try again.');
     }
     chatMessages.push({role:'ai',content:e});
   }
@@ -1127,6 +1535,32 @@ LANGUAGE: Respond in the same language as the user (Hungarian or English). Be co
 /* ============================================================
    BOTTOM SHEET
 ============================================================ */
+// Visual viewport handler: keeps sheet above keyboard on mobile
+let _vpListener = null;
+function _attachVP(){
+  if(!window.visualViewport)return;
+  _vpListener=()=>{
+    const ov=document.getElementById('sheet-overlay');
+    if(!ov||!ov.classList.contains('open'))return;
+    const vv=window.visualViewport;
+    ov.style.height=vv.height+'px';
+    ov.style.top=vv.offsetTop+'px';
+  };
+  window.visualViewport.addEventListener('resize',_vpListener);
+  window.visualViewport.addEventListener('scroll',_vpListener);
+}
+function _detachVP(){
+  if(!window.visualViewport||!_vpListener)return;
+  window.visualViewport.removeEventListener('resize',_vpListener);
+  window.visualViewport.removeEventListener('scroll',_vpListener);
+  _vpListener=null;
+  const ov=document.getElementById('sheet-overlay');
+  if(ov){ov.style.height='';ov.style.top='';}
+}
+
+function setCursorToEnd(el){
+  if(el.setSelectionRange){const l=el.value.length;el.setSelectionRange(l,l);}
+}
 function openSheet(title,bodyHTML,onSave){
   document.getElementById('sheet-title').textContent=title;
   document.getElementById('sheet-body').innerHTML=bodyHTML;
@@ -1134,11 +1568,18 @@ function openSheet(title,bodyHTML,onSave){
   const ov=document.getElementById('sheet-overlay');
   ov.style.display='flex';
   requestAnimationFrame(()=>ov.classList.add('open'));
-  setTimeout(()=>{const i=document.querySelector('#sheet-body input:not([type=range])');if(i)i.focus();},300);
+  _attachVP();
+  setTimeout(()=>{
+    document.querySelectorAll('#sheet-body input[inputmode="numeric"]').forEach(inp=>{
+      inp.addEventListener('focus',function(){setCursorToEnd(this);});
+    });
+    const i=document.querySelector('#sheet-body input:not([type=range])');if(i)i.focus();
+  },300);
 }
 function closeSheet(){
   const ov=document.getElementById('sheet-overlay');
   ov.classList.remove('open');
+  _detachVP();
   setTimeout(()=>{ov.style.display='none';sheetCb=null;},300);
 }
 document.getElementById('sheet-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('sheet-overlay'))closeSheet();});
@@ -1148,39 +1589,40 @@ document.getElementById('sheet-save').addEventListener('click',()=>{if(sheetCb)s
 /* ============================================================
    EDIT FUNCTIONS
 ============================================================ */
-const ASSET_LBL={bank:'Bankszámla egyenleg',cashHUF:'Készpénz HUF',cashEUR:'Készpénz EUR',portfolio:'Portfólió értéke (Ft)'};
+const ASSET_LBL={bank:()=>t('bankBalance'),cashHUF:()=>t('localCash'),cashEUR:()=>t('cashEURLabel'),portfolio:()=>t('portfolioLabel')};
 function editAsset(key){
-  const yd=getYD(),isEur=key==='cashEUR';
-  openSheet(ASSET_LBL[key],
-    `<div class="sheet-label">${isEur?'Összeg (EUR)':'Összeg (Ft)'}</div><input class="sheet-input" id="inp-a" type="number" inputmode="numeric" value="${yd.assets[key]}" placeholder="0">`,
-    ()=>{yd.assets[key]=parseFloat(document.getElementById('inp-a').value)||0;saveState();closeSheet();renderDashboard();}
+  const m=getMD(),a=m.assets,isEur=key==='cashEUR';
+  const sym=isEur?'€':getCurrSym();
+  openSheet(ASSET_LBL[key](),
+    `<div class="sheet-label">${t('amountLabel')} (${sym})</div><input class="sheet-input" id="inp-a" type="text" inputmode="numeric" pattern="[0-9]*" value="${a[key]}" placeholder="0">`,
+    ()=>{a[key]=parseFloat(document.getElementById('inp-a').value)||0;saveState();closeSheet();renderDashboard();}
   );
 }
 function editEurRate(){
-  openSheet('EUR/HUF árfolyam',
-    `<div class="sheet-label">1 EUR = ? HUF</div><input class="sheet-input" id="inp-eur" type="number" inputmode="numeric" value="${state.eurRate}" placeholder="400">
-     <div class="sheet-hint">💡 175 EUR × árfolyam = <strong id="eur-hint">${fmt(Math.round(175*state.eurRate))}</strong></div>`,
+  openSheet(t('eurRate'),
+    `<div class="sheet-label">${t('eurRateLabel')}</div><input class="sheet-input" id="inp-eur" type="text" inputmode="numeric" pattern="[0-9]*" value="${state.eurRate}" placeholder="400">
+     <div class="sheet-hint">💡 175 EUR × rate = <strong id="eur-hint">${fmt(Math.round(175*state.eurRate))}</strong></div>`,
     ()=>{state.eurRate=parseFloat(document.getElementById('inp-eur').value)||400;saveState();closeSheet();renderDashboard();if(activeTab==='invest')renderInvest();}
   );
   setTimeout(()=>{const i=document.getElementById('inp-eur');if(i)i.addEventListener('input',()=>{const h=document.getElementById('eur-hint');if(h)h.textContent=fmt(Math.round(175*(parseFloat(i.value)||400)));});},350);
 }
 function catSel(sel){
   const c=sel||'Core';
-  return`<div class="sheet-label">Kategória</div><select class="sheet-input" id="inp-cat"><option value="Core"${c==='Core'?' selected':''}>🏠 Core – Szükséges kiadás</option><option value="Choice"${c==='Choice'?' selected':''}>🎯 Choice – Választható kiadás</option></select>`;
+  return`<div class="sheet-label">${t('category')}</div><select class="sheet-input" id="inp-cat"><option value="Core"${c==='Core'?' selected':''}>${t('coreCat')}</option><option value="Choice"${c==='Choice'?' selected':''}>${t('choiceCat')}</option></select>`;
 }
 function editIncItem(id){
   const m=getMD(),it=m.income.find(i=>i.id===id);if(!it)return;
-  openSheet('Bevétel szerkesztése',
-    `<div class="sheet-label">Megnevezés</div><input class="sheet-input" id="inp-n" type="text" value="${escA(it.name)}" placeholder="pl. Ösztöndíj">
-     <div class="sheet-label">Összeg (Ft)</div><input class="sheet-input" id="inp-am" type="number" inputmode="numeric" value="${it.amount}" placeholder="0">`,
+  openSheet(t('editIncome'),
+    `<div class="sheet-label">${t('name')}</div><input class="sheet-input" id="inp-n" type="text" value="${escA(it.name)}" placeholder="${t('egIncome')}">
+     <div class="sheet-label">${t('amount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" value="${it.amount}" placeholder="0">`,
     ()=>{it.name=document.getElementById('inp-n').value.trim()||it.name;it.amount=parseFloat(document.getElementById('inp-am').value)||0;saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();}
   );
 }
 function addInc(){
   const m=getMD();
-  openSheet('Új bevétel',
-    `<div class="sheet-label">Megnevezés</div><input class="sheet-input" id="inp-n" type="text" placeholder="pl. Diákmunka">
-     <div class="sheet-label">Összeg (Ft)</div><input class="sheet-input" id="inp-am" type="number" inputmode="numeric" placeholder="0">`,
+  openSheet(t('newIncome'),
+    `<div class="sheet-label">${t('name')}</div><input class="sheet-input" id="inp-n" type="text" placeholder="${t('egPartTime')}">
+     <div class="sheet-label">${t('amount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0">`,
     ()=>{const n=document.getElementById('inp-n').value.trim(),am=parseFloat(document.getElementById('inp-am').value)||0;if(!n)return;const maxId=m.income.length?Math.max(...m.income.map(i=>i.id)):0;m.income.push({id:maxId+1,name:n,amount:am});saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();}
   );
 }
@@ -1188,18 +1630,18 @@ function delInc(id){const m=getMD();m.income=m.income.filter(i=>i.id!==id);saveS
 
 function editExpItem(id){
   const m=getMD(),it=m.expenses.find(e=>e.id===id);if(!it)return;
-  openSheet('Kiadás szerkesztése',
-    `<div class="sheet-label">Megnevezés</div><input class="sheet-input" id="inp-n" type="text" value="${escA(it.name)}" placeholder="pl. Kaja">
-     <div class="sheet-label">Összeg (Ft)</div><input class="sheet-input" id="inp-am" type="number" inputmode="numeric" value="${it.amount}" placeholder="0">
+  openSheet(t('editExpense'),
+    `<div class="sheet-label">${t('name')}</div><input class="sheet-input" id="inp-n" type="text" value="${escA(it.name)}" placeholder="${t('egFood')}">
+     <div class="sheet-label">${t('amount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" value="${it.amount}" placeholder="0">
      ${catSel(it.category)}`,
     ()=>{it.name=document.getElementById('inp-n').value.trim()||it.name;it.amount=parseFloat(document.getElementById('inp-am').value)||0;const c=document.getElementById('inp-cat');if(c)it.category=c.value;saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();}
   );
 }
 function addExp(){
   const m=getMD();
-  openSheet('Új kiadás',
-    `<div class="sheet-label">Megnevezés</div><input class="sheet-input" id="inp-n" type="text" placeholder="pl. Edzőterem">
-     <div class="sheet-label">Összeg (Ft)</div><input class="sheet-input" id="inp-am" type="number" inputmode="numeric" placeholder="0">
+  openSheet(t('newExpense'),
+    `<div class="sheet-label">${t('name')}</div><input class="sheet-input" id="inp-n" type="text" placeholder="${t('egGym')}">
+     <div class="sheet-label">${t('amount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0">
      ${catSel('Core')}`,
     ()=>{const n=document.getElementById('inp-n').value.trim(),am=parseFloat(document.getElementById('inp-am').value)||0;if(!n)return;const maxId=m.expenses.length?Math.max(...m.expenses.map(e=>e.id)):0;const c=document.getElementById('inp-cat');m.expenses.push({id:maxId+1,name:n,amount:am,category:c?c.value:'Core'});saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();}
   );
@@ -1208,12 +1650,13 @@ function delExp(id){const m=getMD();m.expenses=m.expenses.filter(e=>e.id!==id);s
 
 function editInvestment(){
   const m=getMD(),eur=state.eurRate,isJune=state.currentMonth===6;
-  openSheet(MONTHS_HU[state.currentMonth-1]+' – Compound allokáció',
-    `${isJune?`<div class="sheet-hint">💡 Javasolt: 175 EUR × ${eur} Ft + 20 000 Ft = <strong>${fmt(Math.round(175*eur+20000))}</strong></div>`:''}
-     <div class="sheet-label">Befektetett összeg (Ft)</div><input class="sheet-input" id="inp-inv" type="number" inputmode="numeric" value="${m.invested||''}" placeholder="0" oninput="syncV()">
-     <div class="sheet-label">Ebből VWCE ETF (Ft)</div><input class="sheet-input" id="inp-vwce" type="number" inputmode="numeric" value="${m.vwce||''}" placeholder="0">
-     <div class="sheet-label">Ebből vészalap (Ft)</div><input class="sheet-input" id="inp-emg" type="number" inputmode="numeric" value="${m.emergency||''}" placeholder="0" oninput="syncV()">
-     <div class="sheet-label">Megjegyzés</div><input class="sheet-input" id="inp-nt" type="text" value="${escA(m.note)}" placeholder="pl. DCA · havi vétel">`,
+  const mnName=t('months')[state.currentMonth-1];
+  openSheet(mnName+' '+t('compoundAlloc'),
+    `${isJune?`<div class="sheet-hint">💡 ${t('suggestedLabel')}: 175 EUR × ${eur} ${getCurrSym()} + 20 000 = <strong>${fmt(Math.round(175*eur+20000))}</strong></div>`:''}
+     <div class="sheet-label">${t('investedAmount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-inv" type="text" inputmode="numeric" pattern="[0-9]*" value="${m.invested||''}" placeholder="0" oninput="syncV()">
+     <div class="sheet-label">${t('ofWhichAsset')} ${escH(state.investmentConfig.name)} (${getCurrSym()})</div><input class="sheet-input" id="inp-vwce" type="text" inputmode="numeric" pattern="[0-9]*" value="${m.vwce||''}" placeholder="0">
+     <div class="sheet-label">${t('ofWhichEmergency')} (${getCurrSym()})</div><input class="sheet-input" id="inp-emg" type="text" inputmode="numeric" pattern="[0-9]*" value="${m.emergency||''}" placeholder="0" oninput="syncV()">
+     <div class="sheet-label">${t('note')}</div><input class="sheet-input" id="inp-nt" type="text" value="${escA(m.note)}" placeholder="${t('egDCA')}">`,
     ()=>{
       m.invested=parseFloat(document.getElementById('inp-inv').value)||0;
       m.emergency=parseFloat(document.getElementById('inp-emg').value)||0;
@@ -1231,13 +1674,551 @@ function syncV(){
 }
 
 /* ============================================================
+   INVESTMENT CONFIG
+============================================================ */
+function editInvestmentConfig(){
+  const cfg=state.investmentConfig;
+  openSheet(t('investConfig'),
+    `<div class="sheet-label">${t('instrumentName')}</div>
+     <input class="sheet-input" id="inp-iname" type="text" value="${escA(cfg.name)}" placeholder="${getLang()==='hu'?'pl. VWCE ETF, S&P 500':'e.g. VWCE ETF, S&P 500'}">
+     <div class="sheet-label">${t('tickerLabel')}</div>
+     <input class="sheet-input" id="inp-ticker" type="text" value="${escA(cfg.ticker||'')}" placeholder="${getLang()==='hu'?'pl. VWCE, IWDA, SPY':'e.g. VWCE, IWDA, SPY'}">
+     <div class="sheet-label">${t('expectedReturnLabel')} (%)</div>
+     <input class="sheet-input" id="inp-ret" type="text" inputmode="decimal" pattern="[0-9.]*" value="${cfg.expectedReturn}" placeholder="7">
+     <div class="sheet-label">${t('configNoteLabel')}</div>
+     <input class="sheet-input" id="inp-cnote" type="text" value="${escA(cfg.note||'')}" placeholder="${getLang()==='hu'?'pl. DCA stratégia, TBSZ':'e.g. DCA strategy, TBSZ'}">
+     <div class="sheet-hint">💡 ${t('configHint')}</div>`,
+    ()=>{
+      const name=document.getElementById('inp-iname').value.trim();
+      if(name)cfg.name=name;
+      cfg.ticker=document.getElementById('inp-ticker').value.trim();
+      const ret=parseFloat(document.getElementById('inp-ret').value);
+      if(!isNaN(ret)&&ret>0&&ret<=100)cfg.expectedReturn=ret;
+      cfg.note=document.getElementById('inp-cnote').value.trim();
+      // Sync calculator rate to new expected return
+      state.calculator.rate=cfg.expectedReturn;
+      const slr=document.getElementById('sl-rate');if(slr)slr.value=cfg.expectedReturn;
+      saveState();closeSheet();
+      renderInvest();renderBudget();
+      if(activeTab==='ai')renderAI();
+      if(activeTab==='analytics')renderAnalytics();
+    }
+  );
+}
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+function openSettings(){
+  const s=state.settings;
+  document.getElementById('settings-body').innerHTML=`
+    <div class="sheet-label">${t('language')}</div>
+    <select class="sheet-input" id="set-lang">
+      <option value="hu"${s.language==='hu'?' selected':''}>🇭🇺 Magyar</option>
+      <option value="en"${s.language==='en'?' selected':''}>🇬🇧 English</option>
+    </select>
+    <div class="sheet-label" style="margin-top:14px">${t('currencySymbol')}</div>
+    <input class="sheet-input" id="set-sym" type="text" value="${escA(s.currencySymbol)}" placeholder="Ft · € · $ · ₹">
+    <div class="sheet-hint" style="margin-top:8px">${t('currencyHint')}</div>
+  `;
+  const ov=document.getElementById('settings-overlay');
+  ov.style.display='flex';
+  requestAnimationFrame(()=>{
+    document.getElementById('settings-sheet').style.transform='translateY(0)';
+  });
+}
+function closeSettings(){
+  document.getElementById('settings-sheet').style.transform='translateY(100%)';
+  setTimeout(()=>{ document.getElementById('settings-overlay').style.display='none'; },300);
+}
+function saveSettings(){
+  const lang=document.getElementById('set-lang')?.value||'hu';
+  const sym=document.getElementById('set-sym')?.value.trim()||'Ft';
+  state.settings.language=lang;
+  state.settings.currencySymbol=sym;
+  saveState();
+  closeSettings();
+  updateStaticUI();
+  updateHeader();
+  renderCurrent();
+  if(activeTab!=='summary')renderDashboard();
+  if(activeTab!=='budget')renderBudget();
+  if(activeTab!=='invest')renderInvest();
+}
+document.getElementById('settings-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('settings-overlay'))closeSettings();});
+
+/* ============================================================
    INIT
 ============================================================ */
+async function fetchLiveEurRate(){
+  try{
+    const res=await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json');
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const rate=data.eur&&data.eur.huf;
+    if(!rate||isNaN(rate))throw new Error('Bad data');
+    return Math.round(rate);
+  }catch(err){
+    console.warn('Live EUR rate failed:',err);
+    return null;
+  }
+}
+
+async function refreshEurRate(){
+  const btn=document.getElementById('eur-refresh-icon');
+  if(btn)btn.classList.add('spinning');
+  const rate=await fetchLiveEurRate();
+  if(btn)btn.classList.remove('spinning');
+  if(rate){
+    state.eurRate=rate;
+    state.eurRateLastFetched=Date.now();
+    state.eurRateLive=true;
+  } else {
+    state.eurRateLive=false;
+  }
+  saveState();
+  renderDashboard();
+  if(activeTab==='invest')renderInvest();
+}
+
+/* ============================================================
+   ONBOARDING WIZARD
+============================================================ */
+let wizStep = 1;
+let _wizData = null;
+
+function _initWizData() {
+  return {
+    incomes: [{id:1, name:'', amount:0}],
+    expenses: [
+      {id:1, name:'Housing', amount:0, category:'Core'},
+      {id:2, name:'Food', amount:0, category:'Core'},
+      {id:3, name:'Lifestyle', amount:0, category:'Choice'},
+    ],
+    investMode: null,
+    investName:'VWCE ETF', investTicker:'VWCE', investReturn:7,
+    investMonthly:0, investAccount:'TBSZ',
+    savingsMonthly:0,
+  };
+}
+
+function showOnboarding() {
+  _wizData = _initWizData();
+  wizStep = 1;
+  const el = document.createElement('div');
+  el.id = 'onboarding-overlay';
+  el.innerHTML = `
+    <div id="onboarding-card">
+      <div id="wizard-progress"></div>
+      <div id="wizard-body"></div>
+      <div id="wizard-footer">
+        <button class="wiz-skip-btn" onclick="skipOnboarding()"></button>
+        <div class="wiz-nav-btns">
+          <button class="wiz-back-btn" id="wiz-back" onclick="wizBack()"></button>
+          <button class="wiz-next-btn" id="wiz-next" onclick="wizNext()"></button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => { el.classList.add('open'); updateWizardStep(); });
+}
+
+function closeOnboarding() {
+  const el = document.getElementById('onboarding-overlay');
+  if (!el) return;
+  el.classList.remove('open');
+  setTimeout(() => { try{el.remove();}catch(e){} }, 350);
+}
+
+function skipOnboarding() {
+  state.onboardingComplete = true;
+  saveState();
+  closeOnboarding();
+}
+
+function updateWizardStep() {
+  // Update skip/back/next labels (language may have changed on step 1)
+  const skipBtn = document.querySelector('.wiz-skip-btn');
+  if (skipBtn) skipBtn.textContent = t('wizSkip');
+  const backBtn = document.getElementById('wiz-back');
+  if (backBtn) { backBtn.textContent = t('wizBack'); backBtn.style.display = wizStep === 1 ? 'none' : ''; }
+  const nextBtn = document.getElementById('wiz-next');
+  if (nextBtn) { nextBtn.textContent = t('wizNext'); nextBtn.style.display = wizStep === 5 ? 'none' : ''; }
+
+  // Progress dots
+  const prog = document.getElementById('wizard-progress');
+  if (prog) prog.innerHTML = [1,2,3,4,5].map(i =>
+    `<div class="wiz-dot ${i < wizStep ? 'done' : i === wizStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  // Render body
+  const body = document.getElementById('wizard-body');
+  if (!body) return;
+  if (wizStep === 1) body.innerHTML = renderWizStep1();
+  else if (wizStep === 2) body.innerHTML = renderWizStep2();
+  else if (wizStep === 3) body.innerHTML = renderWizStep3();
+  else if (wizStep === 4) body.innerHTML = renderWizStep4();
+  else if (wizStep === 5) body.innerHTML = renderWizStep5();
+  body.scrollTop = 0;
+
+  // Post-render event binding
+  if (wizStep === 1) {
+    document.querySelectorAll('.lang-opt').forEach(el => {
+      el.addEventListener('click', () => {
+        state.settings.language = el.dataset.lang;
+        saveState(); updateStaticUI(); updateWizardStep();
+      });
+    });
+    document.querySelectorAll('.curr-chip').forEach(el => {
+      el.addEventListener('click', () => {
+        const val = el.dataset.curr;
+        if (val === 'custom') {
+          const c = prompt(t('wizCurrLabel') + ':') || state.settings.currencySymbol;
+          state.settings.currencySymbol = c.trim() || state.settings.currencySymbol;
+        } else {
+          state.settings.currencySymbol = val;
+        }
+        saveState(); updateWizardStep();
+      });
+    });
+  }
+  if (wizStep === 4) {
+    document.querySelectorAll('.inv-choice-card').forEach(el => {
+      el.addEventListener('click', () => {
+        wizSaveCurrentStep();
+        _wizData.investMode = el.dataset.mode;
+        updateWizardStep();
+      });
+    });
+  }
+}
+
+function wizSaveCurrentStep() {
+  if (wizStep === 2) {
+    const rows = document.querySelectorAll('.wiz-inc-row');
+    const saved = [];
+    rows.forEach((row, i) => {
+      const name = row.querySelector('.wiz-inc-name')?.value?.trim() || '';
+      const amount = parseFloat(row.querySelector('.wiz-inc-amt')?.value) || 0;
+      saved.push({id:i+1, name, amount});
+    });
+    if (saved.length) _wizData.incomes = saved;
+  }
+  if (wizStep === 3) {
+    const slots = document.querySelectorAll('.wiz-exp-slot');
+    const expNames = ['Housing','Food','Lifestyle'];
+    const expCats = ['Core','Core','Choice'];
+    slots.forEach((slot, i) => {
+      const amount = parseFloat(slot.querySelector('.wiz-exp-amt')?.value) || 0;
+      _wizData.expenses[i] = {id:i+1, name:expNames[i], amount, category:expCats[i]};
+    });
+    // Extra expense rows
+    const extras = _wizData.expenses.slice(3); // preserve already saved extras
+    const newExtras = [];
+    document.querySelectorAll('.wiz-extra-exp').forEach((row, i) => {
+      const name = row.querySelector('.wiz-extra-name')?.value?.trim() || '';
+      const amount = parseFloat(row.querySelector('.wiz-extra-amt')?.value) || 0;
+      const cat = row.querySelector('.wiz-extra-cat')?.value || 'Core';
+      if (name) newExtras.push({id:10+i, name, amount, category:cat});
+    });
+    _wizData.expenses = _wizData.expenses.slice(0,3).concat(newExtras);
+  }
+  if (wizStep === 4) {
+    if (_wizData.investMode === 'existing') {
+      _wizData.investName  = document.getElementById('wiz-iname')?.value?.trim() || 'VWCE ETF';
+      _wizData.investTicker= document.getElementById('wiz-ticker')?.value?.trim() || '';
+      _wizData.investReturn= parseFloat(document.getElementById('wiz-ret')?.value) || 7;
+      _wizData.investMonthly= parseFloat(document.getElementById('wiz-monthly')?.value) || 0;
+      _wizData.investAccount= document.getElementById('wiz-account')?.value?.trim() || '';
+    } else if (_wizData.investMode === 'start') {
+      _wizData.savingsMonthly = parseFloat(document.getElementById('wiz-savings')?.value) || 0;
+    }
+  }
+}
+
+function wizNext() {
+  wizSaveCurrentStep();
+  if (wizStep < 5) { wizStep++; updateWizardStep(); }
+}
+
+function wizBack() {
+  wizSaveCurrentStep();
+  if (wizStep > 1) { wizStep--; updateWizardStep(); }
+}
+
+function completeOnboarding() {
+  wizSaveCurrentStep();
+  const lang = getLang();
+  const expLabelMap = {
+    Housing:  lang==='hu' ? 'Lakhatás / Albérlet' : 'Housing / Rent',
+    Food:     lang==='hu' ? 'Élelmiszer / Kaja'     : 'Food',
+    Lifestyle:lang==='hu' ? 'Életstílus / Szórakozás':'Lifestyle / Fun',
+  };
+  const incomes = _wizData.incomes
+    .filter(i => i.amount > 0 || i.name)
+    .map((i, idx) => ({id:idx+1, name:i.name||(lang==='hu'?'Bevétel':'Income'), amount:i.amount}));
+  const expenses = _wizData.expenses
+    .filter(e => e.amount > 0 || (e.id >= 10 && e.name))
+    .map((e, idx) => ({id:idx+1, name:expLabelMap[e.name]||e.name, amount:e.amount, category:e.category}));
+  const invMonthly = _wizData.investMode==='existing' ? (_wizData.investMonthly||0)
+                   : _wizData.investMode==='start'    ? (_wizData.savingsMonthly||0) : 0;
+
+  // Apply to all months in current year
+  const yd = getYD();
+  yd.months.forEach(m => {
+    if (incomes.length)  m.income   = incomes.map(x=>({...x}));
+    if (expenses.length) m.expenses = expenses.map(x=>({...x}));
+    if (invMonthly > 0) { m.invested = invMonthly; m.vwce = invMonthly; }
+    if (_wizData.investMode==='start' && invMonthly > 0)
+      m.note = lang==='hu' ? 'Tervezett megtakarítás' : 'Planned savings';
+  });
+
+  // Investment config
+  if (_wizData.investMode === 'existing') {
+    state.investmentConfig = {
+      name: _wizData.investName || 'VWCE ETF',
+      ticker: _wizData.investTicker || '',
+      expectedReturn: _wizData.investReturn || 7,
+      note: _wizData.investAccount || 'DCA'
+    };
+    state.calculator.rate = _wizData.investReturn || 7;
+  }
+
+  state.onboardingComplete = true;
+  saveState();
+  closeOnboarding();
+  updateStaticUI(); updateHeader();
+  renderDashboard(); renderBudget(); renderInvest();
+  if (!['summary','budget','invest'].includes(activeTab)) renderTab(activeTab);
+}
+
+function renderWizStep1() {
+  const lang = getLang(), curr = getCurrSym();
+  const currencies = ['Ft','€','$','£','¥','₹'];
+  return `
+    <div style="text-align:center;padding:28px 0 14px">
+      <div style="font-size:52px;margin-bottom:12px">💰</div>
+      <div style="font-family:var(--font-head);font-size:26px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${t('appTitle')}</div>
+      <div style="font-size:14px;color:var(--muted2);line-height:1.55">${t('wizWelcomeSub')}</div>
+    </div>
+    <div class="sheet-label">${t('wizLangLabel')}</div>
+    <div class="lang-grid">
+      <div class="lang-opt ${lang==='en'?'selected':''}" data-lang="en"><span class="lo-flag">🇬🇧</span><span class="lo-name">English</span></div>
+      <div class="lang-opt ${lang==='hu'?'selected':''}" data-lang="hu"><span class="lo-flag">🇭🇺</span><span class="lo-name">Magyar</span></div>
+    </div>
+    <div class="sheet-label">${t('wizCurrLabel')}</div>
+    <div class="curr-opts">
+      ${currencies.map(c => `<div class="curr-chip ${curr===c?'selected':''}" data-curr="${c}">${c}</div>`).join('')}
+      <div class="curr-chip ${!currencies.includes(curr)?'selected':''}" data-curr="custom">✏ ${t('wizCurrCustom')}</div>
+    </div>
+    <div style="height:20px"></div>`;
+}
+
+function renderWizStep2() {
+  const incRows = _wizData.incomes.map(inc => `
+    <div class="wiz-inc-row">
+      <input class="sheet-input wiz-inc-name" type="text" placeholder="${t('wizIncName')}" value="${escA(inc.name)}" style="flex:1.5;margin-bottom:0">
+      <input class="sheet-input wiz-inc-amt" type="text" inputmode="numeric" placeholder="0" value="${inc.amount||''}" style="flex:1;margin-bottom:0">
+    </div>`).join('');
+  return `
+    <div class="wiz-headline">${t('wizStep2Title')}</div>
+    <div class="wiz-sub">${t('wizStep2Sub')}</div>
+    <div id="wiz-inc-list">${incRows}</div>
+    <button class="wiz-add-link" onclick="wizAddIncomeRow()">${t('wizAddSource')}</button>
+    <div style="height:20px"></div>`;
+}
+
+function wizAddIncomeRow() {
+  wizSaveCurrentStep();
+  _wizData.incomes.push({id:_wizData.incomes.length+1, name:'', amount:0});
+  const list = document.getElementById('wiz-inc-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.className = 'wiz-inc-row';
+  div.innerHTML = `<input class="sheet-input wiz-inc-name" type="text" placeholder="${t('wizIncName')}" style="flex:1.5;margin-bottom:0"><input class="sheet-input wiz-inc-amt" type="text" inputmode="numeric" placeholder="0" style="flex:1;margin-bottom:0">`;
+  list.appendChild(div);
+  div.querySelector('input').focus();
+}
+
+function renderWizStep3() {
+  const defs = [
+    {emoji:'🏠', label:t('wizHousing'), badgeCls:'core', cat:'Core'},
+    {emoji:'🍔', label:t('wizFood'),    badgeCls:'core', cat:'Core'},
+    {emoji:'🎯', label:t('wizLifestyle'),badgeCls:'choice', cat:'Choice'},
+  ];
+  const slots = defs.map((def, i) => {
+    const val = _wizData.expenses[i]?.amount || '';
+    return `<div class="wiz-exp-slot">
+      <span class="wiz-exp-emoji">${def.emoji}</span>
+      <div class="wiz-exp-info">
+        <div class="wiz-exp-label">${def.label} <span class="cat-badge ${def.badgeCls}">${def.cat}</span></div>
+        <input class="sheet-input wiz-exp-amt" type="text" inputmode="numeric" placeholder="0" value="${val}" style="margin-bottom:0;padding:10px 12px">
+      </div>
+    </div>`;
+  }).join('');
+  const extraRows = _wizData.expenses.slice(3).map(e => `
+    <div class="wiz-extra-exp" style="display:flex;gap:8px;margin-bottom:8px">
+      <input class="sheet-input wiz-extra-name" type="text" placeholder="${t('name')}" value="${escA(e.name)}" style="flex:1.5;margin-bottom:0">
+      <input class="sheet-input wiz-extra-amt" type="text" inputmode="numeric" placeholder="0" value="${e.amount||''}" style="flex:1;margin-bottom:0">
+      <select class="sheet-input wiz-extra-cat" style="flex:0.8;margin-bottom:0;padding:10px 8px">
+        <option value="Core" ${e.category==='Core'?'selected':''}>Core</option>
+        <option value="Choice" ${e.category==='Choice'?'selected':''}>Choice</option>
+      </select>
+    </div>`).join('');
+  return `
+    <div class="wiz-headline">${t('wizStep3Title')}</div>
+    <div class="wiz-sub">${t('wizStep3Sub')}</div>
+    ${slots}
+    <div id="wiz-extra-list">${extraRows}</div>
+    <button class="wiz-add-link" onclick="wizAddExpRow()">${t('wizAddMore')}</button>
+    <div style="height:20px"></div>`;
+}
+
+function wizAddExpRow() {
+  const list = document.getElementById('wiz-extra-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.className = 'wiz-extra-exp';
+  div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px';
+  div.innerHTML = `<input class="sheet-input wiz-extra-name" type="text" placeholder="${t('name')}" style="flex:1.5;margin-bottom:0"><input class="sheet-input wiz-extra-amt" type="text" inputmode="numeric" placeholder="0" style="flex:1;margin-bottom:0"><select class="sheet-input wiz-extra-cat" style="flex:0.8;margin-bottom:0;padding:10px 8px"><option value="Core">Core</option><option value="Choice">Choice</option></select>`;
+  list.appendChild(div);
+  div.querySelector('input').focus();
+}
+
+function renderWizStep4() {
+  const mode = _wizData.investMode;
+  const tip = key => `<button class="wiz-tooltip-btn" onclick="showWizTooltip(event,'${key}')">?</button>`;
+
+  const existingFields = mode !== 'existing' ? '' : `
+    <div style="margin-top:2px">
+      <div class="sheet-label">${t('wizAssetName')}</div>
+      <input class="sheet-input" id="wiz-iname" type="text" value="${escA(_wizData.investName)}" placeholder="VWCE ETF">
+      <div class="sheet-label" style="display:flex;align-items:center;gap:6px">${getLang()==='hu'?'Ticker / Szimbólum':'Ticker / Symbol'} ${tip('ttETF')}</div>
+      <input class="sheet-input" id="wiz-ticker" type="text" value="${escA(_wizData.investTicker)}" placeholder="VWCE, IWDA, SPY">
+      <div class="sheet-label" style="display:flex;align-items:center;gap:6px">${t('wizExpReturn')} ${tip('ttExpReturn')}</div>
+      <input class="sheet-input" id="wiz-ret" type="text" inputmode="decimal" value="${_wizData.investReturn||7}" placeholder="7">
+      <div class="sheet-label" style="display:flex;align-items:center;gap:6px">${t('wizMonthlyAmt')} ${tip('ttDCA')}</div>
+      <input class="sheet-input" id="wiz-monthly" type="text" inputmode="numeric" value="${_wizData.investMonthly||''}" placeholder="0">
+      <div class="sheet-label" style="display:flex;align-items:center;gap:6px">${t('wizAccount')} ${tip('ttTaxAccount')}</div>
+      <input class="sheet-input" id="wiz-account" type="text" value="${escA(_wizData.investAccount)}" placeholder="TBSZ, ISA">
+    </div>`;
+
+  const startFields = mode !== 'start' ? '' : `
+    <div style="margin-top:2px">
+      <div class="warn-box" style="margin-bottom:14px">🌱 ${t('wizPlaceholderNote')}</div>
+      <div class="sheet-label" style="display:flex;align-items:center;gap:6px">${t('wizSavingsAmt')} ${tip('ttDCA')}</div>
+      <input class="sheet-input" id="wiz-savings" type="text" inputmode="numeric" value="${_wizData.savingsMonthly||''}" placeholder="0">
+    </div>`;
+
+  return `
+    <div class="wiz-headline">${t('wizStep4Title')}</div>
+    <div class="wiz-sub">${t('wizStep4Sub')}</div>
+    <div class="inv-choice-grid">
+      <div class="inv-choice-card ${mode==='existing'?'selected':''}" data-mode="existing">
+        <span class="inv-choice-emoji">📈</span>
+        <div class="inv-choice-label">${t('wizAlreadyInvest')}</div>
+      </div>
+      <div class="inv-choice-card ${mode==='start'?'selected':''}" data-mode="start">
+        <span class="inv-choice-emoji">🌱</span>
+        <div class="inv-choice-label">${t('wizWantToStart')}</div>
+      </div>
+    </div>
+    ${existingFields}${startFields}
+    <div style="height:20px"></div>`;
+}
+
+function renderWizStep5() {
+  // Gather wizard data for preview
+  const totalInc = _wizData.incomes.reduce((s,i) => s+(parseFloat(i.amount)||0), 0);
+  const totalCore = _wizData.expenses.filter(e=>e.category==='Core').reduce((s,e) => s+(parseFloat(e.amount)||0), 0);
+  const totalChoice = _wizData.expenses.filter(e=>e.category==='Choice').reduce((s,e) => s+(parseFloat(e.amount)||0), 0);
+  const totalInv = _wizData.investMode==='existing' ? (_wizData.investMonthly||0)
+                 : _wizData.investMode==='start'    ? (_wizData.savingsMonthly||0) : 0;
+  const totalFree = totalInc - totalCore - totalChoice - totalInv;
+  const pct = v => totalInc > 0 ? Math.min(100, v/totalInc*100) : 0;
+  const corePct=pct(totalCore), choicePct=pct(totalChoice), compPct=pct(totalInv);
+  const freePct=Math.max(0, pct(totalFree));
+  const score = mmScore(compPct);
+
+  const mmRow = (badgeCls, badge, label, amount, p, fillColor) => `
+    <div class="mm-preview-row">
+      <div class="mm-preview-label">
+        <span style="display:flex;align-items:center;gap:6px"><span class="cat-badge ${badgeCls}" style="font-size:8px;padding:1px 5px">${badge}</span>${label}</span>
+        <span>${fmt(amount)} · ${fmtP(p)}</span>
+      </div>
+      <div class="mm-preview-bar"><div style="width:${p}%;height:100%;border-radius:3px;background:${fillColor}"></div></div>
+    </div>`;
+
+  return `
+    <div class="wiz-headline">${t('wizStep5Title')}</div>
+    <div class="wiz-sub">${t('wizStep5Sub')}</div>
+    <div class="mm-preview-card">
+      <div style="font-size:12px;color:var(--muted2);margin-bottom:12px">${t('income')}: <span style="color:var(--accent2);font-family:var(--font-mono)">${fmt(totalInc)}</span></div>
+      ${mmRow('core','Core',t('necessary'),totalCore,corePct,'var(--accent2)')}
+      ${mmRow('choice','Choice',t('discretionary'),totalChoice,choicePct,'var(--accent)')}
+      ${mmRow('compound','Compound',t('investment'),totalInv,compPct,'var(--accent4)')}
+      <div class="mm-preview-row" style="margin-bottom:0">
+        <div class="mm-preview-label">
+          <span style="color:var(--muted)">${t('freeRemainder')}</span>
+          <span style="color:${totalFree>=0?'var(--text)':'var(--accent3)'}">${totalFree>=0?'+':''}${fmt(totalFree)}</span>
+        </div>
+        <div class="mm-preview-bar"><div style="width:${freePct}%;height:100%;border-radius:3px;background:rgba(255,255,255,0.18)"></div></div>
+      </div>
+    </div>
+    <div class="score-big-card" style="margin-bottom:4px">
+      <div class="score-big-num ${score.cls}">${score.score}</div>
+      <div class="score-big-info">
+        <div class="score-big-label">${score.emoji} ${score.label}</div>
+        <div class="score-big-sub">${t('moneyMapScore')}</div>
+        <div class="score-big-pct" style="color:${scoreColor(score.cls)}">${fmtP(compPct)}</div>
+      </div>
+    </div>
+    <button class="wiz-start-btn" onclick="completeOnboarding()">${t('wizStartBtn')}</button>
+    <div style="height:32px"></div>`;
+}
+
+function showWizTooltip(event, key) {
+  event.stopPropagation();
+  const text = t(key);
+  // Remove any existing tooltip
+  document.querySelectorAll('.wiz-tooltip-pop').forEach(el => el.remove());
+  const pop = document.createElement('div');
+  pop.className = 'wiz-tooltip-pop';
+  pop.textContent = text;
+  document.body.appendChild(pop);
+  const btn = event.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const popW = 260;
+  let left = rect.left + btn.offsetWidth/2 - popW/2;
+  if (left < 8) left = 8;
+  if (left + popW > window.innerWidth - 8) left = window.innerWidth - popW - 8;
+  pop.style.cssText = `left:${left}px;top:${rect.bottom+8}px;`;
+  let timer = setTimeout(() => pop.remove(), 4500);
+  document.addEventListener('click', () => { clearTimeout(timer); pop.remove(); }, {once:true, capture:true});
+}
+
 loadState();
+updateStaticUI();
 updateHeader();
 renderDashboard();
 renderBudget();
 renderInvest();
+// Trigger onboarding wizard for new users
+if (!state.onboardingComplete) { setTimeout(() => showOnboarding(), 200); }
+// Fetch live rate on startup (non-blocking)
+fetchLiveEurRate().then(rate=>{
+  if(rate){
+    state.eurRate=rate;
+    state.eurRateLastFetched=Date.now();
+    state.eurRateLive=true;
+    saveState();
+    renderDashboard();
+    if(activeTab==='invest')renderInvest();
+  } else {
+    state.eurRateLive=false;
+    saveState();
+  }
+});
 </script>
 </body>
 </html>
