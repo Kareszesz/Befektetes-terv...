@@ -7,6 +7,7 @@
 <title>Financial Plan</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 <style>
 :root{
   --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a26;--card:#16161f;--border:rgba(255,255,255,0.07);
@@ -14,6 +15,85 @@
   --text:#f0f0f8;--muted:#6b6b80;--muted2:#9494a8;
   --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;
 }
+
+/* ── DARK THEME (explicit) ── */
+html.dark{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a26;--card:#16161f;--border:rgba(255,255,255,0.07);
+  --text:#f0f0f8;--muted:#6b6b80;--muted2:#9494a8;
+}
+
+/* ── LIGHT THEME ── */
+html.light{
+  --bg:#f4f4f8;--bg2:#eeeef4;--bg3:#e6e6f0;--card:#ffffff;--border:rgba(0,0,0,0.09);
+  --text:#1a1a2e;--muted:#888899;--muted2:#666677;
+}
+html.light body::before{background-image:radial-gradient(ellipse 80% 60% at 70% -10%,rgba(124,106,255,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 10% 80%,rgba(62,207,142,0.05) 0%,transparent 50%);}
+html.light #app-header{background:rgba(244,244,248,0.97);}
+html.light #bottom-nav{background:rgba(244,244,248,0.97);}
+html.light #bottom-sheet,html.light .sheet-btns{background:#f0f0f8;}
+html.light #settings-sheet,html.light #settings-sheet>div{background:#f0f0f8!important;}
+html.light #onboarding-card,html.light #wizard-footer{background:#f0f0f8!important;}
+html.light #onboarding-overlay{background:rgba(244,244,248,0.98);}
+html.light #sheet-overlay{background:rgba(120,120,150,0.55);}
+html.light #settings-overlay{background:rgba(120,120,150,0.55)!important;}
+html.light .sheet-input{background:rgba(0,0,0,0.05);border-color:rgba(0,0,0,0.13);}
+html.light .sheet-hint{background:rgba(124,106,255,0.07);}
+html.light .sheet-cancel{background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.1);}
+html.light .budget-sec-footer{background:rgba(0,0,0,0.03);}
+html.light .budget-item-v2:active{background:rgba(0,0,0,0.04);}
+html.light .mm-bar-track{background:rgba(0,0,0,0.08);}
+html.light .mm-bar-fill.remain-fill{background:rgba(0,0,0,0.14);}
+html.light .score-mini-card{background:rgba(0,0,0,0.05);}
+html.light .stat-card,.html.light .milestone-card{background:rgba(0,0,0,0.05);}
+html.light .forecast-bar-item{background:rgba(0,0,0,0.04);}
+html.light .stat-card{background:rgba(0,0,0,0.05);}
+html.light .milestone-card{background:rgba(0,0,0,0.05);}
+html.light input[type=range]{background:rgba(0,0,0,0.12);}
+html.light .month-pill{background:rgba(0,0,0,0.04);}
+html.light .month-item{background:#fff;}
+html.light .goal-progress-track{background:rgba(0,0,0,0.08);}
+html.light .highlight-box{background:rgba(124,106,255,0.06);border-color:rgba(124,106,255,0.18);}
+html.light .warn-box{background:rgba(255,209,102,0.07);}
+html.light .forecast-card{background:linear-gradient(135deg,rgba(124,106,255,0.07) 0%,rgba(62,207,142,0.05) 100%);}
+html.light .result-box.green{background:rgba(62,207,142,0.07);}
+html.light .result-box.red{background:rgba(255,107,107,0.07);}
+html.light .insight-card.success{background:rgba(62,207,142,0.05);}
+html.light .insight-card.warning{background:rgba(255,209,102,0.05);}
+html.light .insight-card.danger{background:rgba(255,107,107,0.05);}
+html.light .insight-card.info{background:rgba(124,106,255,0.05);}
+html.light .wiz-dot{background:rgba(0,0,0,0.12);}
+html.light .lang-opt{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.1);}
+html.light .inv-choice-card{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.1);}
+html.light .emoji-opt{background:rgba(0,0,0,0.04);}
+html.light .wiz-tooltip-pop{background:#f0f0f8;box-shadow:0 8px 32px rgba(0,0,0,0.14);}
+html.light .tag-chip.other{background:rgba(0,0,0,0.04);}
+html.light .an-card{background:#fff;}
+html.light .calc-card{background:#fff;}
+html.light .invest-cfg-card{background:#fff;}
+html.light .score-big-card{background:#fff;}
+html.light .export-btn{background:rgba(0,0,0,0.03)!important;}
+html.light .mm-preview-card{background:rgba(0,0,0,0.03);}
+html.light .mm-preview-bar{background:rgba(0,0,0,0.08);}
+
+/* ── SETTINGS TOGGLE ROWS ── */
+.settings-toggle-group{display:flex;gap:6px;margin-bottom:16px;}
+.stg-btn{flex:1;background:rgba(255,255,255,0.05);border:1.5px solid var(--border);border-radius:10px;color:var(--muted2);font-size:12px;cursor:pointer;padding:10px 4px;font-family:var(--font-body);transition:all 0.2s;line-height:1.3;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center;}
+.stg-btn:active{opacity:0.75;}
+.stg-btn.active{background:rgba(124,106,255,0.15);border-color:var(--accent);color:var(--accent);}
+html.light .stg-btn{background:rgba(0,0,0,0.04);}
+html.light .stg-btn.active{background:rgba(124,106,255,0.12);}
+
+/* ── REDUCE MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:0.01ms!important;animation-duration:0.01ms!important;}
+  .fade-in{animation:none!important;}
+}
+
+/* ── TAP TARGET FIXES ── */
+.delete-btn{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;border-radius:8px;line-height:1;flex-shrink:0;transition:color 0.15s;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
+.delete-btn:active{color:var(--accent3);}
+.month-nav-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);border-radius:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background 0.15s;}
+.month-pill{flex-shrink:0;padding:0 14px;border-radius:20px;font-size:12px;font-family:var(--font-mono);cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--muted2);transition:all 0.15s;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.6;height:100dvh;display:flex;flex-direction:column;}
@@ -23,7 +103,8 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 #app-header{position:relative;z-index:10;background:rgba(10,10,15,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
 .app-title{font-family:var(--font-head);font-size:17px;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
 .month-nav{display:flex;align-items:center;gap:4px;}
-.month-nav-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background 0.15s;}
+/* TAP TARGETS DEFINED IN THEME BLOCK ABOVE */
+/* month-nav-btn, month-pill, delete-btn already defined with 44px min targets */
 .month-nav-btn:active{background:rgba(255,255,255,0.14);}
 .month-nav-display{font-family:var(--font-mono);font-size:13px;color:var(--accent);min-width:92px;text-align:center;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background 0.15s;}
 .month-nav-display:active{background:rgba(124,106,255,0.1);}
@@ -114,7 +195,7 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 /* MONTH PILLS */
 .month-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:16px;}
 .month-pills::-webkit-scrollbar{display:none;}
-.month-pill{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:12px;font-family:var(--font-mono);cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--muted2);transition:all 0.15s;white-space:nowrap;}
+/* month-pill active/has-inv states */
 .month-pill.active{background:rgba(124,106,255,0.15);border-color:rgba(124,106,255,0.4);color:var(--accent);}
 .month-pill.has-inv{border-color:rgba(62,207,142,0.3);color:var(--accent2);}
 .month-pill.active.has-inv{background:rgba(62,207,142,0.1);border-color:rgba(62,207,142,0.5);}
@@ -248,8 +329,22 @@ input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(124,106
 .api-key-save{background:var(--accent);border:none;color:#fff;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:var(--font-body);white-space:nowrap;}
 
 /* MISC BUTTONS */
-.delete-btn{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 6px;border-radius:6px;line-height:1;flex-shrink:0;transition:color 0.15s;}
-.delete-btn:active{color:var(--accent3);}
+/* .delete-btn defined above in theme block with 44×44 tap targets */
+
+/* FREQUENCY BADGE */
+.freq-badge{display:inline-flex;align-items:center;gap:2px;background:rgba(255,209,102,0.12);border:1px solid rgba(255,209,102,0.22);border-radius:6px;padding:1px 6px;font-size:9px;font-family:var(--font-mono);color:var(--accent4);flex-shrink:0;letter-spacing:0.02em;}
+.freq-badge.var{background:rgba(124,106,255,0.12);border-color:rgba(124,106,255,0.22);color:var(--accent);}
+/* GROSS-NET SECTION */
+.gn-toggle{background:none;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--muted2);font-size:12px;font-family:var(--font-mono);padding:8px 12px;cursor:pointer;width:100%;text-align:left;margin-bottom:10px;transition:border-color 0.15s,color 0.15s;display:flex;align-items:center;justify-content:space-between;}
+.gn-toggle:active{border-color:var(--accent4);}
+.gn-body{background:rgba(255,209,102,0.05);border:1px solid rgba(255,209,102,0.15);border-radius:12px;padding:14px;margin-bottom:12px;}
+.gn-result{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.07);}
+.gn-net-val{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--accent2);}
+.gn-use-btn{background:rgba(62,207,142,0.15);border:1px solid rgba(62,207,142,0.3);color:var(--accent2);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:var(--font-mono);}
+.gn-use-btn:active{background:rgba(62,207,142,0.28);}
+/* VARIABLE OVERRIDE */
+.var-override-box{background:rgba(124,106,255,0.06);border:1px solid rgba(124,106,255,0.2);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+.var-override-label{font-size:11px;color:var(--accent);font-family:var(--font-mono);margin-bottom:8px;letter-spacing:0.05em;}
 .add-btn{background:none;border:2px dashed rgba(255,255,255,0.12);border-radius:12px;padding:13px;color:var(--muted2);font-size:13px;cursor:pointer;width:100%;text-align:center;font-family:var(--font-body);transition:border-color 0.15s,color 0.15s;}
 .add-btn:active{border-color:var(--accent);color:var(--accent);}
 .apply-all-btn{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px;color:var(--muted2);font-size:12px;cursor:pointer;font-family:var(--font-mono);letter-spacing:0.05em;margin-top:6px;transition:background 0.15s;}
@@ -260,6 +355,103 @@ input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(124,106
 .highlight-box strong{color:var(--text);}
 .warn-box{background:rgba(255,209,102,0.07);border:1px solid rgba(255,209,102,0.2);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--muted2);line-height:1.5;}
 .warn-box strong{color:var(--accent4);}
+
+/* ACCOUNT SETTINGS CARD */
+.account-cfg-card{background:var(--card);border:1px solid rgba(62,207,142,0.3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:14px;gap:12px;transition:border-color 0.2s;}
+.account-cfg-card:active{border-color:rgba(62,207,142,0.6);}
+.account-cfg-left{flex:1;min-width:0;}
+.account-cfg-name{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--accent2);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.account-cfg-detail{font-size:11px;color:var(--muted2);margin-top:3px;font-family:var(--font-mono);}
+.account-cfg-icon{font-size:18px;color:var(--muted);flex-shrink:0;}
+
+/* ANNUAL LIMIT BAR */
+.limit-bar-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-top:10px;}
+.limit-bar-label{font-size:11px;color:var(--muted2);font-family:var(--font-mono);margin-bottom:8px;}
+.limit-bar-track{height:10px;border-radius:5px;background:rgba(255,255,255,0.07);overflow:hidden;margin-bottom:6px;}
+.limit-bar-fill{height:100%;border-radius:5px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+.limit-bar-fill.under{background:var(--accent2);}
+.limit-bar-fill.over{background:var(--accent3);}
+.limit-bar-pct{font-family:var(--font-mono);font-size:13px;font-weight:600;}
+
+/* ACCOUNT TYPE GRID */
+.acct-type-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.acct-type-btn{background:rgba(255,255,255,0.05);border:2px solid var(--border);border-radius:10px;padding:8px 12px;font-size:12px;font-family:var(--font-mono);cursor:pointer;transition:all 0.15s;color:var(--muted2);}
+.acct-type-btn:active{opacity:0.7;}
+.acct-type-btn.selected{border-color:var(--accent2);background:rgba(62,207,142,0.12);color:var(--accent2);}
+
+/* TOGGLE ROW */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.toggle-row:last-of-type{border-bottom:none;}
+.toggle-label{font-size:13px;color:var(--muted2);}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,0.12);border-radius:24px;transition:background 0.2s;}
+.toggle-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:transform 0.2s;}
+.toggle-switch input:checked+.toggle-slider{background:var(--accent2);}
+.toggle-switch input:checked+.toggle-slider:before{transform:translateX(20px);}
+
+/* TOAST NOTIFICATION */
+#backup-toast{position:fixed;top:env(safe-area-inset-top,0);left:50%;transform:translateX(-50%) translateY(-120%);z-index:9999;background:#252535;border:1px solid rgba(124,106,255,0.4);border-radius:14px;padding:12px 18px;font-size:13px;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;max-width:calc(100vw - 32px);width:max-content;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+#backup-toast.show{transform:translateX(-50%) translateY(calc(env(safe-area-inset-top,0px) + 12px));}
+.toast-icon{font-size:18px;flex-shrink:0;}
+.toast-text{flex:1;line-height:1.4;}
+.toast-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;}
+
+/* EXPORT SECTION */
+.export-btn{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:var(--text);font-size:13px;font-family:var(--font-body);cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;margin-bottom:8px;transition:background 0.15s,border-color 0.15s;}
+.export-btn:active{background:rgba(255,255,255,0.1);}
+.export-btn-icon{font-size:18px;flex-shrink:0;}
+.export-btn-info{flex:1;}
+.export-btn-title{font-weight:600;font-size:13px;}
+.export-btn-sub{font-size:11px;color:var(--muted2);margin-top:2px;}
+.export-btn.green{border-color:rgba(62,207,142,0.25);background:rgba(62,207,142,0.06);}
+.export-btn.green:active{background:rgba(62,207,142,0.14);}
+.export-btn.purple{border-color:rgba(124,106,255,0.25);background:rgba(124,106,255,0.06);}
+.export-btn.purple:active{background:rgba(124,106,255,0.14);}
+.export-btn.yellow{border-color:rgba(255,209,102,0.25);background:rgba(255,209,102,0.06);}
+.export-btn.yellow:active{background:rgba(255,209,102,0.14);}
+.export-btn.blue{border-color:rgba(78,205,196,0.25);background:rgba(78,199,196,0.06);}
+.export-btn.blue:active{background:rgba(78,205,196,0.14);}
+#import-file-input{display:none;}
+.import-error{color:var(--accent3);font-size:12px;padding:8px 12px;background:rgba(255,107,107,0.08);border-radius:8px;border:1px solid rgba(255,107,107,0.2);margin-top:-4px;margin-bottom:8px;display:none;}
+
+/* GOAL CARDS */
+.goal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden;cursor:pointer;transition:border-color 0.2s;}
+.goal-card:active{border-color:rgba(255,255,255,0.18);}
+.goal-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.goal-emoji{font-size:22px;line-height:1;flex-shrink:0;}
+.goal-name{font-size:15px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.goal-achieved-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(62,207,142,0.18);border:1px solid rgba(62,207,142,0.35);border-radius:20px;padding:3px 9px;font-size:11px;font-family:var(--font-mono);color:var(--accent2);flex-shrink:0;}
+.goal-progress-track{height:8px;border-radius:4px;background:rgba(255,255,255,0.07);overflow:hidden;margin-bottom:8px;}
+.goal-progress-fill{height:100%;border-radius:4px;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1);}
+.goal-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted2);font-family:var(--font-mono);}
+.goal-amounts{display:flex;align-items:center;gap:4px;}
+.goal-pct{color:var(--muted);font-family:var(--font-mono);font-size:11px;}
+.goal-eta{font-size:11px;color:var(--muted2);font-family:var(--font-mono);}
+.goal-add-btn{background:none;border:2px dashed rgba(255,255,255,0.12);border-radius:14px;padding:14px;color:var(--muted2);font-size:13px;cursor:pointer;width:100%;text-align:center;font-family:var(--font-body);transition:border-color 0.15s,color 0.15s;}
+.goal-add-btn:active{border-color:var(--accent2);color:var(--accent2);}
+
+/* EMOJI PICKER */
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:12px;}
+.emoji-opt{background:rgba(255,255,255,0.05);border:2px solid transparent;border-radius:10px;padding:8px 4px;text-align:center;font-size:20px;cursor:pointer;transition:all 0.15s;line-height:1;}
+.emoji-opt:active{opacity:0.7;}
+.emoji-opt.sel-emoji{border-color:var(--accent);background:rgba(124,106,255,0.15);}
+
+/* COLOR SWATCHES */
+.color-swatches{display:flex;gap:10px;margin-bottom:12px;}
+.color-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color 0.15s,transform 0.15s;}
+.color-swatch:active{transform:scale(0.9);}
+.color-swatch.sel-color{border-color:#fff;}
+
+/* GOAL BUDGET LINE */
+.goal-budget-line{padding:9px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.goal-budget-line:last-child{border-bottom:none;}
+
+/* CONFETTI */
+.confetti-container{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confetti-fall linear forwards;}
+@keyframes confetti-fall{0%{transform:translateY(0) rotateZ(0deg) rotateX(0deg);opacity:1;}100%{transform:translateY(110vh) rotateZ(720deg) rotateX(360deg);opacity:0;}}
+
 .eur-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-top:10px;}
 .eur-card:active{border-color:rgba(255,255,255,0.18);}
 .eur-left{font-size:13px;color:var(--muted2);}
@@ -391,6 +583,14 @@ select.sheet-input{-webkit-appearance:none;appearance:none;cursor:pointer;}
   </div>
 </div>
 
+<!-- BACKUP TOAST -->
+<div id="backup-toast">
+  <span class="toast-icon">💾</span>
+  <span class="toast-text" id="toast-text"></span>
+  <button class="toast-close" onclick="dismissToast()">×</button>
+</div>
+<input type="file" id="import-file-input" accept=".json">
+
 <!-- SETTINGS MODAL -->
 <div id="settings-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:200;align-items:flex-end;">
   <div id="settings-sheet" style="background:#1a1a26;border-radius:20px 20px 0 0;width:100%;max-width:500px;margin:0 auto;max-height:90dvh;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);display:flex;flex-direction:column;">
@@ -448,7 +648,7 @@ const LOCALES = {
     syncFromPlan:'⟳ Sync from investment plan', paid:'Paid in', gain:'Gain', total2:'Total',
     growthChart:'Growth Chart', years:'years', milestones:'Milestones',
     monthlyPlan:'Monthly Investment Plan', strategy:'Strategy',
-    strategyText:'VWCE ETF · DCA · TBSZ account – tax-free returns after 5 years',
+    strategyText:'VWCE ETF · DCA · {acctName} account – tax-free returns after 5 years',
     warningText:'⚠️ Warning: 7% return is VWCE historical average – actual results may vary. Not investment advice.',
     currentLabel:'Now', viewingLabel:'Viewing',
     // Analytics
@@ -503,7 +703,16 @@ const LOCALES = {
     ytdLabel:'YTD invested', plannedLabel:'Planned total', projectedLabel:'Projected',
     // Settings
     settingsTitle:'⚙ Settings', language:'Language', currencySymbol:'Primary Currency Symbol',
+    currencyCode:'Primary Currency ISO Code (e.g. HUF, EUR, USD)',
     currencyHint:'Symbol shown on all amounts, e.g. Ft · € · $ · ₹ · £',
+    // Appearance
+    appearanceSection:'Appearance',
+    themeLabel:'Theme',
+    themeLight:'☀️ Light', themeDark:'🌙 Dark', themeSystem:'⚙ System',
+    fontSizeLabel:'Text Size',
+    fontS:'S', fontM:'M', fontL:'L', fontXL:'XL',
+    paletteLabel:'Color Palette',
+    paletteDefault:'Default', paletteDeuteranopia:'Deuteranopia', paletteProtanopia:'Protanopia', paletteMonochrome:'Mono',
     secondaryCurrencySection:'Secondary / Foreign Currency (optional)',
     scCode:'ISO Code (e.g. EUR, USD, GBP)',
     scSymbol:'Symbol (e.g. €, $, £)',
@@ -549,6 +758,21 @@ const LOCALES = {
     wizSkip:'Skip',
     wizBack:'Back',
     wizNext:'Next',
+    // Variable income
+    freqLabel:'Frequency', freqMonthly:'📅 Monthly', freqWeekly:'🔄 Weekly', freqBiweekly:'🔄 Bi-weekly', freqVariable:'✳ Variable',
+    freqBadgeWeekly:'4×/mo', freqBadgeBiweekly:'2×/mo', freqBadgeVar:'variable',
+    thisMonthOverride:'This month\'s amount override', thisMonthHint:'Leave blank to use the base amount above.',
+    grossNetCalc:'Calculate net from gross ▾', grossNetCalcOpen:'Calculate net from gross ▴',
+    grossAmt:'Gross amount', taxRatePct:'Tax rate (%)', netResult:'Net:', useThis:'Use this →',
+    monthlyEquiv:'Monthly equivalent',
+    // Goals
+    myGoals:'My Goals', addGoal:'＋ Add Goal', newGoal:'New Goal', editGoalTitle:'Edit Goal',
+    goalName:'Goal Name', goalEmoji:'Icon', goalType:'Type', goalTarget:'Target Amount',
+    goalCurrent:'Current Amount', goalMonthly:'Monthly Contribution', goalDate:'Target Date (YYYY-MM, optional)',
+    goalColor:'Color', goalAchieved:'✅ Achieved!', noGoals:'No goals yet – add your first one!',
+    goalSavings:'💰 Savings', goalInvestment:'📈 Investment', goalDebt:'💳 Pay off debt',
+    goalContributions:'Goals contributions', goalMonthsLeft:'months left',
+    goalAtRate:'at', goalPerMonth:'/mo', goalTargetLabel:'Target',
     // Tooltips
     ttDCA:'Dollar-Cost Averaging – buying a fixed amount at regular intervals regardless of price. Reduces the risk of buying at the worst moment.',
     ttETF:'Exchange-Traded Fund – a basket of many stocks you buy as one share. Instant diversification at very low cost.',
@@ -560,7 +784,7 @@ const LOCALES = {
     navSummary:'Összegzés', navBudget:'Büdzsé', navInvest:'Befektetés', navAnalytics:'Analitika', navAI:'AI',
     months:['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'],
     monthsShort:['Jan','Feb','Már','Ápr','Máj','Jún','Júl','Aug','Szep','Okt','Nov','Dec'],
-    wealthBalance:'Vagyonmérleg', bankAccount:'Bankszámlán', cashHUF:'Készpénz HUF', cashEUR:'Készpénz EUR', portfolio:'Portfólió (VWCE)',
+    wealthBalance:'Vagyonmérleg', bankAccount:'Bankszámlán', cashLocal:'Helyi készpénz', cashSecondary:'Külföldi készpénz', portfolio:'Portfólió',
     totalWealth:'Összes vagyon', moneyMap:'Money Map', necessary:'Szükséges', discretionary:'Választható',
     investment:'Befektetés', freeRemainder:'Szabad maradvány', moneyMapScore:'Money Map Score',
     currentMonth:'Ez a hónap', yearlyAvg:'Éves átlag', invested:'Befektetve',
@@ -583,7 +807,7 @@ const LOCALES = {
     syncFromPlan:'⟳ Szinkronizálás a befektetési tervből', paid:'Befizetett', gain:'Hozam', total2:'Végösszeg',
     growthChart:'Növekedési grafikon', years:'év', milestones:'Mérföldkövek',
     monthlyPlan:'Havi befektetési terv', strategy:'Stratégia',
-    strategyText:'VWCE ETF · DCA · TBSZ számla – 5 év után adómentes hozam',
+    strategyText:'VWCE ETF · DCA · {acctName} számla – 5 év után adómentes hozam',
     warningText:'⚠️ Figyelem: A 7%-os hozam a VWCE historikus átlaga – a valóság eltérhet. Nem befektetési tanácsadás.',
     currentLabel:'Most', viewingLabel:'Nézett',
     monthlyCashflowChart:'Havi Cashflow', incVsExp:'Bevétel vs Kiadások – havi bontás',
@@ -619,8 +843,9 @@ const LOCALES = {
     suggestedLabel:'💡 Javasolt', investedAmount:'Befektetett összeg',
     ofWhichVWCE:'Ebből VWCE ETF', ofWhichEmergency:'Ebből vészalap',
     note:'Megjegyzés', egDCA:'pl. DCA · havi vétel',
-    eurRate:'EUR/HUF árfolyam', eurRateLabel:'1 EUR = ? HUF',
-    bankBalance:'Bankszámla egyenleg', localCash:'Készpénz HUF', cashEURLabel:'Készpénz EUR', portfolioLabel:'Portfólió értéke',
+    fxRateTitle:'Árfolyam', fxRateEditTitle:'Árfolyam szerkesztése',
+    noSecondary:'Nincs másodlagos deviza beállítva',
+    bankBalance:'Bankszámla egyenleg', localCash:'Helyi készpénz', cashSecondaryLbl:'Külföldi készpénz', portfolioLabel:'Portfólió értéke',
     amountLabel:'Összeg',
     great:'Great', okay:'Okay', needsWork:'Fejlesztendő', weak:'Gyenge',
     vcScale:'Aktuális hónap · Vincent Chan skála (0–3)',
@@ -628,10 +853,28 @@ const LOCALES = {
     ins2t_high:'Vendéglátás – érdemes figyelni', ins2t_mid:'Vendéglátás rendben', ins2t_low:'Vendéglátás kiegyensúlyozott',
     ins3t_streak:'DCA Streak!', ins3t_cons:'DCA konzisztencia',
     ins4t_miss:'Vészalap hiányzik', ins4t_ok:'Vészalap rendben', ins4t_build:'Vészalap épül',
-    ins5t_eur:'EUR készpénz portfólió', ins6t_cash:'Készpénzes szemlélet – okos döntés',
+    ins5t_sec:'Külföldi deviza portfólió', ins6t_cash:'Készpénzes szemlélet – okos döntés',
     ytdLabel:'YTD befektetve', plannedLabel:'Tervezett total', projectedLabel:'Előrejelzett',
     settingsTitle:'⚙ Beállítások', language:'Nyelv', currencySymbol:'Pénznem szimbólum',
+    currencyCode:'Elsődleges deviza ISO kód (pl. HUF, EUR, USD)',
     currencyHint:'Írj be bármilyen szimbólumot, pl. Ft · € · $ · ₹ · £',
+    // Appearance
+    appearanceSection:'Megjelenés',
+    themeLabel:'Téma',
+    themeLight:'☀️ Világos', themeDark:'🌙 Sötét', themeSystem:'⚙ Rendszer',
+    fontSizeLabel:'Betűméret',
+    fontS:'S', fontM:'M', fontL:'L', fontXL:'XL',
+    paletteLabel:'Színpaletta',
+    paletteDefault:'Alap', paletteDeuteranopia:'Deuteranopia', paletteProtanopia:'Protanopia', paletteMonochrome:'Mono',
+    secondaryCurrencySection:'Másodlagos / külföldi deviza (opcionális)',
+    scCode:'ISO kód (pl. EUR, USD, GBP)',
+    scSymbol:'Szimbólum (pl. €, $, £)',
+    scName:'Megnevezés (pl. Euró)',
+    scRate:'Árfolyam az elsődleges devizához',
+    scRateHint:'Hány elsődleges egység = 1 külföldi egység? (pl. 400 = 1 EUR → 400 Ft)',
+    scFetchLive:'Élő árfolyam lekérése',
+    scRemove:'Másodlagos deviza eltávolítása',
+    scAdd:'+ Másodlagos deviza hozzáadása',
     // Investment Config
     investConfig:'Befektetési eszköz', instrumentName:'Eszköz neve', tickerLabel:'Ticker / Szimbólum (opcionális)',
     expectedReturnLabel:'Várható éves hozam', configNoteLabel:'Megjegyzés / Stratégia',
@@ -668,6 +911,21 @@ const LOCALES = {
     wizSkip:'Kihagyás',
     wizBack:'Vissza',
     wizNext:'Tovább',
+    // Variable income
+    freqLabel:'Gyakoriság', freqMonthly:'📅 Havi', freqWeekly:'🔄 Heti', freqBiweekly:'🔄 Kéthetente', freqVariable:'✳ Változó',
+    freqBadgeWeekly:'4×/hó', freqBadgeBiweekly:'2×/hó', freqBadgeVar:'változó',
+    thisMonthOverride:'Ez a hónap – felülírás', thisMonthHint:'Hagyd üresen az alap összeg használatához.',
+    grossNetCalc:'Nettó kiszámítása bruttóból ▾', grossNetCalcOpen:'Nettó kiszámítása bruttóból ▴',
+    grossAmt:'Bruttó összeg', taxRatePct:'Adókulcs (%)', netResult:'Nettó:', useThis:'Felhasználom →',
+    monthlyEquiv:'Havi egyenérték',
+    // Goals
+    myGoals:'Céljaim', addGoal:'＋ Cél hozzáadása', newGoal:'Új cél', editGoalTitle:'Cél szerkesztése',
+    goalName:'Cél neve', goalEmoji:'Ikon', goalType:'Típus', goalTarget:'Célösszeg',
+    goalCurrent:'Jelenlegi összeg', goalMonthly:'Havi hozzájárulás', goalDate:'Céldátum (ÉÉÉÉ-HH, opcionális)',
+    goalColor:'Szín', goalAchieved:'✅ Teljesítve!', noGoals:'Még nincs cél – adj hozzá egyet!',
+    goalSavings:'💰 Megtakarítás', goalInvestment:'📈 Befektetés', goalDebt:'💳 Adósság törlesztése',
+    goalContributions:'Célok hozzájárulásai', goalMonthsLeft:'hónap van hátra',
+    goalAtRate:'ha', goalPerMonth:'/hó', goalTargetLabel:'Cél',
     // Tooltips
     ttDCA:'Dollar-Cost Averaging – rendszeres, fix összegű vásárlás az ártól függetlenül. Csökkenti a rossz időpontban való vétel kockázatát.',
     ttETF:'Tőzsdén kereskedett alap – egyetlen vásárlással sok részvénybe fektetsz egyszerre. Azonnali diverzifikáció, nagyon alacsony díjjal.',
@@ -680,6 +938,75 @@ function t(key){ return (LOCALES[state.settings?.language||'hu']||LOCALES.hu)[ke
 function getLang(){ return state.settings?.language||'hu'; }
 function getCurrSym(){ return state.settings?.currencySymbol||'Ft'; }
 function getLocale(){ return getLang()==='hu'?'hu-HU':'en-US'; }
+
+/* ============================================================
+   THEME / ACCESSIBILITY
+============================================================ */
+function applyTheme(){
+  const theme=state.settings?.theme||'system';
+  let resolved=theme;
+  if(theme==='system') resolved=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  const cl=document.documentElement.classList;
+  cl.remove('light','dark');
+  cl.add(resolved);
+}
+function applyFontSize(){
+  const sizes={S:13,M:15,L:17,XL:19};
+  document.documentElement.style.fontSize=(sizes[state.settings?.fontSize||'M']||15)+'px';
+}
+const PALETTES={
+  default:     {accent:'',accent2:'#3ecf8e',accent3:'#ff6b6b',accent4:'#ffd166',accent5:'#ff9f43'},
+  deuteranopia:{accent:'',accent2:'#0077bb',accent3:'#ee7733',accent4:'#ffd166',accent5:'#ff9f43'},
+  protanopia:  {accent:'',accent2:'#0099cc',accent3:'#ee3377',accent4:'#ffd166',accent5:'#ff9f43'},
+  monochrome:  {accent:'#888888',accent2:'#aaaaaa',accent3:'#555555',accent4:'#cccccc',accent5:'#999999'},
+};
+function applyColorPalette(){
+  const p=PALETTES[state.settings?.colorPalette||'default']||PALETTES.default;
+  const r=document.documentElement;
+  if(p.accent)r.style.setProperty('--accent',p.accent);else r.style.removeProperty('--accent');
+  r.style.setProperty('--accent2',p.accent2);
+  r.style.setProperty('--accent3',p.accent3);
+  r.style.setProperty('--accent4',p.accent4);
+  r.style.setProperty('--accent5',p.accent5);
+}
+let _reduceMotion=false;
+function applyReduceMotion(){
+  _reduceMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(_reduceMotion){
+    let s=document.getElementById('_rmStyle');
+    if(!s){s=document.createElement('style');s.id='_rmStyle';document.head.appendChild(s);}
+    s.textContent='*{transition-duration:0.01ms!important;animation-duration:0.01ms!important;}.fade-in{animation:none!important;}';
+  }
+}
+function applyAllAccessibility(){
+  applyTheme();applyFontSize();applyColorPalette();applyReduceMotion();
+}
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{
+  if((state.settings?.theme||'system')==='system') applyTheme();
+});
+
+/* Chart theme helpers */
+function chartBg(){return document.documentElement.classList.contains('light')?'#ffffff':'#16161f';}
+function chartText(){return document.documentElement.classList.contains('light')?'#888899':'#6b6b80';}
+function chartGrid(){return document.documentElement.classList.contains('light')?'rgba(0,0,0,0.06)':'rgba(255,255,255,0.05)';}
+
+/* ============================================================
+   INVESTMENT ACCOUNT PRESETS
+============================================================ */
+const ACCOUNT_PRESETS = {
+  tbsz:  {name:'TBSZ',          taxFree:true,  annualLimit:null, lockupYears:5,  note:'Tax-free after 5 years (HU)'},
+  isa:   {name:'Stocks & Shares ISA', taxFree:true, annualLimit:20000, lockupYears:null, note:'Annual limit £20,000 (UK)'},
+  '401k':{name:'401(k)',        taxFree:false, annualLimit:23000,lockupYears:null,note:'Tax-deferred (US)'},
+  roth:  {name:'Roth IRA',      taxFree:true,  annualLimit:7000, lockupYears:null,note:'Tax-free growth (US)'},
+  tfsa:  {name:'TFSA',          taxFree:true,  annualLimit:7000, lockupYears:null,note:'Tax-free, CAD 7,000/year (CA)'},
+  ppf:   {name:'PPF',           taxFree:true,  annualLimit:150000,lockupYears:15,note:'Tax-free, ₹1.5L/year, 15y lock (IN)'},
+  nps:   {name:'NPS',           taxFree:false, annualLimit:null, lockupYears:null,note:'Tax-deferred (IN)'},
+  pea:   {name:'PEA',           taxFree:true,  annualLimit:null, lockupYears:5,  note:'Tax-free after 5 years (FR)'},
+  custom:{name:'',              taxFree:true,  annualLimit:null, lockupYears:null,note:''},
+};
+
+function getAcctName(){ return state.investmentAccount?.name || 'TBSZ'; }
 
 const BASE_INCOME = [];
 const BASE_EXPENSES = [];
@@ -719,26 +1046,64 @@ function initDefault() {
   state = {
     currentYear:2026,
     currentMonth:_NOW.getMonth()+1,
-    eurRate:400,
+    secondaryCurrency:null,
     geminiKey:'',
     years:{'2026':createYear(2026)},
     calculator:{monthly:16000,rate:7,years:20},
-    settings:{language:'hu',currencySymbol:'Ft'},
+    settings:{language:'hu',currencySymbol:'Ft',currencyCode:'HUF',theme:'system',fontSize:'M',colorPalette:'default'},
     investmentConfig:{name:'VWCE ETF',ticker:'VWCE',expectedReturn:7,note:'DCA strategy · TBSZ'},
-    onboardingComplete:false
+    investmentAccount:{type:'tbsz',name:'TBSZ',taxFree:true,annualLimit:null,lockupYears:5,note:'Tax-free after 5 years'},
+    onboardingComplete:false,
+    goals:[],
+    variableIncomeOverrides:{}
   };
 }
 
 function migrateState() {
   if(!state.currentMonth) state.currentMonth = _NOW.getMonth()+1;
   if(!state.geminiKey) state.geminiKey = '';
+  if(!state.saveCount) state.saveCount = 0;
   if(!state.calculator) state.calculator = {monthly:16000,rate:7,years:20};
-  if(state.eurRateLive===undefined) state.eurRateLive=false;
-  if(!state.settings) state.settings={language:'hu',currencySymbol:'Ft'};
+  if(!state.settings) state.settings={language:'hu',currencySymbol:'Ft',currencyCode:'HUF',theme:'system',fontSize:'M',colorPalette:'default'};
   if(!state.settings.language) state.settings.language='hu';
   if(!state.settings.currencySymbol) state.settings.currencySymbol='Ft';
+  if(!state.settings.theme) state.settings.theme='system';
+  if(!state.settings.fontSize) state.settings.fontSize='M';
+  if(!state.settings.colorPalette) state.settings.colorPalette='default';
+  // Migrate old eurRate → secondaryCurrency
+  if(state.eurRate && !state.secondaryCurrency) {
+    state.secondaryCurrency = {
+      code:'EUR', symbol:'€', name:'Euro',
+      rate: state.eurRate,
+      rateLastFetched: state.eurRateLastFetched||null,
+      rateLive: state.eurRateLive||false
+    };
+    delete state.eurRate;
+    delete state.eurRateLastFetched;
+    delete state.eurRateLive;
+  }
+  if(state.secondaryCurrency===undefined) state.secondaryCurrency=null;
+  // Add currencyCode to settings if missing (guess from symbol)
+  if(!state.settings.currencyCode) {
+    const sym=state.settings.currencySymbol||'Ft';
+    state.settings.currencyCode = sym==='Ft'?'HUF':sym==='€'?'EUR':sym==='$'?'USD':sym==='£'?'GBP':sym==='₹'?'INR':'';
+  }
   if(!state.investmentConfig) state.investmentConfig={name:'VWCE ETF',ticker:'VWCE',expectedReturn:7,note:'DCA strategy · TBSZ'};
   if(!state.investmentConfig.ticker) state.investmentConfig.ticker='';
+  if(!state.investmentAccount) state.investmentAccount={type:'tbsz',name:'TBSZ',taxFree:true,annualLimit:null,lockupYears:5,note:'Tax-free after 5 years'};
+  if(state.investmentAccount.taxFree===undefined) state.investmentAccount.taxFree=true;
+  if(!state.goals) state.goals=[];
+  if(!state.variableIncomeOverrides) state.variableIncomeOverrides={};
+  // Migrate income items: ensure frequency and isVariable fields exist
+  for(const y of Object.keys(state.years)){
+    const yd=state.years[y];
+    if(yd.months) yd.months.forEach(m=>{
+      if(m.income) m.income.forEach(it=>{
+        if(!it.frequency) it.frequency='monthly';
+        if(it.isVariable===undefined) it.isVariable=false;
+      });
+    });
+  }
   // Existing users: mark onboarding as complete (they already know the app)
   if(state.onboardingComplete===undefined) state.onboardingComplete=true;
   // Sync calculator rate to investmentConfig if calculator was at default
@@ -767,7 +1132,16 @@ function migrateState() {
   }
 }
 
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function saveState(){
+  state.saveCount=(state.saveCount||0)+1;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  if(state.saveCount>0&&state.saveCount%10===0){
+    const msg=getLang()==='hu'
+      ?'💾 Érdemes exportálni a biztonsági mentést — Beállítások → Export'
+      :'💾 Consider exporting a backup — Settings → Export';
+    showToast(msg);
+  }
+}
 
 /* ============================================================
    HELPERS
@@ -776,14 +1150,44 @@ function getYD(){return state.years[String(state.currentYear)];}
 function getMD(){return getYD().months[state.currentMonth-1];}
 function getMonth(m){return getYD().months[m-1];}
 
-function mInc(m){return m.income.reduce((s,i)=>s+i.amount,0);}
+/* Income helpers – frequency normalisation */
+function freqMultiplier(freq){
+  if(freq==='weekly')return 52/12;
+  if(freq==='biweekly')return 26/12;
+  return 1; // monthly or variable
+}
+function getVarOverride(incId,year,monthNum){
+  const yo=(state.variableIncomeOverrides||{})[year||state.currentYear];
+  if(!yo)return null;
+  const mo=yo[monthNum];
+  if(!mo)return null;
+  return mo[incId]!==undefined?mo[incId]:null;
+}
+function setVarOverride(incId,year,monthNum,val){
+  if(!state.variableIncomeOverrides)state.variableIncomeOverrides={};
+  const y=String(year||state.currentYear);
+  if(!state.variableIncomeOverrides[y])state.variableIncomeOverrides[y]={};
+  if(!state.variableIncomeOverrides[y][monthNum])state.variableIncomeOverrides[y][monthNum]={};
+  if(val===null||val===undefined)delete state.variableIncomeOverrides[y][monthNum][incId];
+  else state.variableIncomeOverrides[y][monthNum][incId]=val;
+}
+function incMonthlyAmt(it,year,monthNum){
+  if(it.isVariable){
+    const ov=getVarOverride(it.id,year,monthNum);
+    return ov!==null?ov:it.amount;
+  }
+  return Math.round(it.amount*freqMultiplier(it.frequency||'monthly'));
+}
+function mInc(m){
+  return m.income.reduce((s,i)=>s+incMonthlyAmt(i,state.currentYear,m.month),0);
+}
 function mCore(m){return m.expenses.filter(e=>e.category==='Core').reduce((s,e)=>s+e.amount,0);}
 function mChoice(m){return m.expenses.filter(e=>e.category==='Choice').reduce((s,e)=>s+e.amount,0);}
 function mExp(m){return mCore(m)+mChoice(m);}
 function mRemain(m){return mInc(m)-mExp(m)-m.invested;}
 function yearInv(){return getYD().months.reduce((s,m)=>s+m.invested,0);}
 
-function fmt(n){const sym=getCurrSym();const loc=getLocale();return Number(n).toLocaleString(loc)+'\u00a0'+sym;}
+function fmt(n){const sym=getCurrSym();const loc=getLocale();return new Intl.NumberFormat(loc,{minimumFractionDigits:0,maximumFractionDigits:0}).format(Number(n))+'\u00a0'+sym;}
 function fmtS(n){n=Number(n);const sym=getCurrSym();const isHu=getLocale()==='hu-HU';if(n>=1000000)return(n/1000000).toFixed(1).replace(isHu?'.':'-', isHu?',':'.')+'\u00a0M';if(n>=1000)return(n/1000).toFixed(0)+(isHu?'e':'k');return String(Math.round(n));}
 function fmtM(n){const isHu=getLocale()==='hu-HU';return(n/1000000).toFixed(1).replace(isHu?'.':'-',isHu?',':'.')+'\u00a0M\u00a0'+getCurrSym();}
 function fmtP(n){return n.toFixed(1).replace('.',getLocale()==='hu-HU'?',':'.')+'\u00a0%';}
@@ -818,6 +1222,7 @@ function updateStaticUI(){
   el('sheet-save').textContent=t('save');
   el('settings-title').textContent=t('settingsTitle');
   document.documentElement.lang=getLang();
+  applyAllAccessibility();
 }
 
 /* ============================================================
@@ -890,9 +1295,10 @@ function renderCurrent(){renderTab(activeTab);}
    RENDER: DASHBOARD
 ============================================================ */
 function renderDashboard(){
-  const m=getMD(),eur=state.eurRate;
+  const m=getMD(),sc=state.secondaryCurrency;
+  const secRate=sc?sc.rate:0;
   const a=m.assets;
-  const totalAssets=a.bank+a.cashHUF+a.cashEUR*eur+a.portfolio;
+  const totalAssets=a.bank+a.cashHUF+a.cashEUR*secRate+a.portfolio;
   const inc=mInc(m),core=mCore(m),choice=mChoice(m),inv=m.invested,remain=mRemain(m);
   const corePct=inc>0?core/inc*100:0,choicePct=inc>0?choice/inc*100:0;
   const compPct=inc>0?inv/inc*100:0,remPct=inc>0?Math.max(0,remain/inc*100):0;
@@ -905,17 +1311,17 @@ function renderDashboard(){
   const isNow=state.currentYear===_NOW.getFullYear()&&state.currentMonth===_NOW.getMonth()+1;
   const mn=t('monthsShort')[state.currentMonth-1];
   const mnFull=t('months')[state.currentMonth-1];
-  const rateSubtitle=state.eurRateLastFetched
-    ?t('liveUpdated')+': '+new Date(state.eurRateLastFetched).toLocaleTimeString(getLocale(),{hour:'2-digit',minute:'2-digit'})+(state.eurRateLive?' · '+t('liveRate'):'')
-    :state.eurRateLive===false?t('offlineRate'):t('manualRate');
+  const rateSubtitle=sc?.rateLastFetched
+    ?t('liveUpdated')+': '+new Date(sc.rateLastFetched).toLocaleTimeString(getLocale(),{hour:'2-digit',minute:'2-digit'})+(sc.rateLive?' · '+t('liveRate'):'')
+    :sc?.rateLive===false?t('offlineRate'):t('manualRate');
 
   document.getElementById('pane-summary').innerHTML=`<div class="fade-in">
   <div class="section-label">${t('wealthBalance')}</div>
   <div class="grid-2">
     <div class="card tap" onclick="editAsset('bank')"><div class="card-label">${t('bankAccount')}</div><div class="card-value purple">${fmtS(a.bank)}</div><div class="card-sub">${fmt(a.bank)}</div></div>
-    <div class="card tap" onclick="editAsset('cashHUF')"><div class="card-label">${t('cashHUF')}</div><div class="card-value purple">${fmtS(a.cashHUF)}</div><div class="card-sub">${fmt(a.cashHUF)}</div></div>
-    <div class="card tap" onclick="editAsset('cashEUR')"><div class="card-label">${t('cashEUR')}</div><div class="card-value yellow">${a.cashEUR} €</div><div class="card-sub">≈ ${fmt(Math.round(a.cashEUR*eur))}</div></div>
-    <div class="card tap" onclick="editAsset('portfolio')"><div class="card-label">${getLang()==='hu'?'Portfólió':'Portfolio'} (${escH(state.investmentConfig.name)})</div><div class="card-value green">${fmtS(a.portfolio)}</div><div class="card-sub">${fmt(a.portfolio)}</div></div>
+    <div class="card tap" onclick="editAsset('cashHUF')"><div class="card-label">${t('cashLocal')}</div><div class="card-value purple">${fmtS(a.cashHUF)}</div><div class="card-sub">${fmt(a.cashHUF)}</div></div>
+    ${sc?`<div class="card tap" onclick="editAsset('cashEUR')"><div class="card-label">Cash ${escH(sc.code)}</div><div class="card-value yellow">${a.cashEUR}\u00a0${escH(sc.symbol)}</div><div class="card-sub">≈ ${fmt(Math.round(a.cashEUR*secRate))}</div></div>`:''}
+    <div class="card tap ${sc?'':'full'}" onclick="editAsset('portfolio')"><div class="card-label">${getLang()==='hu'?'Portfólió':'Portfolio'} (${escH(state.investmentConfig.name)})</div><div class="card-value green">${fmtS(a.portfolio)}</div><div class="card-sub">${fmt(a.portfolio)}</div></div>
     <div class="card full"><div class="card-label">${t('totalWealth')}</div><div class="card-value green">${fmtS(totalAssets)}</div><div class="card-sub">${fmt(Math.round(totalAssets))}</div></div>
   </div>
 
@@ -969,23 +1375,70 @@ function renderDashboard(){
     <div class="rb-sub">${fmt(inc)} − ${fmt(core+choice)} − ${fmt(inv)}</div>
   </div>
 
+  ${sc?`
   <div class="section-label">${t('exchangeRate')}</div>
-  <div class="eur-card" onclick="editEurRate()">
+  <div class="eur-card" onclick="editExchangeRate()">
     <div>
-      <span class="eur-left">EUR/HUF</span>
+      <span class="eur-left">1 ${escH(sc.code)} → ${getCurrSym()}</span>
       <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">${rateSubtitle}</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <button class="eur-refresh-btn" id="eur-refresh-icon" onclick="event.stopPropagation();refreshEurRate()" title="Refresh">↻</button>
-      <span class="eur-right">1 € = ${eur} ${getCurrSym()} ✎</span>
+      <button class="eur-refresh-btn" id="eur-refresh-icon" onclick="event.stopPropagation();refreshSecRate()" title="Refresh">↻</button>
+      <span class="eur-right">1 ${escH(sc.symbol)} = ${sc.rate} ${getCurrSym()} ✎</span>
     </div>
-  </div>
+  </div>`:''}
+
+  <div class="section-label" style="margin-top:20px">${t('myGoals')}</div>
+  ${renderGoalCards()}
+  <button class="goal-add-btn" onclick="addGoal()" style="margin-top:8px">🎯 ${t('addGoal')}</button>
 </div>`;
 }
 
 /* ============================================================
-   RENDER: BUDGET
+   RENDER: GOAL CARDS
 ============================================================ */
+const GOAL_EMOJIS=['🛡️','🏠','🚗','✈️','🎓','💍','👶','💻','🏖️','🏦','📱','🎸','🏋️','🌍','💊','🎯'];
+const GOAL_COLORS=['#3ecf8e','#7c6aff','#ffd166','#ff6b6b'];
+
+function renderGoalCards(){
+  if(!state.goals||state.goals.length===0){
+    return`<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">🎯 ${t('noGoals')}</div>`;
+  }
+  let hasNewlyAchieved=false;
+  const cards=state.goals.map(g=>{
+    const pct=g.targetAmount>0?Math.min(100,g.currentAmount/g.targetAmount*100):0;
+    const achieved=g.currentAmount>=g.targetAmount&&g.targetAmount>0;
+    if(achieved&&!g._celebrated){hasNewlyAchieved=true;g._celebrated=true;}
+    const remaining=Math.max(0,g.targetAmount-g.currentAmount);
+    const monthsLeft=g.monthlyContribution>0?Math.ceil(remaining/g.monthlyContribution):null;
+    const etaStr=achieved?''
+      :monthsLeft!==null?`~${monthsLeft} ${t('goalMonthsLeft')} ${t('goalAtRate')} ${fmt(g.monthlyContribution)}${t('goalPerMonth')}`
+      :(g.targetDate?`${t('goalTargetLabel')}: ${g.targetDate}`:'');
+    const dateStr=g.targetDate&&!achieved?`<span style="color:var(--muted)">📅 ${g.targetDate}</span>`:'';
+    return`<div class="goal-card" style="margin-bottom:10px;border-left:3px solid ${escH(g.color||'#7c6aff')}" onclick="editGoal(${g.id})">
+      ${achieved?`<div style="position:absolute;inset:0;border-radius:14px;background:rgba(62,207,142,0.04);pointer-events:none"></div>`:''}
+      <div class="goal-card-header">
+        <span class="goal-emoji">${g.emoji||'🎯'}</span>
+        <span class="goal-name">${escH(g.name)}</span>
+        ${achieved?`<span class="goal-achieved-badge">✅ ${t('goalAchieved')}</span>`:''}
+      </div>
+      <div class="goal-progress-track">
+        <div class="goal-progress-fill" style="width:${pct.toFixed(1)}%;background:${escH(g.color||'#7c6aff')}"></div>
+      </div>
+      <div class="goal-meta">
+        <div class="goal-amounts">
+          <span style="color:var(--text);font-family:var(--font-mono);font-size:12px">${fmt(g.currentAmount)}</span>
+          <span style="color:var(--muted)">/</span>
+          <span style="color:var(--muted2);font-size:12px">${fmt(g.targetAmount)}</span>
+        </div>
+        <span class="goal-pct">${pct.toFixed(1)}%</span>
+      </div>
+      ${etaStr||dateStr?`<div class="goal-eta" style="margin-top:6px">${etaStr}${etaStr&&dateStr?' · ':''}${dateStr}</div>`:''}
+    </div>`;
+  }).join('');
+  if(hasNewlyAchieved){saveState();setTimeout(triggerConfetti,200);}
+  return cards;
+}
 function renderBudget(){
   const m=getMD();
   const inc=mInc(m),coreExp=m.expenses.filter(e=>e.category==='Core'),choiceExp=m.expenses.filter(e=>e.category==='Choice');
@@ -1001,11 +1454,19 @@ function renderBudget(){
     return`<div class="${cls}" onclick="setMonth(${mn})">${n}</div>`;
   }).join('');
 
-  const incHtml=m.income.map(it=>`
-    <div class="budget-item-v2" onclick="editIncItem(${it.id})">
+  const incHtml=m.income.map(it=>{
+    const freq=it.frequency||'monthly';
+    const isVar=it.isVariable||false;
+    const monthlyAmt=incMonthlyAmt(it,state.currentYear,m.month);
+    let badge='';
+    if(isVar){badge=`<span class="freq-badge var">✳ ${t('freqBadgeVar')}</span>`;}
+    else if(freq==='weekly'){badge=`<span class="freq-badge">🔄 ${t('freqBadgeWeekly')}</span>`;}
+    else if(freq==='biweekly'){badge=`<span class="freq-badge">🔄 ${t('freqBadgeBiweekly')}</span>`;}
+    return`<div class="budget-item-v2" onclick="editIncItem(${it.id})">
       <span class="item-name">${escH(it.name)}</span>
-      <div class="item-right"><span class="item-amount income">+${fmt(it.amount)}</span><button class="delete-btn" onclick="event.stopPropagation();delInc(${it.id})">×</button></div>
-    </div>`).join('');
+      <div class="item-right">${badge}<span class="item-amount income">+${fmt(monthlyAmt)}</span><button class="delete-btn" onclick="event.stopPropagation();delInc(${it.id})">×</button></div>
+    </div>`;
+  }).join('');
 
   const coreHtml=coreExp.map(it=>`
     <div class="budget-item-v2" onclick="editExpItem(${it.id})">
@@ -1062,6 +1523,21 @@ function renderBudget(){
     ${inv>0?`<div class="budget-sec-footer"><span class="footer-label">${t('total')}</span><span class="footer-pct">${fmtP(compPct)}</span><span class="footer-total yellow">−${fmt(inv)}</span></div>`:''}
   </div>
   <button class="add-btn" onclick="editInvestment()" style="margin-bottom:16px">${t('setInvestment')}</button>
+  ${(()=>{
+    const gLines=(state.goals||[]).filter(g=>g.monthlyContribution>0);
+    if(!gLines.length) return '';
+    const linesHtml=gLines.map(g=>`<div class="goal-budget-line">
+      <span style="font-size:16px">${g.emoji||'🎯'}</span>
+      <span style="flex:1;font-size:13px;color:var(--muted2)">${escH(g.name)}</span>
+      <span style="font-family:var(--font-mono);font-size:13px;color:var(--accent4)">−${fmt(g.monthlyContribution)}</span>
+    </div>`).join('');
+    const totalG=gLines.reduce((s,g)=>s+g.monthlyContribution,0);
+    return`<div class="section-label" style="margin-top:4px">${t('goalContributions')}</div>
+    <div class="budget-sec">
+      ${linesHtml}
+      <div class="budget-sec-footer"><span class="footer-label">${t('total')}</span><span class="footer-total" style="color:var(--accent4)">−${fmt(totalG)}</span></div>
+    </div>`;
+  })()}
 
   <div class="section-label">${t('result')}</div>
   <div class="result-box ${remain>=0?'green':'red'}">
@@ -1121,10 +1597,42 @@ function renderInvest(){
 
   const c=state.calculator;
   const cfg=state.investmentConfig;
-  const strategyStr=cfg.note||`${cfg.name} · DCA`;
+  const acct=state.investmentAccount;
+  const acctName=getAcctName();
+  const strategyStr=(cfg.note||`${cfg.name} · DCA`).replace(/{acctName}/g,acctName);
   const warnStr=getLang()==='hu'
     ?`⚠️ Figyelem: A ${cfg.expectedReturn}%-os hozam a ${escH(cfg.name)} historikus átlaga – a valóság eltérhet. Nem befektetési tanácsadás.`
     :`⚠️ Note: The ${cfg.expectedReturn}% return is the historical average for ${escH(cfg.name)} – actual returns may vary. Not financial advice.`;
+
+  // Account card subtitle
+  const acctSubDetail=(()=>{
+    const parts=[];
+    if(acct.taxFree) parts.push(getLang()==='hu'?'Adómentes':'Tax-free');
+    else parts.push(getLang()==='hu'?'Adóhalasztott':'Tax-deferred');
+    if(acct.lockupYears) parts.push(getLang()==='hu'?`${acct.lockupYears} év után`:`After ${acct.lockupYears}y`);
+    if(acct.annualLimit) parts.push(getLang()==='hu'?`Limit: ${fmt(acct.annualLimit)}`:`Limit: ${fmt(acct.annualLimit)}`);
+    return parts.join(' · ');
+  })();
+
+  // Annual limit bar
+  const limitBarHtml=(()=>{
+    if(!acct.annualLimit||acct.annualLimit<=0) return '';
+    const totalContrib=yearInv();
+    const pct=Math.min(100,totalContrib/acct.annualLimit*100);
+    const over=totalContrib>acct.annualLimit;
+    const label=getLang()==='hu'
+      ?`Éves befektetési limit: ${fmt(totalContrib)} / ${fmt(acct.annualLimit)}`
+      :`Annual contribution limit: ${fmt(totalContrib)} / ${fmt(acct.annualLimit)}`;
+    return `<div class="limit-bar-wrap">
+      <div class="limit-bar-label">${label}</div>
+      <div class="limit-bar-track"><div class="limit-bar-fill ${over?'over':'under'}" style="width:${pct.toFixed(1)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="limit-bar-pct" style="color:${over?'var(--accent3)':'var(--accent2)'}">${pct.toFixed(0)}%</span>
+        ${over?`<span style="font-size:11px;color:var(--accent3);font-family:var(--font-mono)">${getLang()==='hu'?'⚠ Limit túllépve!':'⚠ Over limit!'}</span>`:''}
+      </div>
+    </div>`;
+  })();
+
   document.getElementById('pane-invest').innerHTML=`<div class="fade-in">
   <div class="section-label">${t('yearSummary')}</div>
   <div class="invest-cfg-card" onclick="editInvestmentConfig()">
@@ -1134,10 +1642,18 @@ function renderInvest(){
     </div>
     <span class="invest-cfg-icon">⚙</span>
   </div>
+  <div class="account-cfg-card" onclick="editInvestmentAccount()">
+    <div class="account-cfg-left">
+      <div class="account-cfg-name">🏦 ${escH(acctName)}</div>
+      <div class="account-cfg-detail">${escH(acctSubDetail)}${acct.note?' · '+escH(acct.note):''}</div>
+    </div>
+    <span class="account-cfg-icon">⚙</span>
+  </div>
   <div class="grid-2">
     <div class="card"><div class="card-label">${t('investedYear')} ${state.currentYear}</div><div class="card-value purple">${fmtS(yInv)}</div><div class="card-sub">${fmt(yInv)}</div></div>
     <div class="card"><div class="card-label">${t('activeMonthsFull')}</div><div class="card-value purple">${actM}</div><div class="card-sub">${t('months12')}</div></div>
   </div>
+  ${limitBarHtml}
 
   <div class="section-label">${t('compoundCalc')}</div>
   <div class="calc-card">
@@ -1161,10 +1677,9 @@ function renderInvest(){
   <div class="section-label" style="margin-top:16px">${t('monthlyPlan')}</div>
   ${rows}
   <div class="highlight-box">
-    🎯 <strong>${t('strategy')}:</strong> ${escH(strategyStr)}<br>
-    <span style="display:inline-block;margin-top:6px">💶 175 EUR × ${state.eurRate} ${getCurrSym()} ≈ <strong style="color:var(--accent4)">${fmt(Math.round(175*state.eurRate))}</strong></span>
+    🎯 <strong>${t('strategy')}:</strong> ${escH(strategyStr)}<br><span style="display:inline-block;margin-top:6px">🏦 <strong>${escH(acctName)}</strong> · ${escH(acctSubDetail)}</span>${state.secondaryCurrency?`<br><span style="display:inline-block;margin-top:6px">1 ${escH(state.secondaryCurrency.symbol)} ≈ <strong style="color:var(--accent4)">${fmt(Math.round(state.secondaryCurrency.rate))}</strong></span>`:''}
   </div>
-  <div class="warn-box" style="margin-top:10px">${warnStr}</div>
+  <div class="warn-box" style="margin-top:10px">${warnStr.replace(/TBSZ/g, acctName)}</div>
 </div>`;
   buildCalcChart();updateCalcUI();
 }
@@ -1194,7 +1709,7 @@ function buildCalcChart(){
   const{monthly,rate,years}=state.calculator;
   const labels=[],principal=[],gains=[];
   for(let y=1;y<=years;y++){const t=fv(monthly,rate,y),inv=monthly*y*12;labels.push(y+'');principal.push(Math.round(inv));gains.push(Math.round(t-inv));}
-  charts.growth=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:t('paid'),data:principal,backgroundColor:'rgba(124,106,255,0.7)',stack:'a',borderRadius:2},{label:t('gain'),data:gains,backgroundColor:'rgba(62,207,142,0.7)',stack:'a',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+Math.round(ctx.raw).toLocaleString(getLocale())+'\u00a0'+getCurrSym()}}},scales:{x:{stacked:true,ticks:{color:'#6b6b80',autoSkip:true,maxTicksLimit:10},grid:{display:false}},y:{stacked:true,ticks:{color:'#6b6b80',callback:v=>(v/1000000).toFixed(1)+'M'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+  charts.growth=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:t('paid'),data:principal,backgroundColor:'rgba(124,106,255,0.7)',stack:'a',borderRadius:2},{label:t('gain'),data:gains,backgroundColor:'rgba(62,207,142,0.7)',stack:'a',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:chartBg(),titleColor:chartText(),bodyColor:chartText(),callbacks:{label:ctx=>' '+Math.round(ctx.raw).toLocaleString(getLocale())+'\u00a0'+getCurrSym()}}},scales:{x:{stacked:true,ticks:{color:chartText(),autoSkip:true,maxTicksLimit:10},grid:{display:false}},y:{stacked:true,ticks:{color:chartText(),callback:v=>(v/1000000).toFixed(1)+'M'},grid:{color:chartGrid()}}}}});
 }
 function syncCalc(){
   const yd=getYD(),wi=yd.months.filter(m=>m.invested>0);
@@ -1252,7 +1767,7 @@ function buildAnalyticsCharts(){
   const yd=getYD();
   const labels=t('monthsShort');
   const chartOpts={responsive:true,maintainAspectRatio:false};
-  const tickColor='#6b6b80',gridColor='rgba(255,255,255,0.05)';
+  const tickColor=chartText(),gridColor=chartGrid();
   const sym=getCurrSym(),loc=getLocale();
   const moneyCb=ctx=>ctx.dataset.label+': '+Math.round(ctx.raw).toLocaleString(loc)+'\u00a0'+sym;
 
@@ -1329,9 +1844,10 @@ function genInsights(){
   else if(emgMonths>=3)insights.push({e:'✅',t:'success',title:t('ins4t_ok'),text:getLang()==='hu'?`${emgMonths.toFixed(1)} havi kiadást fed a vészalapod – kiváló!`:`Your emergency fund covers ${emgMonths.toFixed(1)} months of expenses – excellent!`});
   else insights.push({e:'🛡️',t:'info',title:t('ins4t_build'),text:getLang()==='hu'?`Jó kezdet! Jelenleg ≈${emgMonths.toFixed(1)} havi kiadást fed. Cél: 3 hónap (≈${fmt(Math.round(avgExp*3))}).`:`Good start! Currently covers ≈${emgMonths.toFixed(1)} months. Goal: 3 months (≈${fmt(Math.round(avgExp*3))}).`});
 
-  // 5. EUR asset
-  const eurVal=curAssets.cashEUR*state.eurRate;
-  if(curAssets.cashEUR>0)insights.push({e:'💶',t:'info',title:t('ins5t_eur'),text:getLang()==='hu'?`${curAssets.cashEUR} EUR (≈${fmt(Math.round(eurVal))}) stabil értéktároló infláció ellen.`:`${curAssets.cashEUR} EUR (≈${fmt(Math.round(eurVal))}) is a solid inflation hedge. Keep it.`});
+  // 5. Secondary currency asset
+  const sc=state.secondaryCurrency;
+  const secVal=curAssets.cashEUR*(sc?sc.rate:0);
+  if(sc&&curAssets.cashEUR>0)insights.push({e:'💶',t:'info',title:t('ins5t_sec'),text:getLang()==='hu'?`${curAssets.cashEUR} ${sc.symbol} (≈${fmt(Math.round(secVal))}) stabil értéktároló infláció ellen.`:`${curAssets.cashEUR} ${sc.symbol} (≈${fmt(Math.round(secVal))}) is a solid inflation hedge. Keep it.`});
 
   // 6. Cash preference
   insights.push({e:'💵',t:'info',title:t('ins6t_cash'),text:getLang()==='hu'?`A fizikai pénzzel való gazdálkodás természetesen visszafog a felesleges kiadásoktól.`:`Managing physical cash naturally limits impulse spending. Combine it with bank savings and ETF investing for the best result.`});
@@ -1447,18 +1963,26 @@ async function sendChat(){
   try{
     const yd=getYD(),m=getMD(),ma=m.assets;
     const cfg=state.investmentConfig;
-    const sysPrompt=`You are a supportive personal finance assistant for a Hungarian university student (18 years old).
+    const scInfo=state.secondaryCurrency
+      ?`| ${state.secondaryCurrency.code} ${ma.cashEUR}\u00a0${state.secondaryCurrency.symbol} (≈${fmt(Math.round(ma.cashEUR*state.secondaryCurrency.rate))})`
+      :'';
+    const sysPrompt=`You are a supportive personal finance assistant.
 
 CURRENT FINANCIAL DATA:
-- Monthly income: ${fmt(mInc(m))} (scholarship 58,000 + parent 10,000 HUF)
+- Monthly income: ${fmt(mInc(m))}
 - Monthly expenses: Core ${fmt(mCore(m))} | Choice ${fmt(mChoice(m))} | Total ${fmt(mExp(m))}
 - Monthly investment: ${fmt(m.invested)} (${cfg.name}${cfg.ticker?' ['+cfg.ticker+']':''}, DCA strategy, expected annual return ${cfg.expectedReturn}%${cfg.note?', '+cfg.note:''})
+- Tax account: ${getAcctName()} · ${state.investmentAccount.taxFree?'Tax-free':'Tax-deferred'}${state.investmentAccount.annualLimit?' · Annual limit: '+fmt(state.investmentAccount.annualLimit):''}${state.investmentAccount.lockupYears?' · Lock-up: '+state.investmentAccount.lockupYears+'y':''}${state.investmentAccount.note?' · '+state.investmentAccount.note:''}
 - Year ${state.currentYear} total invested so far: ${fmt(yearInv())}
-- Assets: Bank ${fmt(ma.bank)} | Cash HUF ${fmt(ma.cashHUF)} | EUR ${ma.cashEUR}€ (≈${fmt(Math.round(ma.cashEUR*state.eurRate))}) | Portfolio ${fmt(ma.portfolio)}
-- EUR/HUF rate: ${state.eurRate} Ft
+- Assets: Bank ${fmt(ma.bank)} | Local Cash ${fmt(ma.cashHUF)} ${scInfo}| Portfolio ${fmt(ma.portfolio)}
+${state.secondaryCurrency?`- ${state.secondaryCurrency.code}/${getCurrSym()} rate: ${state.secondaryCurrency.rate}`:''}
+${(state.goals||[]).length>0?`
+FINANCIAL GOALS:
+${(state.goals||[]).map(g=>{const pct=g.targetAmount>0?Math.min(100,g.currentAmount/g.targetAmount*100):0;const mo=g.monthlyContribution>0?Math.ceil(Math.max(0,g.targetAmount-g.currentAmount)/g.monthlyContribution):null;return`- ${g.emoji||'🎯'} ${g.name} [${g.type||'savings'}]: ${fmt(g.currentAmount)}/${fmt(g.targetAmount)} (${pct.toFixed(0)}%)${g.monthlyContribution>0?`, ${fmt(g.monthlyContribution)}/mo`:''}${mo!==null?`, ~${mo} months left`:''}${g.targetDate?`, target ${g.targetDate}`:''}`}).join('\n')}`:''
+}
 
-PHILOSOPHY: Long-term DCA investing only. ${cfg.name}${cfg.ticker?' ('+cfg.ticker+')':''}. TBSZ account. No day trading. No gambling. No crypto speculation. Small consistent steps while enjoying youth.
-PERSONALITY: Supportive, realistic, non-judgmental. Student life is valid. Never shame spending on food, travel, or experiences.
+PHILOSOPHY: Long-term DCA investing only. ${cfg.name}${cfg.ticker?' ('+cfg.ticker+')':''}. No day trading. No gambling. No crypto speculation. Small consistent steps while enjoying youth.
+PERSONALITY: Supportive, realistic, non-judgmental. Never shame spending on food, travel, or experiences.
 LANGUAGE: Respond in the same language as the user (Hungarian or English). Be concise (2-4 sentences unless the question requires more).`;
 
     // Build history: exclude the current (last) user message — it goes as the final content item
@@ -1589,44 +2113,180 @@ document.getElementById('sheet-save').addEventListener('click',()=>{if(sheetCb)s
 /* ============================================================
    EDIT FUNCTIONS
 ============================================================ */
-const ASSET_LBL={bank:()=>t('bankBalance'),cashHUF:()=>t('localCash'),cashEUR:()=>t('cashEURLabel'),portfolio:()=>t('portfolioLabel')};
+const ASSET_LBL={
+  bank:()=>t('bankBalance'),
+  cashHUF:()=>t('localCash'),
+  cashEUR:()=>state.secondaryCurrency?`Cash ${state.secondaryCurrency.code}`:t('cashSecondaryLbl'),
+  portfolio:()=>t('portfolioLabel')
+};
 function editAsset(key){
-  const m=getMD(),a=m.assets,isEur=key==='cashEUR';
-  const sym=isEur?'€':getCurrSym();
+  const m=getMD(),a=m.assets,sc=state.secondaryCurrency;
+  const sym=(key==='cashEUR')?(sc?.symbol||'?'):getCurrSym();
   openSheet(ASSET_LBL[key](),
-    `<div class="sheet-label">${t('amountLabel')} (${sym})</div><input class="sheet-input" id="inp-a" type="text" inputmode="numeric" pattern="[0-9]*" value="${a[key]}" placeholder="0">`,
+    `<div class="sheet-label">${t('amountLabel')} (${escH(sym)})</div><input class="sheet-input" id="inp-a" type="text" inputmode="numeric" pattern="[0-9]*" value="${a[key]}" placeholder="0">`,
     ()=>{a[key]=parseFloat(document.getElementById('inp-a').value)||0;saveState();closeSheet();renderDashboard();}
   );
 }
-function editEurRate(){
-  openSheet(t('eurRate'),
-    `<div class="sheet-label">${t('eurRateLabel')}</div><input class="sheet-input" id="inp-eur" type="text" inputmode="numeric" pattern="[0-9]*" value="${state.eurRate}" placeholder="400">
-     <div class="sheet-hint">💡 175 EUR × rate = <strong id="eur-hint">${fmt(Math.round(175*state.eurRate))}</strong></div>`,
-    ()=>{state.eurRate=parseFloat(document.getElementById('inp-eur').value)||400;saveState();closeSheet();renderDashboard();if(activeTab==='invest')renderInvest();}
+function editExchangeRate(){
+  const sc=state.secondaryCurrency;
+  if(!sc)return;
+  openSheet(t('fxRateEditTitle'),
+    `<div class="sheet-label">1 ${escH(sc.symbol)} (${escH(sc.code)}) = ? ${getCurrSym()}</div>
+     <input class="sheet-input" id="inp-rate" type="text" inputmode="decimal" value="${sc.rate}" placeholder="1">
+     <div class="sheet-hint">💡 ${t('scRateHint')}</div>`,
+    ()=>{
+      const r=parseFloat(document.getElementById('inp-rate').value);
+      if(!isNaN(r)&&r>0){sc.rate=r;sc.rateLive=false;sc.rateLastFetched=null;}
+      saveState();closeSheet();renderDashboard();if(activeTab==='invest')renderInvest();
+    }
   );
-  setTimeout(()=>{const i=document.getElementById('inp-eur');if(i)i.addEventListener('input',()=>{const h=document.getElementById('eur-hint');if(h)h.textContent=fmt(Math.round(175*(parseFloat(i.value)||400)));});},350);
 }
 function catSel(sel){
   const c=sel||'Core';
   return`<div class="sheet-label">${t('category')}</div><select class="sheet-input" id="inp-cat"><option value="Core"${c==='Core'?' selected':''}>${t('coreCat')}</option><option value="Choice"${c==='Choice'?' selected':''}>${t('choiceCat')}</option></select>`;
 }
+function _incSheetHTML(it,isNew){
+  const freq=it?(it.frequency||'monthly'):'monthly';
+  const isVar=it?(it.isVariable||false):false;
+  const baseAmt=it?it.amount:'';
+  const name=it?escA(it.name):'';
+  const fOpt=(v,lk)=>`<option value="${v}"${freq===v?' selected':''}>${t(lk)}</option>`;
+  const overrideVal=(!isNew&&it&&isVar)?getVarOverride(it.id,state.currentYear,state.currentMonth):'';
+  const overrideDisp=overrideVal!==null&&overrideVal!==undefined?overrideVal:'';
+  const varBox=isVar?`<div class="var-override-box">
+    <div class="var-override-label">📅 ${t('thisMonthOverride')} — ${t('months')[state.currentMonth-1]}</div>
+    <input class="sheet-input" id="inp-ov" type="text" inputmode="numeric" value="${overrideDisp}" placeholder="${t('thisMonthHint')}">
+    <div style="font-size:11px;color:var(--muted2);margin-top:-6px;margin-bottom:8px">${t('thisMonthHint')}</div>
+  </div>`:'';
+  const equivNote=freq!=='monthly'&&!isVar&&baseAmt!==''
+    ?`<div style="font-size:11px;color:var(--accent4);font-family:var(--font-mono);margin-top:-8px;margin-bottom:10px">≈ ${fmt(Math.round(Number(baseAmt)*freqMultiplier(freq)))} ${t('monthlyEquiv')}</div>`:'' ;
+  return`<div class="sheet-label">${t('name')}</div>
+<input class="sheet-input" id="inp-n" type="text" value="${name}" placeholder="${t('egIncome')}">
+<div class="sheet-label">${t('amount')} (${getCurrSym()}${freq==='weekly'?' · '+t('freqWeekly').replace('🔄 ',''):freq==='biweekly'?' · '+t('freqBiweekly').replace('🔄 ',''):''})</div>
+<input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" value="${baseAmt}" placeholder="0" oninput="_incEquivUpdate()">
+<div id="inc-equiv-note">${equivNote}</div>
+<div class="sheet-label">${t('freqLabel')}</div>
+<select class="sheet-input" id="inp-freq" onchange="_incFreqChange()">${fOpt('monthly','freqMonthly')}${fOpt('weekly','freqWeekly')}${fOpt('biweekly','freqBiweekly')}${fOpt('variable','freqVariable')}</select>
+<div id="inc-var-box">${varBox}</div>
+<button class="gn-toggle" id="gn-toggle" onclick="_gnToggle()" type="button">${t('grossNetCalc')}</button>
+<div id="gn-body" style="display:none">
+  <div class="gn-body">
+    <div class="sheet-label">${t('grossAmt')} (${getCurrSym()})</div>
+    <input class="sheet-input" id="inp-gross" type="text" inputmode="numeric" placeholder="200000" oninput="_gnCalc()">
+    <div class="sheet-label">${t('taxRatePct')}</div>
+    <input class="sheet-input" id="inp-tax" type="text" inputmode="decimal" placeholder="25" value="${it&&it.taxRate?it.taxRate:''}" oninput="_gnCalc()">
+    <div class="gn-result">
+      <span class="gn-net-val" id="gn-net">—</span>
+      <button class="gn-use-btn" type="button" onclick="_gnUse()">${t('useThis')}</button>
+    </div>
+  </div>
+</div>`;
+}
+
+function _incFreqChange(){
+  const freq=document.getElementById('inp-freq')?.value;
+  const isVar=freq==='variable';
+  const box=document.getElementById('inc-var-box');
+  if(box){
+    if(isVar){
+      const curOvRaw=getVarOverride(window._editIncId||0,state.currentYear,state.currentMonth);
+      const curOv=curOvRaw!==null&&curOvRaw!==undefined?curOvRaw:'';
+      box.innerHTML=`<div class="var-override-box">
+        <div class="var-override-label">📅 ${t('thisMonthOverride')} — ${t('months')[state.currentMonth-1]}</div>
+        <input class="sheet-input" id="inp-ov" type="text" inputmode="numeric" value="${curOv}" placeholder="${t('thisMonthHint')}">
+        <div style="font-size:11px;color:var(--muted2);margin-top:-6px;margin-bottom:8px">${t('thisMonthHint')}</div>
+      </div>`;
+    } else { box.innerHTML=''; }
+  }
+  _incEquivUpdate();
+}
+function _incEquivUpdate(){
+  const note=document.getElementById('inc-equiv-note');if(!note)return;
+  const freq=document.getElementById('inp-freq')?.value||'monthly';
+  const amt=parseFloat(document.getElementById('inp-am')?.value)||0;
+  if(freq!=='monthly'&&freq!=='variable'&&amt>0){
+    note.innerHTML=`<div style="font-size:11px;color:var(--accent4);font-family:var(--font-mono);margin-top:-8px;margin-bottom:10px">≈ ${fmt(Math.round(amt*freqMultiplier(freq)))} ${t('monthlyEquiv')}</div>`;
+  } else { note.innerHTML=''; }
+}
+let _gnOpen=false;
+function _gnToggle(){
+  _gnOpen=!_gnOpen;
+  const body=document.getElementById('gn-body');
+  const btn=document.getElementById('gn-toggle');
+  if(body)body.style.display=_gnOpen?'block':'none';
+  if(btn)btn.textContent=_gnOpen?t('grossNetCalcOpen'):t('grossNetCalc');
+}
+function _gnCalc(){
+  const gross=parseFloat(document.getElementById('inp-gross')?.value)||0;
+  const tax=parseFloat(document.getElementById('inp-tax')?.value)||0;
+  const net=Math.round(gross*(1-tax/100));
+  const el=document.getElementById('gn-net');
+  if(el)el.textContent=gross>0?fmt(net):'—';
+}
+function _gnUse(){
+  const gross=parseFloat(document.getElementById('inp-gross')?.value)||0;
+  const tax=parseFloat(document.getElementById('inp-tax')?.value)||0;
+  const net=Math.round(gross*(1-tax/100));
+  const amEl=document.getElementById('inp-am');
+  if(amEl&&gross>0){amEl.value=String(net);_incEquivUpdate();}
+}
+
 function editIncItem(id){
   const m=getMD(),it=m.income.find(i=>i.id===id);if(!it)return;
-  openSheet(t('editIncome'),
-    `<div class="sheet-label">${t('name')}</div><input class="sheet-input" id="inp-n" type="text" value="${escA(it.name)}" placeholder="${t('egIncome')}">
-     <div class="sheet-label">${t('amount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" value="${it.amount}" placeholder="0">`,
-    ()=>{it.name=document.getElementById('inp-n').value.trim()||it.name;it.amount=parseFloat(document.getElementById('inp-am').value)||0;saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();}
-  );
+  window._editIncId=id;
+  _gnOpen=false;
+  openSheet(t('editIncome'),_incSheetHTML(it,false),()=>{
+    const n=document.getElementById('inp-n').value.trim()||it.name;
+    const am=parseFloat(document.getElementById('inp-am').value)||0;
+    const freq=document.getElementById('inp-freq').value;
+    const isVar=freq==='variable';
+    it.name=n; it.amount=am; it.frequency=freq; it.isVariable=isVar;
+    // Save tax rate if set
+    const taxEl=document.getElementById('inp-tax');
+    if(taxEl&&taxEl.value)it.taxRate=parseFloat(taxEl.value)||0;
+    // Variable override
+    if(isVar){
+      const ovEl=document.getElementById('inp-ov');
+      const ovVal=ovEl&&ovEl.value.trim()!==''?parseFloat(ovEl.value):null;
+      setVarOverride(it.id,state.currentYear,state.currentMonth,ovVal);
+    } else {
+      setVarOverride(it.id,state.currentYear,state.currentMonth,null);
+    }
+    saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();
+  });
 }
 function addInc(){
   const m=getMD();
-  openSheet(t('newIncome'),
-    `<div class="sheet-label">${t('name')}</div><input class="sheet-input" id="inp-n" type="text" placeholder="${t('egPartTime')}">
-     <div class="sheet-label">${t('amount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-am" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0">`,
-    ()=>{const n=document.getElementById('inp-n').value.trim(),am=parseFloat(document.getElementById('inp-am').value)||0;if(!n)return;const maxId=m.income.length?Math.max(...m.income.map(i=>i.id)):0;m.income.push({id:maxId+1,name:n,amount:am});saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();}
-  );
+  window._editIncId=0;
+  _gnOpen=false;
+  openSheet(t('newIncome'),_incSheetHTML(null,true),()=>{
+    const n=document.getElementById('inp-n').value.trim();
+    if(!n)return;
+    const am=parseFloat(document.getElementById('inp-am').value)||0;
+    const freq=document.getElementById('inp-freq').value;
+    const isVar=freq==='variable';
+    const maxId=m.income.length?Math.max(...m.income.map(i=>i.id)):0;
+    const newId=maxId+1;
+    m.income.push({id:newId,name:n,amount:am,frequency:freq,isVariable:isVar});
+    if(isVar){
+      const ovEl=document.getElementById('inp-ov');
+      const ovVal=ovEl&&ovEl.value.trim()!==''?parseFloat(ovEl.value):null;
+      if(ovVal!==null)setVarOverride(newId,state.currentYear,state.currentMonth,ovVal);
+    }
+    saveState();closeSheet();renderBudget();if(activeTab==='summary')renderDashboard();
+  });
 }
-function delInc(id){const m=getMD();m.income=m.income.filter(i=>i.id!==id);saveState();renderBudget();if(activeTab==='summary')renderDashboard();}
+function delInc(id){
+  const m=getMD();
+  m.income=m.income.filter(i=>i.id!==id);
+  // Clean up any variable overrides for this income id
+  for(const y of Object.keys(state.variableIncomeOverrides||{})){
+    for(const mn of Object.keys(state.variableIncomeOverrides[y]||{})){
+      delete (state.variableIncomeOverrides[y][mn]||{})[id];
+    }
+  }
+  saveState();renderBudget();if(activeTab==='summary')renderDashboard();
+}
 
 function editExpItem(id){
   const m=getMD(),it=m.expenses.find(e=>e.id===id);if(!it)return;
@@ -1649,10 +2309,19 @@ function addExp(){
 function delExp(id){const m=getMD();m.expenses=m.expenses.filter(e=>e.id!==id);saveState();renderBudget();if(activeTab==='summary')renderDashboard();}
 
 function editInvestment(){
-  const m=getMD(),eur=state.eurRate,isJune=state.currentMonth===6;
+  const m=getMD(),sc=state.secondaryCurrency,isJune=state.currentMonth===6;
   const mnName=t('months')[state.currentMonth-1];
+  const acctName=getAcctName();
+  const acctHint=state.investmentAccount.taxFree
+    ?(getLang()==='hu'?`📋 ${escH(acctName)} számla – ${state.investmentAccount.lockupYears?state.investmentAccount.lockupYears+' év után adómentes':'Adómentes'}`:
+      `📋 ${escH(acctName)} account – ${state.investmentAccount.lockupYears?'Tax-free after '+state.investmentAccount.lockupYears+'y':'Tax-free'}`)
+    :(getLang()==='hu'?`📋 ${escH(acctName)} számla – Adóhalasztott`:`📋 ${escH(acctName)} – Tax-deferred`);
+  const juneHint=isJune&&sc
+    ?`<div class="sheet-hint">💡 ${t('suggestedLabel')}: 175 ${escH(sc.symbol)} × ${sc.rate} + 20 000 = <strong>${fmt(Math.round(175*sc.rate+20000))}</strong></div>`
+    :'';
   openSheet(mnName+' '+t('compoundAlloc'),
-    `${isJune?`<div class="sheet-hint">💡 ${t('suggestedLabel')}: 175 EUR × ${eur} ${getCurrSym()} + 20 000 = <strong>${fmt(Math.round(175*eur+20000))}</strong></div>`:''}
+    `${juneHint}
+     <div class="sheet-hint" style="margin-bottom:14px">${acctHint}</div>
      <div class="sheet-label">${t('investedAmount')} (${getCurrSym()})</div><input class="sheet-input" id="inp-inv" type="text" inputmode="numeric" pattern="[0-9]*" value="${m.invested||''}" placeholder="0" oninput="syncV()">
      <div class="sheet-label">${t('ofWhichAsset')} ${escH(state.investmentConfig.name)} (${getCurrSym()})</div><input class="sheet-input" id="inp-vwce" type="text" inputmode="numeric" pattern="[0-9]*" value="${m.vwce||''}" placeholder="0">
      <div class="sheet-label">${t('ofWhichEmergency')} (${getCurrSym()})</div><input class="sheet-input" id="inp-emg" type="text" inputmode="numeric" pattern="[0-9]*" value="${m.emergency||''}" placeholder="0" oninput="syncV()">
@@ -1707,19 +2376,455 @@ function editInvestmentConfig(){
 }
 
 /* ============================================================
+   INVESTMENT ACCOUNT EDITOR
+============================================================ */
+function editInvestmentAccount(){
+  const acct=state.investmentAccount;
+  const isHu=getLang()==='hu';
+
+  const presetLabels={
+    tbsz:'TBSZ (HU)',
+    isa:'ISA (UK)',
+    '401k':'401(k) (US)',
+    roth:'Roth IRA (US)',
+    tfsa:'TFSA (CA)',
+    ppf:'PPF (IN)',
+    nps:'NPS (IN)',
+    pea:'PEA (FR)',
+    custom:isHu?'Egyéni':'Custom',
+  };
+
+  const typeGrid=Object.keys(ACCOUNT_PRESETS).map(k=>
+    `<div class="acct-type-btn${acct.type===k?' selected':''}" onclick="acctTypeSelect('${k}')" id="atype-${k}">${presetLabels[k]||k}</div>`
+  ).join('');
+
+  const bodyHTML=`
+    <div class="sheet-label">${isHu?'Számla típusa':'Account Type'}</div>
+    <div class="acct-type-grid" id="acct-type-grid">${typeGrid}</div>
+    <div class="sheet-label">${isHu?'Megnevezés':'Name'}</div>
+    <input class="sheet-input" id="acct-name" type="text" value="${escA(acct.name)}" placeholder="TBSZ, ISA, Roth IRA…">
+    <div class="toggle-row">
+      <span class="toggle-label">${isHu?'Adómentes':'Tax-free'}</span>
+      <label class="toggle-switch"><input type="checkbox" id="acct-taxfree" ${acct.taxFree?'checked':''}><span class="toggle-slider"></span></label>
+    </div>
+    <div class="sheet-label" style="margin-top:12px">${isHu?'Éves limit (0 = nincs)':'Annual limit (0 = none)'} (${getCurrSym()})</div>
+    <input class="sheet-input" id="acct-limit" type="text" inputmode="numeric" value="${acct.annualLimit||''}" placeholder="0">
+    <div class="sheet-label">${isHu?'Zárolási időszak (év)':'Lock-up period (years)'}</div>
+    <input class="sheet-input" id="acct-lockup" type="text" inputmode="numeric" value="${acct.lockupYears||''}" placeholder="${isHu?'pl. 5':'e.g. 5'}">
+    <div class="sheet-label">${isHu?'Megjegyzés':'Note'}</div>
+    <input class="sheet-input" id="acct-note" type="text" value="${escA(acct.note||'')}" placeholder="${isHu?'pl. 5 év után adómentes':'e.g. Tax-free after 5 years'}">
+  `;
+
+  openSheet(isHu?'🏦 Számla beállítások':'🏦 Account Settings', bodyHTML, ()=>{
+    const name=document.getElementById('acct-name').value.trim();
+    if(name) acct.name=name;
+    acct.taxFree=document.getElementById('acct-taxfree').checked;
+    const lim=parseFloat(document.getElementById('acct-limit').value)||0;
+    acct.annualLimit=lim>0?lim:null;
+    const lockup=parseInt(document.getElementById('acct-lockup').value)||0;
+    acct.lockupYears=lockup>0?lockup:null;
+    acct.note=document.getElementById('acct-note').value.trim();
+    saveState();closeSheet();renderInvest();
+  });
+}
+
+function acctTypeSelect(key){
+  const preset=ACCOUNT_PRESETS[key];
+  if(!preset) return;
+  // Update UI selection
+  document.querySelectorAll('.acct-type-btn').forEach(b=>b.classList.remove('selected'));
+  const btn=document.getElementById('atype-'+key);
+  if(btn) btn.classList.add('selected');
+  // Update state type
+  state.investmentAccount.type=key;
+  // Pre-fill fields (except for custom)
+  if(key!=='custom'){
+    const nameEl=document.getElementById('acct-name');
+    if(nameEl) nameEl.value=preset.name;
+    const tfEl=document.getElementById('acct-taxfree');
+    if(tfEl) tfEl.checked=preset.taxFree;
+    const limEl=document.getElementById('acct-limit');
+    if(limEl) limEl.value=preset.annualLimit||'';
+    const lockEl=document.getElementById('acct-lockup');
+    if(lockEl) lockEl.value=preset.lockupYears||'';
+    const noteEl=document.getElementById('acct-note');
+    if(noteEl) noteEl.value=preset.note||'';
+  }
+}
+function _goalSheetHTML(g){
+  const isEdit=!!g;
+  const emoji=g?g.emoji:'🎯';
+  const name=g?escA(g.name):'';
+  const type=g?g.type:'savings';
+  const target=g?g.targetAmount:'';
+  const current=g?g.currentAmount:0;
+  const monthly=g?g.monthlyContribution:'';
+  const date=g?escA(g.targetDate||''):'';
+  const color=g?g.color:GOAL_COLORS[0];
+  const typeOpt=(v,label)=>`<option value="${v}"${type===v?' selected':''}>${label}</option>`;
+  const emojiGrid=GOAL_EMOJIS.map(e=>`<div class="emoji-opt${e===emoji?' sel-emoji':''}" onclick="this.closest('.emoji-grid').querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('sel-emoji'));this.classList.add('sel-emoji')" data-em="${e}">${e}</div>`).join('');
+  const colorSwatches=GOAL_COLORS.map(c=>`<div class="color-swatch${c===color?' sel-color':''}" style="background:${c}" onclick="this.closest('.color-swatches').querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('sel-color'));this.classList.add('sel-color')" data-col="${c}"></div>`).join('');
+  return`<div class="sheet-label">${t('goalName')}</div>
+<input class="sheet-input" id="g-name" type="text" value="${name}" placeholder="${getLang()==='hu'?'pl. Vészalap':'e.g. Emergency Fund'}">
+<div class="sheet-label">${t('goalEmoji')}</div>
+<div class="emoji-grid">${emojiGrid}</div>
+<div class="sheet-label">${t('goalType')}</div>
+<select class="sheet-input" id="g-type">${typeOpt('savings',t('goalSavings'))}${typeOpt('investment',t('goalInvestment'))}${typeOpt('debt',t('goalDebt'))}</select>
+<div class="sheet-label">${t('goalTarget')} (${getCurrSym()})</div>
+<input class="sheet-input" id="g-target" type="text" inputmode="numeric" value="${target}" placeholder="200000">
+<div class="sheet-label">${t('goalCurrent')} (${getCurrSym()})</div>
+<input class="sheet-input" id="g-current" type="text" inputmode="numeric" value="${current}" placeholder="0">
+<div class="sheet-label">${t('goalMonthly')} (${getCurrSym()})</div>
+<input class="sheet-input" id="g-monthly" type="text" inputmode="numeric" value="${monthly}" placeholder="10000">
+<div class="sheet-label">${t('goalDate')}</div>
+<input class="sheet-input" id="g-date" type="text" value="${date}" placeholder="2027-06">
+<div class="sheet-label">${t('goalColor')}</div>
+<div class="color-swatches">${colorSwatches}</div>
+${isEdit?`<button onclick="_deleteGoal(${g.id})" style="width:100%;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.25);color:var(--accent3);border-radius:12px;padding:13px;font-size:14px;cursor:pointer;font-family:var(--font-body);margin-top:4px">${t('delete')}</button>`:''}`;
+}
+
+function _readGoalSheet(){
+  const selEmoji=document.querySelector('.emoji-opt.sel-emoji');
+  const selColor=document.querySelector('.color-swatch.sel-color');
+  return{
+    name:document.getElementById('g-name').value.trim(),
+    emoji:selEmoji?selEmoji.dataset.em:'🎯',
+    type:document.getElementById('g-type').value,
+    targetAmount:parseFloat(document.getElementById('g-target').value)||0,
+    currentAmount:parseFloat(document.getElementById('g-current').value)||0,
+    monthlyContribution:parseFloat(document.getElementById('g-monthly').value)||0,
+    targetDate:document.getElementById('g-date').value.trim(),
+    color:selColor?selColor.dataset.col:GOAL_COLORS[0],
+  };
+}
+
+function addGoal(){
+  openSheet(t('newGoal'),_goalSheetHTML(null),()=>{
+    const d=_readGoalSheet();if(!d.name)return;
+    const maxId=(state.goals||[]).length?Math.max(...state.goals.map(g=>g.id)):0;
+    if(!state.goals)state.goals=[];
+    state.goals.push({id:maxId+1,...d,_celebrated:false});
+    saveState();closeSheet();renderDashboard();if(activeTab==='budget')renderBudget();
+  });
+}
+
+function editGoal(id){
+  const g=state.goals.find(x=>x.id===id);if(!g)return;
+  openSheet(t('editGoalTitle'),_goalSheetHTML(g),()=>{
+    const d=_readGoalSheet();if(!d.name)return;
+    const wasAchieved=g.currentAmount>=g.targetAmount&&g.targetAmount>0;
+    Object.assign(g,d);
+    // Reset celebration flag if no longer achieved
+    if(g.currentAmount<g.targetAmount)g._celebrated=false;
+    // If newly achieved, celebrate
+    if(!wasAchieved&&g.currentAmount>=g.targetAmount&&g.targetAmount>0){g._celebrated=false;}
+    saveState();closeSheet();renderDashboard();if(activeTab==='budget')renderBudget();
+  });
+}
+
+function _deleteGoal(id){
+  state.goals=state.goals.filter(g=>g.id!==id);
+  saveState();closeSheet();renderDashboard();if(activeTab==='budget')renderBudget();
+}
+
+/* CONFETTI */
+function triggerConfetti(){
+  const container=document.createElement('div');
+  container.className='confetti-container';
+  document.body.appendChild(container);
+  const colors=['#7c6aff','#3ecf8e','#ffd166','#ff6b6b','#ff9f43','#ffffff'];
+  const shapes=['border-radius:50%','border-radius:2px','border-radius:0'];
+  for(let i=0;i<80;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    const size=Math.random()*10+6;
+    const x=Math.random()*100;
+    const dur=Math.random()*2+2;
+    const delay=Math.random()*1.2;
+    const col=colors[Math.floor(Math.random()*colors.length)];
+    const sh=shapes[Math.floor(Math.random()*shapes.length)];
+    p.style.cssText=`left:${x}%;width:${size}px;height:${size}px;background:${col};${sh};animation-duration:${dur}s;animation-delay:${delay}s;opacity:1;`;
+    container.appendChild(p);
+  }
+  setTimeout(()=>container.remove(),5000);
+}
+
+/* ============================================================
    SETTINGS
 ============================================================ */
+/* ============================================================
+   TOAST NOTIFICATIONS
+============================================================ */
+let _toastTimer = null;
+function showToast(msg, duration=5000){
+  const toast=document.getElementById('backup-toast');
+  const txt=document.getElementById('toast-text');
+  if(!toast||!txt)return;
+  txt.textContent=msg;
+  toast.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>dismissToast(),duration);
+}
+function dismissToast(){
+  const toast=document.getElementById('backup-toast');
+  if(toast)toast.classList.remove('show');
+  clearTimeout(_toastTimer);
+}
+
+/* ============================================================
+   EXPORT / IMPORT / BACKUP
+============================================================ */
+function exportJSON(){
+  const dateStr=new Date().toISOString().slice(0,10);
+  const filename=`financial-plan-backup-${dateStr}.json`;
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  _downloadBlob(blob,filename);
+  showToast(getLang()==='hu'?'✅ Biztonsági mentés letöltve!':'✅ Backup downloaded!',3000);
+}
+
+function exportCSV(){
+  const isHu=getLang()==='hu';
+  const sym=getCurrSym();
+  const rows=[['Year','Month','Income','CoreExpenses','ChoiceExpenses','Invested','Emergency','Bank','CashLocal','CashForeign','Portfolio','NetWorth','Remain']];
+  const sc=state.secondaryCurrency;
+  const secRate=sc?sc.rate:0;
+  const years=Object.keys(state.years).map(Number).sort((a,b)=>a-b);
+  years.forEach(yr=>{
+    const yd=state.years[String(yr)];
+    (yd.months||[]).forEach(m=>{
+      const inc=mInc(m),core=mCore(m),choice=mChoice(m),inv=m.invested||0,emg=m.emergency||0;
+      const a=m.assets||{bank:0,cashHUF:0,cashEUR:0,portfolio:0};
+      const nw=a.bank+a.cashHUF+a.cashEUR*secRate+a.portfolio;
+      const rem=inc-core-choice-inv;
+      rows.push([yr,t('months')[m.month-1],inc,core,choice,inv,emg,a.bank,a.cashHUF,a.cashEUR,a.portfolio,Math.round(nw),rem]);
+    });
+  });
+  const csv=rows.map(r=>r.map(v=>{
+    const s=String(v);
+    return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;
+  }).join(',')).join('\r\n');
+  const dateStr=new Date().toISOString().slice(0,10);
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  _downloadBlob(blob,`financial-plan-${dateStr}.csv`);
+  showToast(isHu?'✅ CSV exportálva!':'✅ CSV exported!',3000);
+}
+
+function importJSON(){
+  const el=document.getElementById('import-file-input');
+  if(!el)return;
+  el.value='';
+  el.onchange=function(){
+    const file=el.files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+      try{
+        const parsed=JSON.parse(e.target.result);
+        if(!parsed||typeof parsed!=='object'||!parsed.years) throw new Error('Invalid structure');
+        const isHu=getLang()==='hu';
+        const msg=isHu
+          ?'Ez az aktuális összes adatodat felváltja. Folytatod?'
+          :'This will replace all current data. Continue?';
+        if(!confirm(msg))return;
+        const errEl=document.getElementById('import-error-msg');
+        if(errEl)errEl.style.display='none';
+        state=parsed;
+        migrateState();
+        saveState();
+        updateStaticUI();updateHeader();
+        renderDashboard();renderBudget();renderInvest();
+        if(activeTab==='analytics')renderAnalytics();
+        if(activeTab==='ai')renderAI();
+        closeSettings();
+        showToast(isHu?'✅ Adatok visszaállítva!':'✅ Data restored successfully!',4000);
+      }catch(err){
+        const errEl=document.getElementById('import-error-msg');
+        if(errEl){errEl.textContent=(getLang()==='hu'?'❌ Érvénytelen backup fájl: ':'❌ Invalid backup file: ')+err.message;errEl.style.display='block';}
+      }
+    };
+    reader.readAsText(file);
+  };
+  el.click();
+}
+
+function copyShareLink(){
+  const isHu=getLang()==='hu';
+  try{
+    if(typeof LZString==='undefined') throw new Error('LZString not loaded');
+    // Exclude sensitive key from share
+    const shareState={...state,geminiKey:''};
+    const compressed=LZString.compressToEncodedURIComponent(JSON.stringify(shareState));
+    const url=window.location.href.split('#')[0]+'#data='+compressed;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(()=>{
+        showToast(isHu?'🔗 Hivatkozás másolva a vágólapra!':'🔗 Share link copied to clipboard!',4000);
+      }).catch(()=>_fallbackCopy(url,isHu));
+    }else{
+      _fallbackCopy(url,isHu);
+    }
+  }catch(err){
+    showToast(isHu?'❌ Nem sikerült a másolás.':'❌ Copy failed: '+err.message,4000);
+  }
+}
+
+function _fallbackCopy(text,isHu){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.cssText='position:fixed;top:-999px;left:-999px;';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');showToast(isHu?'🔗 Hivatkozás másolva!':'🔗 Share link copied!',4000);}
+  catch(e){prompt(isHu?'Másold ki a hivatkozást:':'Copy this link:',text);}
+  document.body.removeChild(ta);
+}
+
+function _downloadBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
+}
+
+function _checkShareHash(){
+  const hash=window.location.hash;
+  if(!hash.startsWith('#data='))return;
+  const compressed=hash.slice(6);
+  if(!compressed)return;
+  try{
+    if(typeof LZString==='undefined')return;
+    const json=LZString.decompressFromEncodedURIComponent(compressed);
+    if(!json)return;
+    const parsed=JSON.parse(json);
+    if(!parsed||!parsed.years)return;
+    const isHu=(parsed.settings?.language||'hu')==='hu';
+    const msg=isHu
+      ?'📤 Megosztott terv importálása? Ez az aktuális adataidat felváltja.'
+      :'📤 Import shared plan? This will replace your current data.';
+    setTimeout(()=>{
+      if(confirm(msg)){
+        state=parsed;
+        migrateState();
+        saveState();
+        updateStaticUI();updateHeader();
+        renderDashboard();renderBudget();renderInvest();
+        window.location.hash='';
+        showToast(isHu?'✅ Megosztott terv importálva!':'✅ Shared plan imported!',4000);
+      }else{
+        window.location.hash='';
+      }
+    },800);
+  }catch(e){
+    window.location.hash='';
+  }
+}
+
 function openSettings(){
   const s=state.settings;
+  const sc=state.secondaryCurrency;
+  const isHu=getLang()==='hu';
+  const theme=s.theme||'system';
+  const fs=s.fontSize||'M';
+  const cp=s.colorPalette||'default';
+
+  const scFields=sc?`
+    <div class="sheet-label" style="margin-top:14px">${t('scCode')}</div>
+    <input class="sheet-input" id="sc-code" type="text" value="${escA(sc.code)}" placeholder="EUR" style="text-transform:uppercase">
+    <div class="sheet-label">${t('scSymbol')}</div>
+    <input class="sheet-input" id="sc-sym" type="text" value="${escA(sc.symbol)}" placeholder="€">
+    <div class="sheet-label">${t('scName')}</div>
+    <input class="sheet-input" id="sc-name" type="text" value="${escA(sc.name)}" placeholder="Euro">
+    <div class="sheet-label">${t('scRate')}</div>
+    <input class="sheet-input" id="sc-rate" type="text" inputmode="decimal" value="${sc.rate}" placeholder="1">
+    <div class="sheet-hint" style="margin-bottom:10px">${t('scRateHint')}</div>
+    <button onclick="settingsFetchLiveRate()" style="width:100%;background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.25);color:var(--accent2);border-radius:10px;padding:10px;font-size:13px;cursor:pointer;margin-bottom:12px;" id="sc-fetch-btn">⟳ ${t('scFetchLive')}</button>
+    <button onclick="settingsRemoveSecondary()" style="width:100%;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.2);color:var(--accent3);border-radius:10px;padding:10px;font-size:13px;cursor:pointer;margin-bottom:4px;">🗑 ${t('scRemove')}</button>
+  `:`
+    <button onclick="settingsAddSecondary()" style="width:100%;background:rgba(124,106,255,0.1);border:1px dashed rgba(124,106,255,0.3);color:var(--accent);border-radius:10px;padding:12px;font-size:13px;cursor:pointer;margin-top:4px;">${t('scAdd')}</button>
+  `;
+
+  const yearsCount=Object.keys(state.years||{}).length;
+  const monthsCount=Object.values(state.years||{}).reduce((s,y)=>s+(y.months||[]).length,0);
+  const dataSize=Math.round(JSON.stringify(state).length/1024);
+
   document.getElementById('settings-body').innerHTML=`
-    <div class="sheet-label">${t('language')}</div>
+    <!-- ═══ APPEARANCE ═══ -->
+    <div class="sheet-label" style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">✦ ${t('appearanceSection')}</div>
+
+    <div class="sheet-label">${t('themeLabel')}</div>
+    <div class="settings-toggle-group" id="theme-group">
+      <button class="stg-btn ${theme==='light'?'active':''}" data-theme="light" onclick="setThemePick(this)">${t('themeLight')}</button>
+      <button class="stg-btn ${theme==='dark'?'active':''}" data-theme="dark" onclick="setThemePick(this)">${t('themeDark')}</button>
+      <button class="stg-btn ${theme==='system'?'active':''}" data-theme="system" onclick="setThemePick(this)">${t('themeSystem')}</button>
+    </div>
+
+    <div class="sheet-label">${t('fontSizeLabel')}</div>
+    <div class="settings-toggle-group" id="font-group">
+      <button class="stg-btn ${fs==='S'?'active':''}" data-fs="S" onclick="setFontPick(this)" style="font-size:11px">${t('fontS')}</button>
+      <button class="stg-btn ${fs==='M'?'active':''}" data-fs="M" onclick="setFontPick(this)" style="font-size:13px">${t('fontM')}</button>
+      <button class="stg-btn ${fs==='L'?'active':''}" data-fs="L" onclick="setFontPick(this)" style="font-size:15px">${t('fontL')}</button>
+      <button class="stg-btn ${fs==='XL'?'active':''}" data-fs="XL" onclick="setFontPick(this)" style="font-size:17px">${t('fontXL')}</button>
+    </div>
+
+    <div class="sheet-label">${t('paletteLabel')}</div>
+    <div class="settings-toggle-group" id="palette-group">
+      <button class="stg-btn ${cp==='default'?'active':''}" data-pal="default" onclick="setPalettePick(this)">${t('paletteDefault')}</button>
+      <button class="stg-btn ${cp==='deuteranopia'?'active':''}" data-pal="deuteranopia" onclick="setPalettePick(this)" style="font-size:10px">${t('paletteDeuteranopia')}</button>
+      <button class="stg-btn ${cp==='protanopia'?'active':''}" data-pal="protanopia" onclick="setPalettePick(this)" style="font-size:10px">${t('paletteProtanopia')}</button>
+      <button class="stg-btn ${cp==='monochrome'?'active':''}" data-pal="monochrome" onclick="setPalettePick(this)">${t('paletteMonochrome')}</button>
+    </div>
+
+    <!-- ═══ LANGUAGE & CURRENCY ═══ -->
+    <div class="sheet-label" style="margin-top:8px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">🌐 ${t('language')}</div>
     <select class="sheet-input" id="set-lang">
       <option value="hu"${s.language==='hu'?' selected':''}>🇭🇺 Magyar</option>
       <option value="en"${s.language==='en'?' selected':''}>🇬🇧 English</option>
     </select>
-    <div class="sheet-label" style="margin-top:14px">${t('currencySymbol')}</div>
+    <div class="sheet-label" style="margin-top:6px">${t('currencySymbol')}</div>
     <input class="sheet-input" id="set-sym" type="text" value="${escA(s.currencySymbol)}" placeholder="Ft · € · $ · ₹">
-    <div class="sheet-hint" style="margin-top:8px">${t('currencyHint')}</div>
+    <div class="sheet-label">${t('currencyCode')}</div>
+    <input class="sheet-input" id="set-code" type="text" value="${escA(s.currencyCode||'')}" placeholder="HUF" style="text-transform:uppercase">
+    <div class="sheet-hint" style="margin-top:4px;margin-bottom:14px">${t('currencyHint')}</div>
+    <div class="sheet-label" style="margin-top:6px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${t('secondaryCurrencySection')}</div>
+    ${scFields}
+
+    <!-- ═══ EXPORT ═══ -->
+    <div class="sheet-label" style="margin-top:20px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${isHu?'📦 Export &amp; Biztonsági mentés':'📦 Export &amp; Backup'}</div>
+    <div style="font-size:11px;color:var(--muted2);font-family:var(--font-mono);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border)">
+      ${isHu?`${yearsCount} év · ${monthsCount} hónap · ~${dataSize} KB adat`:`${yearsCount} year${yearsCount!==1?'s':''} · ${monthsCount} months · ~${dataSize} KB data`}
+    </div>
+
+    <button class="export-btn green" onclick="exportJSON()">
+      <span class="export-btn-icon">📥</span>
+      <span class="export-btn-info">
+        <div class="export-btn-title">${isHu?'Teljes backup letöltése (JSON)':'Export full backup (JSON)'}</div>
+        <div class="export-btn-sub">${isHu?'Minden adat — visszaállítható bármikor':'All data — fully restorable anytime'}</div>
+      </span>
+    </button>
+
+    <button class="export-btn purple" onclick="importJSON()">
+      <span class="export-btn-icon">📤</span>
+      <span class="export-btn-info">
+        <div class="export-btn-title">${isHu?'Backup visszaállítása (JSON)':'Import backup (JSON)'}</div>
+        <div class="export-btn-sub">${isHu?'JSON fájl betöltése — felváltja az aktuális adatokat':'Load a JSON file — replaces current data'}</div>
+      </span>
+    </button>
+    <div class="import-error" id="import-error-msg"></div>
+
+    <button class="export-btn yellow" onclick="exportCSV()">
+      <span class="export-btn-icon">📊</span>
+      <span class="export-btn-info">
+        <div class="export-btn-title">${isHu?'Exportálás táblázatba (CSV)':'Export to spreadsheet (CSV)'}</div>
+        <div class="export-btn-sub">${isHu?'Havi összesítés — Excel, Google Sheets kompatibilis':'Monthly summary — Excel &amp; Google Sheets compatible'}</div>
+      </span>
+    </button>
+
+    <button class="export-btn blue" onclick="copyShareLink()">
+      <span class="export-btn-icon">🔗</span>
+      <span class="export-btn-info">
+        <div class="export-btn-title">${isHu?'Hivatkozás másolása (megosztás)':'Copy share link'}</div>
+        <div class="export-btn-sub">${isHu?'Tömörített URL — sablon megosztáshoz, partnernek':'Compressed URL — share a template or with a partner'}</div>
+      </span>
+    </button>
+    <div style="font-size:11px;color:var(--muted);margin-top:-2px;margin-bottom:16px;padding:0 4px">${isHu?'⚠ Az API kulcs nem kerül a hivatkozásba.':'⚠ Your API key is never included in the share link.'}</div>
   `;
   const ov=document.getElementById('settings-overlay');
   ov.style.display='flex';
@@ -1731,11 +2836,44 @@ function closeSettings(){
   document.getElementById('settings-sheet').style.transform='translateY(100%)';
   setTimeout(()=>{ document.getElementById('settings-overlay').style.display='none'; },300);
 }
+/* Live-apply helpers (instant feedback while settings sheet is open) */
+function setThemePick(btn){
+  document.querySelectorAll('#theme-group .stg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.settings.theme=btn.dataset.theme;
+  applyTheme();
+}
+function setFontPick(btn){
+  document.querySelectorAll('#font-group .stg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.settings.fontSize=btn.dataset.fs;
+  applyFontSize();
+}
+function setPalettePick(btn){
+  document.querySelectorAll('#palette-group .stg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.settings.colorPalette=btn.dataset.pal;
+  applyColorPalette();
+}
+
 function saveSettings(){
   const lang=document.getElementById('set-lang')?.value||'hu';
   const sym=document.getElementById('set-sym')?.value.trim()||'Ft';
+  const code=(document.getElementById('set-code')?.value.trim()||'').toUpperCase();
   state.settings.language=lang;
   state.settings.currencySymbol=sym;
+  if(code)state.settings.currencyCode=code;
+  // Theme/font/palette already saved live via pick helpers above
+  // Secondary currency
+  const sc=state.secondaryCurrency;
+  if(sc){
+    const scCode=(document.getElementById('sc-code')?.value.trim()||'').toUpperCase();
+    const scSym=document.getElementById('sc-sym')?.value.trim()||sc.symbol;
+    const scName=document.getElementById('sc-name')?.value.trim()||sc.name;
+    const scRate=parseFloat(document.getElementById('sc-rate')?.value)||sc.rate;
+    if(scCode)sc.code=scCode;
+    sc.symbol=scSym;sc.name=scName;sc.rate=scRate;
+  }
   saveState();
   closeSettings();
   updateStaticUI();
@@ -1745,36 +2883,71 @@ function saveSettings(){
   if(activeTab!=='budget')renderBudget();
   if(activeTab!=='invest')renderInvest();
 }
+
+function settingsAddSecondary(){
+  state.secondaryCurrency={code:'EUR',symbol:'€',name:'Euro',rate:1,rateLastFetched:null,rateLive:false};
+  saveState();
+  openSettings();
+}
+function settingsRemoveSecondary(){
+  if(confirm(getLang()==='hu'?'Biztosan törlöd a másodlagos devizát?':'Remove secondary currency?')){
+    state.secondaryCurrency=null;
+    saveState();
+    openSettings();
+  }
+}
+async function settingsFetchLiveRate(){
+  const btn=document.getElementById('sc-fetch-btn');
+  const scCode=(document.getElementById('sc-code')?.value.trim()||'').toUpperCase();
+  const primaryCode=(document.getElementById('set-code')?.value.trim()||state.settings.currencyCode||'').toUpperCase();
+  if(!scCode||!primaryCode){
+    alert(getLang()==='hu'?'Add meg a két ISO kódot a lekérés előtt!':'Enter both ISO codes first!');
+    return;
+  }
+  if(btn){btn.disabled=true;btn.textContent='⟳ ...';}
+  const rate=await fetchLiveSecRate(scCode,primaryCode);
+  if(btn){btn.disabled=false;btn.textContent='⟳ '+t('scFetchLive');}
+  if(rate){
+    const inp=document.getElementById('sc-rate');
+    if(inp)inp.value=rate;
+  }else{
+    alert(getLang()==='hu'?'Nem sikerült lekérni az árfolyamot.':'Could not fetch the live rate.');
+  }
+}
 document.getElementById('settings-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('settings-overlay'))closeSettings();});
 
 /* ============================================================
    INIT
 ============================================================ */
-async function fetchLiveEurRate(){
+async function fetchLiveSecRate(secCode, primaryCode){
   try{
-    const res=await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json');
+    if(!secCode||!primaryCode)throw new Error('Missing codes');
+    const base=secCode.toLowerCase(),target=primaryCode.toLowerCase();
+    const res=await fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${base}.json`);
     if(!res.ok)throw new Error('HTTP '+res.status);
     const data=await res.json();
-    const rate=data.eur&&data.eur.huf;
+    const rate=data[base]&&data[base][target];
     if(!rate||isNaN(rate))throw new Error('Bad data');
-    return Math.round(rate);
+    return rate;
   }catch(err){
-    console.warn('Live EUR rate failed:',err);
+    console.warn('Live rate fetch failed:',err);
     return null;
   }
 }
 
-async function refreshEurRate(){
+async function refreshSecRate(){
+  const sc=state.secondaryCurrency;
+  if(!sc)return;
+  const primaryCode=state.settings.currencyCode||'';
+  if(!primaryCode){alert(getLang()==='hu'?'Állítsd be az elsődleges deviza ISO kódját a Beállításokban!':'Set your primary currency ISO code in Settings first!');return;}
   const btn=document.getElementById('eur-refresh-icon');
   if(btn)btn.classList.add('spinning');
-  const rate=await fetchLiveEurRate();
+  const rate=await fetchLiveSecRate(sc.code,primaryCode);
   if(btn)btn.classList.remove('spinning');
   if(rate){
-    state.eurRate=rate;
-    state.eurRateLastFetched=Date.now();
-    state.eurRateLive=true;
-  } else {
-    state.eurRateLive=false;
+    sc.rate=rate;sc.rateLastFetched=Date.now();sc.rateLive=true;
+  }else{
+    sc.rateLive=false;
   }
   saveState();
   renderDashboard();
@@ -2205,20 +3378,20 @@ renderBudget();
 renderInvest();
 // Trigger onboarding wizard for new users
 if (!state.onboardingComplete) { setTimeout(() => showOnboarding(), 200); }
-// Fetch live rate on startup (non-blocking)
-fetchLiveEurRate().then(rate=>{
-  if(rate){
-    state.eurRate=rate;
-    state.eurRateLastFetched=Date.now();
-    state.eurRateLive=true;
-    saveState();
-    renderDashboard();
-    if(activeTab==='invest')renderInvest();
-  } else {
-    state.eurRateLive=false;
-    saveState();
-  }
-});
+// Check for shared plan in URL hash
+_checkShareHash();
+// Auto-fetch live rate on startup if secondary currency and primary code are both configured
+(async()=>{
+  const sc=state.secondaryCurrency;
+  const primaryCode=state.settings.currencyCode||'';
+  if(!sc||!primaryCode)return;
+  const rate=await fetchLiveSecRate(sc.code,primaryCode);
+  if(rate){sc.rate=rate;sc.rateLastFetched=Date.now();sc.rateLive=true;}
+  else{sc.rateLive=false;}
+  saveState();
+  renderDashboard();
+  if(activeTab==='invest')renderInvest();
+})();
 </script>
 </body>
 </html>
